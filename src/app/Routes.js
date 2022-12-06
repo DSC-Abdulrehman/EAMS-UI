@@ -4,7 +4,7 @@
  * Note: It's recommended to compose related routes in internal router
  * components (e.g: `src/app/modules/Auth/pages/AuthPage`, `src/app/BasePage`).
  */
-
+// React import 
 import React from "react"
 import { Redirect, Switch, Route } from "react-router-dom"
 import { shallowEqual, useSelector } from "react-redux"
