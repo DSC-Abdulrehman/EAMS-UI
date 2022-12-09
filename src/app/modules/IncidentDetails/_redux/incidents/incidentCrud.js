@@ -8,8 +8,9 @@ export function createIncident(body) {
 }
 
 // Read
-export function getAllIncidents(body) {
-  return axios.post(
+
+export const getAllIncidents = async (body) => {
+  return await axios.post(
     `${USERS_URL}/incidentdetails/read-all-incident-details`,
     body
   )
@@ -34,8 +35,8 @@ export function deleteIncident(id) {
 }
 
 //get All Roles
-export function getAllIncidentTypes() {
-  return axios.get(`${USERS_URL}/settings/read-all-incident-types-master-data`)
+export const getAllIncidentTypes = async () => {
+  return await axios.get(`${USERS_URL}/settings/read-all-incident-types-master-data`)
 }
 
 //Get Incident

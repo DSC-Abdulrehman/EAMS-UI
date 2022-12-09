@@ -18,10 +18,7 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
       secondQueryParams: centersUIContext.secondQueryParams,
     }
   }, [centersUIContext])
-  console.log(
-    "queryParams for Vcenter Vehicle",
-    centersUIProps.secondQueryParams
-  )
+  
 
   // const newQueryParams = {
   //   ...centersUIProps.queryParams,
@@ -51,7 +48,7 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
     shallowEqual
   )
 
-  // console.log("vehiclesForCenter", vehiclesForCenter, totalCount)
+  console.log("centerForEdit", centerForEdit)
 
   useEffect(() => {
     if (id) {

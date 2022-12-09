@@ -134,9 +134,9 @@ export function CentersTable() {
         openDeleteCenterDialog: centersUIProps.openDeleteCenterDialog,
         openReadCenterDialog: centersUIProps.openReadCenterDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
+        // isAccessForDelete: isAccessForDelete
+        //   ? isAccessForDelete.isAccess
+        //   : false,
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",

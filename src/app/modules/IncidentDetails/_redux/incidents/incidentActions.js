@@ -8,7 +8,7 @@ export const fetchIncidents = (queryparm) => async (dispatch) => {
   //console.log("Receive QP", queryparm)
   dispatch(actions.startCall({ callType: callTypes.list }))
 
-  return requestFromServer
+  return await requestFromServer
     .getAllIncidents(queryparm)
     .then((response) => {
       dispatch(actions.incidentsFetched(response))
@@ -18,13 +18,13 @@ export const fetchIncidents = (queryparm) => async (dispatch) => {
       dispatch(actions.catchError({ error, callType: callTypes.list }))
     })
 }
-export const fetchIncident = (id) => (dispatch) => {
+export const fetchIncident = (id) => async (dispatch) =>  {
   if (!id) {
-    return dispatch(actions.incidentFetched({ incidentForEdit: undefined }))
+    return await dispatch(actions.incidentFetched({ incidentForEdit: undefined }))
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }))
-  return requestFromServer
+  return await requestFromServer
     .getIncidentById({ id: id })
     .then((response) => {
       //console.log("getIncidentById", response)
@@ -124,9 +124,9 @@ export const updateIncident = (incident) => (dispatch) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }))
     })
 }
-export const fetchIncidentTypes = () => (dispatch) => {
+export const fetchIncidentTypes = () => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }))
-  return requestFromServer
+  return await requestFromServer
     .getAllIncidentTypes()
     .then((response) => {
       const incidentTypes = response.data?.data
@@ -137,9 +137,9 @@ export const fetchIncidentTypes = () => (dispatch) => {
       dispatch(actions.catchError({ error, callType: callTypes.list }))
     })
 }
-export const fetchSeverityTypes = () => (dispatch) => {
+export const fetchSeverityTypes = () => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }))
-  return requestFromServer.getIncidentSeveritiesType().then((response) => {
+  return await requestFromServer.getIncidentSeveritiesType().then((response) => {
     const entities = response.data?.data
     dispatch(actions.incidentSeverityfetched(entities))
   })

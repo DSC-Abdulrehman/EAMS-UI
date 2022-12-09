@@ -58,14 +58,14 @@ export function TripLogsTable() {
     const forEdit = userAccess["Incident Details"].find(
       (item) => item.componentName === "UpdateIncidentDetail"
     )
-    return forEdit.isAccess
+    return forEdit?.isAccess
   }
 
   const AccessForDelete = () => {
     const forDelete = userAccess["Incident Details"].find(
       (item) => item.componentName === "DeleteIncidentDetail"
     )
-    return forDelete.isAccess
+    return forDelete?.isAccess
   }
 
   //console.log("isAccessForEdit", userAccess)
@@ -170,9 +170,9 @@ export function TripLogsTable() {
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
-      style: {
-        minWidth: "100px",
-      },
+      // style: {
+      //   minWidth: "100px",
+      // },
     },
   ]
 
@@ -197,8 +197,8 @@ export function TripLogsTable() {
               <BootstrapTable
                 wrapperClasses="table-responsive"
                 bordered={false}
-                classes="table table-head-custom table-vertical-center overflow-hidden"
-                bootstrap4
+                //classes="table table-head-custom table-vertical-center overflow-hidden"
+                //bootstrap4
                 remote
                 keyField="id"
                 data={entities === null ? [] : entities}

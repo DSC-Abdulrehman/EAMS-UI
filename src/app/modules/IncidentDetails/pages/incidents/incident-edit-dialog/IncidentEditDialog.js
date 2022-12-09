@@ -50,50 +50,29 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
   // }
 
   useEffect(() => {
-    dispatch(actions.fetchIncidentTypes())
-    dispatch(actions.fetchSeverityTypes())
-    dispatch(actions.fetchCenters())
-    dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
-    // console.log("centerId", centerId)
-    dispatch(
-      actions.fetchVehicleById({
-        ...incidentsUIProps.queryParams,
-        centerId: centerId,
-      })
-    )
+    // dispatch(actions.fetchIncidentTypes())
+    // dispatch(actions.fetchSeverityTypes())
+    // dispatch(actions.fetchCenters())
+    // dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
+    // // console.log("centerId", centerId)
+    // await dispatch(
+    //   actions.fetchVehicleById({
+    //     ...incidentsUIProps.queryParams,
+    //     centerId: centerId,
+    //   })
+    // )
 
-    if (!id) {
-    } else {
-      dispatch(actions.fetchIncident(id))
-      if (incidentForEdit) {
-        dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
-        // console.log("fetchVehicleById called")
-      }
-      // dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
-      // console.log("incidentForEdit", incidentForEdit)
-    }
-    // if (id) {
+    // if (!id) {
+    // } else {
     //   dispatch(actions.fetchIncident(id))
     //   if (incidentForEdit) {
-    //     dispatch(actions.fetchVehicleById(parseInt(incidentForEdit.centerId)))
-    //     console.log("fetchVehicleById called ")
+    //     dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
+       
     //   }
-
-    //   console.log("fetchIncident called ")
-    // } else if (centerId) {
-    //   dispatch(actions.fetchVehicleById(parseInt(centerId)))
-    //   console.log("fetchVehicleById called ")
+     
     // }
-
-    // if (incidentForEdit) {
-    //   console.log("incidentForEdit.centerId", incidentForEdit.centerId)
-    //   dispatch(actions.fetchVehicleById(parseInt(incidentForEdit.centerId)))
-    //   // dispatch(actions.fetchVehicleById(centerId))
-    // }
-    // if (centerId > 0) {
-
-    // }
-  }, [id, dispatch, incidentsUIProps, centerId])
+   
+  }, [])
   // console.log("incidentForEdit", incidentForEdit)
   // if (incidentForEdit) {
   //   return

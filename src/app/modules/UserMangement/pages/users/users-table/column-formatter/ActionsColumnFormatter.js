@@ -71,7 +71,7 @@ export function ActionsColumnFormatter(
         >
           <a
             title="Delete User"
-            className="btn btn-icon btn-light btn-hover-danger btn-sm"
+            className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
             onClick={() => openDeleteUserDialog(row.id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-danger">

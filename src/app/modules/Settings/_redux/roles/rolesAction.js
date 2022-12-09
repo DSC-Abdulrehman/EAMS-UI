@@ -29,9 +29,9 @@ export const fetchRole = (id) => (dispatch) => {
   return requestFromServer
     .getRoleById({ id: id })
     .then((response) => {
-      //console.log("response for getROle by ID", response)
       const entities = response.data?.data
       dispatch(actions.roleFetched({ roleForEdit: entities }))
+      
     })
     .catch((error) => {
       error.clientMessage = "Can't find role"
@@ -81,7 +81,7 @@ export const createRole = (roleForCreation) => (dispatch) => {
 }
 
 export const deleteRole = (id) => (dispatch) => {
-  console.log("id is", id)
+  
   dispatch(actions.startCall({ callType: callTypes.action }))
 
   return requestFromServer
@@ -106,15 +106,14 @@ export const deleteRole = (id) => (dispatch) => {
 }
 
 export const updateRole = (role) => (dispatch) => {
-  // console.log("updatedUser data", role)
+  
   dispatch(actions.startCall({ callType: callTypes.action }))
   return requestFromServer
     .updateRole(role)
     .then((response) => {
-      const updatedRole = response.data?.data
-      // console.log("userAction Res", response)
+      const updatedRole = response?.data?.data
       dispatch(actions.roleUpdated({ updatedRole }))
-      toast.success(response.data.message + " Updated", {
+      toast.success(response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

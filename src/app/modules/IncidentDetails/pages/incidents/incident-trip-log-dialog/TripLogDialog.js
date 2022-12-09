@@ -49,69 +49,32 @@ export function TripLogDialog({ id, show, onHide, userForRead }) {
   //   centerId: incidentForEdit.centerId,
   // }
 
-  useEffect(() => {
-    dispatch(actions.fetchIncidentTypes())
-    dispatch(actions.fetchSeverityTypes())
-    dispatch(actions.fetchCenters())
-    dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
-    // console.log("centerId", centerId)
-    dispatch(
-      actions.fetchVehicleById({
-        ...incidentsUIProps.queryParams,
-        centerId: centerId,
-      })
-    )
+  // useEffect(() => {
+  //   dispatch(actions.fetchIncidentTypes())
+  //   dispatch(actions.fetchSeverityTypes())
+  //   dispatch(actions.fetchCenters())
+  //   dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
+  //   // console.log("centerId", centerId)
+  //   dispatch(
+  //     actions.fetchVehicleById({
+  //       ...incidentsUIProps.queryParams,
+  //       centerId: centerId,
+  //     })
+  //   )
 
-    if (!id) {
-    } else {
-      dispatch(actions.fetchIncident(id))
-      if (incidentForEdit) {
-        dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
-        // console.log("fetchVehicleById called")
-      }
-      // dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
-      // console.log("incidentForEdit", incidentForEdit)
-    }
-    // if (id) {
-    //   dispatch(actions.fetchIncident(id))
-    //   if (incidentForEdit) {
-    //     dispatch(actions.fetchVehicleById(parseInt(incidentForEdit.centerId)))
-    //     console.log("fetchVehicleById called ")
-    //   }
-
-    //   console.log("fetchIncident called ")
-    // } else if (centerId) {
-    //   dispatch(actions.fetchVehicleById(parseInt(centerId)))
-    //   console.log("fetchVehicleById called ")
-    // }
-
-    // if (incidentForEdit) {
-    //   console.log("incidentForEdit.centerId", incidentForEdit.centerId)
-    //   dispatch(actions.fetchVehicleById(parseInt(incidentForEdit.centerId)))
-    //   // dispatch(actions.fetchVehicleById(centerId))
-    // }
-    // if (centerId > 0) {
-
-    // }
-  }, [id, dispatch, incidentsUIProps, centerId])
-  // console.log("incidentForEdit", incidentForEdit)
-  // if (incidentForEdit) {
-  //   return
-  // }
-
-  //Create New object for Edit Incident
-
-  // const getIncident = incidentForEdit.incident
-  // const getCenterId = incidentForEdit.centerId
-  // const getSelectedVehicles = incidentForEdit.vehicleId
-  // var newIncidentForEdit = {
-  //   ...getIncident,
-  //   ...getCenterId,
-  //   ...getSelectedVehicles,
-  // }
-
-  // dispatch(actions.fetchVehicleById(parseInt(centerId)))
-  //console.log("newIncidentForEdit", newIncidentForEdit)
+  //   if (!id) {
+  //   } else {
+  //     dispatch(actions.fetchIncident(id))
+  //     if (incidentForEdit) {
+  //       dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
+  //       // console.log("fetchVehicleById called")
+  //     }
+  //     // dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
+  //     // console.log("incidentForEdit", incidentForEdit)
+  //   }
+    
+  // }, [id, dispatch, incidentsUIProps, centerId])
+  
   const saveIncident = (incident) => {
     if (!id) {
       const incidentUpdate = { ...incident }
