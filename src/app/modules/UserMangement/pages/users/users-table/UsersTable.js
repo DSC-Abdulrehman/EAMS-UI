@@ -82,13 +82,13 @@ export function UsersTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
     },
-    {
-      dataField: "email",
-      text: "Email",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-    },
+    // {
+    //   dataField: "email",
+    //   text: "Email",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    // },
     {
       dataField: "cnic",
       text: "CNIC",

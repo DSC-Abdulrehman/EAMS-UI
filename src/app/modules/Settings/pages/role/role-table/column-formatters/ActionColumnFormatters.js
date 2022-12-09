@@ -42,7 +42,7 @@ export function ActionsColumnFormatter(
       >
         <a
           title="Delete Role"
-          className="btn btn-icon btn-light btn-hover-danger btn-sm"
+          className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
           onClick={() => openDeleteRoleDialog(row.id)}
         >
           <span className="svg-icon svg-icon-md svg-icon-danger">
@@ -56,7 +56,7 @@ export function ActionsColumnFormatter(
       >
         <a
           title="Access Right"
-          className="btn btn-icon btn-light btn-hover-primary btn-sm"
+          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
           onClick={() => openRoleAccessPage(row.id)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">

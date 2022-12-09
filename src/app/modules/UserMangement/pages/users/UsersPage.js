@@ -73,7 +73,7 @@ export function UsersPage({ history }) {
         )}
       </Route>
 
-      {/* <Route path="/users/read-all-users/:id/read">
+      <Route path="/users/read-all-users/:id/read">
         {({ history, match }) => (
           <UsersEditDialog
             show={match != null}
@@ -84,7 +84,7 @@ export function UsersPage({ history }) {
             }}
           />
         )}
-      </Route> */}
+      </Route>
       <Route path="/users/read-all-users/:id/delete">
         {({ history, match }) => (
           <UserDeleteDialog

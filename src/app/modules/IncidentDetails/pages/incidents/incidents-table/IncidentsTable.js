@@ -49,23 +49,39 @@ export function IncidentsTable() {
   const { totalCount, entities, listLoading } = currentState
   const dispatch = useDispatch()
 
+
+
   useEffect(() => {
-    // incidentsUIProps.setIds([])
-    dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
-  }, [incidentsUIProps.queryParams, dispatch])
+    async function fetchData() {
+      await dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
+      await dispatch(actions.fetchIncidentTypes())
+      await dispatch(actions.fetchSeverityTypes())
+      await dispatch(actions.fetchCenters())
+    }
+    fetchData();
+   
+  }, [])
+
+  // useEffect(() => {
+    
+  //   dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
+  //   dispatch(actions.fetchIncidentTypes())
+  //   dispatch(actions.fetchSeverityTypes())
+  //   dispatch(actions.fetchCenters())
+  // }, [incidentsUIProps.queryParams, dispatch])
 
   const AccessForEdit = () => {
     const forEdit = userAccess["Incident Details"].find(
       (item) => item.componentName === "UpdateIncidentDetail"
     )
-    return forEdit.isAccess
+    return forEdit?.isAccess
   }
 
   const AccessForDelete = () => {
     const forDelete = userAccess["Incident Details"].find(
       (item) => item.componentName === "DeleteIncidentDetail"
     )
-    return forDelete.isAccess
+    return forDelete?.isAccess
   }
 
   //console.log("isAccessForEdit", userAccess)

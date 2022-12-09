@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Modal } from "react-bootstrap"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import * as actions from "../../../_redux/roles/rolesAction"
@@ -9,7 +9,17 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 export function RoleEditDialog({ id, show, onHide }) {
+
+  const [loading, setLoading] = useState(false)
  
+  const enableLoading = () => {
+    setLoading(true)
+  }
+
+  const disableLoading = () => {
+    setLoading(false)
+  }
+
   //Role UI Context
   const rolesUIContext = useRolesUIContext()
 
@@ -22,10 +32,6 @@ export function RoleEditDialog({ id, show, onHide }) {
   //Role Redux State
 
   const dispatch = useDispatch()
-  // const RoleState = useSelector((state) => {
-  //   return state.roles
-  // })
-
   const { currentState, actionsLoading, roleForEdit } = useSelector(
     (state) => ({
       currentState: state.roles,
@@ -34,9 +40,8 @@ export function RoleEditDialog({ id, show, onHide }) {
     }),
     shallowEqual
   )
-
-  //console.log("roleForEdit", roleForEdit)
-
+  
+  
   useEffect(() => {
     // server call for getting Role by id
     dispatch(actions.fetchRole(id))
@@ -44,14 +49,18 @@ export function RoleEditDialog({ id, show, onHide }) {
 
 
   const saveRole = (roleValues) => {
+    
     if(!id){
+      enableLoading()
       dispatch(actions.createRole(roleValues))
       onHide()
     }else{
+      enableLoading()
       const roleUpdatedFields = {
         id: id,
         name: roleValues.name
       }
+      
       dispatch(actions.updateRole(roleUpdatedFields))
       onHide()
     }
@@ -69,7 +78,7 @@ export function RoleEditDialog({ id, show, onHide }) {
   // console.log("RoleState", actionsLoading)
   return (
     <Modal
-      size="lg"
+      size="sm"
       show={show}
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
@@ -80,6 +89,7 @@ export function RoleEditDialog({ id, show, onHide }) {
         actionsLoading={actionsLoading}
         onHide={onHide}
         role={roleForEdit || rolesUIProps.initRole}
+        loading = {loading}
       />
        <ToastContainer
         position="top-right"

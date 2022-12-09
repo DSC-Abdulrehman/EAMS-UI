@@ -1,15 +1,14 @@
-// import React from "react"
 import React, { useMemo, useEffect } from "react"
-// import { useDispatch } from "react-redux"
 import { Route } from "react-router-dom"
 import { RolesUIProvider } from "./RolesUIContext"
 import { RolesCard } from "./RolesCard"
 import { RoleEditDialog } from "./role-edit-dialog/RoleEditDialog"
-// import { AccessRights } from "./access-right-page/AccessRightPage"
 import { RoleLoadingDialog } from "./role-loading-dialog/RoleLoadingDialog"
 import { RoleDeleteDialog } from "./role-delete-dialog/RoleDeleteDialog"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import * as actions from "../../_redux/roles/rolesAction"
+import { ToastContainer } from "react-toastify"
+// import { AccessRights } from "./access-right-page/AccessRightPage"
 
 export function RolePage({ history }) {
 
@@ -47,6 +46,17 @@ export function RolePage({ history }) {
           />
         )}
       </Route>
+      <Route path="/settings/read-all-roles/:id/edit">
+        {({ history, match }) => (
+          <RoleEditDialog
+            show={match != null}
+            id={match && match.params.id}
+            onHide={() => {
+              history.push("/settings/read-all-roles")
+            }}
+          />
+        )}
+      </Route>
       <Route path="/settings/read-all-roles/:id/delete">
         {({ history, match }) => (
           <RoleDeleteDialog
@@ -59,6 +69,17 @@ export function RolePage({ history }) {
         )}
       </Route>
       <RolesCard />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </RolesUIProvider>
   )
 }
