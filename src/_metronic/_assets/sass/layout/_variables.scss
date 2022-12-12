@@ -9,7 +9,7 @@ $root-font-size-md:                             	12px; // Root font size for mob
 
 // Layout Theme Colors
 $layout-themes: (
-	dark:  #1e1e2d, // Dark theme color
+	dark:  #009241, // Dark theme color
 	light: #ffffff // Light theme color
 ) !default;
 
@@ -480,9 +480,12 @@ $header-menu-config: (
 									self: (
 										bg-color: (
 											default: transparent,
-											open: #1b1b28,
-											active: #1b1b28,
-											hover: #1b1b28
+											// open: #1b1b28,
+											// active: #1b1b28,
+											// hover: #1b1b28,
+											open: #C72017,
+											active: #C72017,
+											hover: #C72017
 										)
 									),
 
@@ -519,7 +522,8 @@ $header-menu-config: (
 									// Text
 									text: (
 										font-color:	(
-											default: #a2a3b7,
+											// default: #a2a3b7,
+											default: #ffff,
 											here: #ffffff,
 											active: #ffffff,
 											hover: #ffffff
@@ -555,7 +559,8 @@ $header-menu-config: (
 
 											// Text
 											text: (
-												font-color:	#a2a3b7
+												// font-color:	#a2a3b7
+												font-color:	#ffff
 											)
 										)
 									)
@@ -795,10 +800,14 @@ $header-menu-config: (
 								self: (
 									bg-color: (
 										default: transparent,
-										open: #1b1b28,
-										here: #1b1b28,
-										active: #1b1b28,
-										hover: #1b1b28
+										// open: #1b1b28,
+										// here: #1b1b28,
+										// active: #1b1b28,
+										// hover: #1b1b28,
+										open: #C72017,
+										here: #C72017,
+										active: #C72017,
+										hover: #C72017
 									)
 								),
 								// Icon
@@ -835,7 +844,8 @@ $header-menu-config: (
 								// Text
 								text:	(
 									font-color:	(
-										default: #a2a3b7,
+										// default: #a2a3b7,
+										default: #ffff,
 										open: #ffffff,
 										here: #ffffff,
 										active: #ffffff,
@@ -883,10 +893,14 @@ $header-menu-config: (
 										self: (
 											bg-color: (
 												default: transparent,
-												open: #1b1b28,
-												here: #1b1b28,
-												active: #1b1b28,
-												hover: #1b1b28
+												// open: #1b1b28,
+												// here: #1b1b28,
+												// active: #1b1b28,
+												// hover: #1b1b28,
+												open: #C72017,
+												here: #C72017,
+												active: #C72017,
+												hover: #C72017
 											)
 										),
 
@@ -925,7 +939,8 @@ $header-menu-config: (
 										// Text
 										text: (
 											font-color:	(
-												default: #9899ac,
+												// default: #9899ac,
+												default: #ffff,
 												open: #ffffff,
 												active: #ffffff,
 												hover: #ffffff
@@ -1653,10 +1668,15 @@ $aside-menu-config: (
 							self: (
 								bg-color: (
 									default: transparent,
-									open: #1b1b28,
-									here: #1b1b28,
-									active: #1b1b28,
-									hover: #1b1b28
+									// open: #1b1b28,
+									// here: #1b1b28,
+									// active: #1b1b28,
+									// hover: #1b1b28,
+										open: #C72017,
+										here: #C72017,
+										active: #C72017,
+										hover: #C72017
+
 								)
 							),
 
@@ -1697,7 +1717,8 @@ $aside-menu-config: (
 							// Text
 							text:	(
 								font-color:	(
-									default: #a2a3b7,
+									// default: #a2a3b7,
+									default: #ffff,
 									open: #ffffff,
 									here: #ffffff,
 									active: #ffffff,
@@ -1747,10 +1768,14 @@ $aside-menu-config: (
 									self: (
 										bg-color: (
 											default: transparent,
-											open: #1b1b28,
-											here: #1b1b28,
-											active: #1b1b28,
-											hover: #1b1b28
+											// open: #1b1b28,
+											// here: #1b1b28,
+											// active: #1b1b28,
+											// hover: #1b1b28,
+												open: #C72017,
+												here: #C72017,
+												active: #C72017,
+												hover: #C72017
 										)
 									),
 									// Icon
@@ -1787,7 +1812,8 @@ $aside-menu-config: (
 									// Text
 									text: (
 										font-color:	(
-											default: #9899ac,
+											// default: #9899ac,
+											default: #ffff,
 											open: #ffffff,
 											active: #ffffff,
 											hover: #ffffff
