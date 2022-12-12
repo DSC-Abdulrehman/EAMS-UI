@@ -42,7 +42,7 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
     }),
     shallowEqual
   )
-
+  //  console.log("getState for edit user", getState)
   // const NewIncidentForEdit = {
   //   ...incidentForEdit.incident,
   //   vehicleId: incidentForEdit.vehicleId,

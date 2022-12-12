@@ -30,7 +30,8 @@ export function IncidentEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {!isUserForRead ? title : "Incident Read"}
+          {/* {!isUserForRead ? title : "Incident Read"} */}
+          Incident Trip log
         </Modal.Title>
       </Modal.Header>
     </>

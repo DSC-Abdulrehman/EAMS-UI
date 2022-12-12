@@ -5,12 +5,23 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { IncidentEditDialogHeader } from "./IncidentEditDialogHeader"
 import { useIncidentsUIContext } from "../IncidentsUIContext"
 import * as actions from "../../../_redux/incidents/incidentActions"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+
+import BootstrapTable from 'react-bootstrap-table-next';
+import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+// import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    
+  },
+}));
 
 export function TripLogDialog({ id, show, onHide, userForRead }) {
-  const title = "UserEditDialog"
-  const [centerId, setCenter] = useState(0)
+  const classes = useStyles();
   const incidentsUIContext = useIncidentsUIContext()
   const incidentsUIProps = useMemo(() => {
     return {
@@ -20,102 +31,34 @@ export function TripLogDialog({ id, show, onHide, userForRead }) {
   }, [incidentsUIContext])
 
   const dispatch = useDispatch()
-  const {
-    actionsLoading,
-    incidentForEdit,
-    isuserForRead,
-    IncidentType,
-    incidentSeverity,
-    centers,
-    vehicleByCenterId,
-    getState,
-  } = useSelector(
-    (state) => ({
-      actionsLoading: state.incidentDetails.actionsLoading,
-      incidentForEdit: state.incidentDetails.incidentForEdit,
-      isuserForRead: state.incidentDetails.userForRead,
-      IncidentType: state.incidentDetails.incidentTypes,
-      incidentSeverity: state.incidentDetails.incidentSeverity,
-      centers: state.incidentDetails.centers,
-      vehicleByCenterId: state.incidentDetails.vehicleByCenterId,
-      getState: state,
-    }),
-    shallowEqual
-  )
+  const {tripLog} = useSelector((state) => ({tripLog : state?.incidentDetails?.TripLog}),shallowEqual)
+   
 
-  // const NewIncidentForEdit = {
-  //   ...incidentForEdit.incident,
-  //   vehicleId: incidentForEdit.vehicleId,
-  //   centerId: incidentForEdit.centerId,
-  // }
-
-  // useEffect(() => {
-  //   dispatch(actions.fetchIncidentTypes())
-  //   dispatch(actions.fetchSeverityTypes())
-  //   dispatch(actions.fetchCenters())
-  //   dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
-  //   // console.log("centerId", centerId)
-  //   dispatch(
-  //     actions.fetchVehicleById({
-  //       ...incidentsUIProps.queryParams,
-  //       centerId: centerId,
-  //     })
-  //   )
-
-  //   if (!id) {
-  //   } else {
-  //     dispatch(actions.fetchIncident(id))
-  //     if (incidentForEdit) {
-  //       dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
-  //       // console.log("fetchVehicleById called")
-  //     }
-  //     // dispatch(actions.fetchVehicleById(incidentForEdit.centerId))
-  //     // console.log("incidentForEdit", incidentForEdit)
-  //   }
+   const columns = [{
+    dataField: 'center.name',
+    text: 'Center'
+  }, {
+    dataField: 'dateTime',
+    text: 'dateTime',
+  }, {
+    dataField: 'finalReading',
+    text: 'Final Reading',
     
-  // }, [id, dispatch, incidentsUIProps, centerId])
-  
-  const saveIncident = (incident) => {
-    if (!id) {
-      const incidentUpdate = { ...incident }
-      dispatch(actions.createIncident(incident)).then((res) => {
-        onHide()
-      })
-    } else {
-      //console.log("i'm in update")
-      const {
-        isActive,
-        slug,
-        createdBy,
-        updatedBy,
-        createdAt,
-        updatedAt,
-        incidentSeverity,
-        center,
-        incidentType,
-        vehicle,
-        centerId,
-        vehicleId,
-        incidentSeverityId,
-        ...rest
-      } = incident
+  },{
+    dataField: 'initialReading',
+    text: 'initialReading',
+    
+  },
+   {
+    dataField : 'logBookNo',
+    text : 'LogBook'
+   },
+   {
+    dataField : 'status',
+    text: 'Status'
+   }
+];
 
-      //console.log("...rest::", rest)
-      // const userUpdatedFields = {
-      //   id: saveIncident.id,
-      //   email: saveIncident.email,
-      //   phNo: saveIncident.phNo,
-      //   cnic: saveIncident.cnic,
-      //   password: saveIncident.password,
-      //   firstName: saveIncident.firstName,
-      //   lastName: saveIncident.lastName,
-      //   roleId: saveIncident.roleId,
-      // }
-
-      dispatch(actions.updateIncident({ ...rest, id }))
-      onHide()
-    }
-  }
 
   return (
     <Modal
@@ -125,28 +68,12 @@ export function TripLogDialog({ id, show, onHide, userForRead }) {
       aria-labelledby="example-modal-sizes-title-lg"
     >
       <IncidentEditDialogHeader id={id} isUserForRead={userForRead} />
-      {/* <TripLogTable
-        saveIncident={saveIncident}
-        incident={incidentForEdit || incidentsUIProps.initIncident}
-        IncidentType={IncidentType}
-        incidentSeverity={incidentSeverity}
-        centers={centers}
-        vehicleByCenterId={vehicleByCenterId}
-        onHide={onHide}
-        isUserForRead={userForRead}
-        setCenter={setCenter}
-      /> */}
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      {!tripLog ? 
+      (<div className={classes.root}><CircularProgress /></div>)
+       :
+      <><BootstrapTable keyField='id' data={ tripLog } columns={ columns } /></>}
+      
+     
     </Modal>
   )
 }

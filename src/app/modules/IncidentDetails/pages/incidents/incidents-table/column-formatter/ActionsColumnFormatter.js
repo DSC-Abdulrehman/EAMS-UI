@@ -46,7 +46,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && (
+      {/* {isAccessForEdit && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>}
         >
@@ -62,7 +62,7 @@ export function ActionsColumnFormatter(
             </span>
           </a>
         </OverlayTrigger>
-      )}
+      )} */}
 
       <> </>
       {isAccessForDelete && (
@@ -95,9 +95,10 @@ export function ActionsColumnFormatter(
           onClick={() => openTripLogDialog(row.id)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
-            <SVG
+            TRIP
+            {/* <SVG
               src={toAbsoluteUrl("/media/svg/icons/Communication/view.svg")}
-            />
+            /> */}
           </span>
         </a>
       </OverlayTrigger>
