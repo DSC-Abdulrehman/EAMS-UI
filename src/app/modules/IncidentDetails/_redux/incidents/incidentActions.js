@@ -169,7 +169,7 @@ export const fetchTripLog = (queryparm) => async (dispatch) => {
       dispatch(actions.tripLogFetched(response))
     })
     .catch((error) => {
-      error.clientMessage = "Can't find customers"
+      error.clientMessage = "Can't find TripLog"
       dispatch(actions.catchError({ error, callType: callTypes.list }))
     })
 }

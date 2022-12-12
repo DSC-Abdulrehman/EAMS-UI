@@ -10,6 +10,8 @@ import {
   TextArea,
 } from "../../../../../../_metronic/_partials/controls"
 import { max } from "date-fns"
+import * as actions from "../../../_redux/incidents/incidentActions"
+
 
 // Validation schema
 const incidentEditSchema = Yup.object().shape({
@@ -62,6 +64,23 @@ export function IncidentEditForm({
   isUserForRead,
   setCenter,
 }) {
+  const dispatch = useDispatch()
+  const getCenterId = ((id) =>{
+  
+    const queryParams ={
+      filter: {
+        "searchQuery": ""
+    },
+      sortOrder: "name",
+      pageSize: 10,
+      pageNumber: 1,
+      centerId: id
+    }
+
+    dispatch(actions.fetchVehicleById({...queryParams}))
+    
+  })
+
   const NewIncidentForEdit = {
     ...incident.incident,
     vehicleId: incident.vehicleId,
@@ -195,6 +214,7 @@ export function IncidentEditForm({
                         onChange={(e) => {
                           setCenter(e.currentTarget.value)
                           handleChange(e)
+                          getCenterId(e.currentTarget.value)
                         }}
                       >
                         <option>Select Nearest Center</option>

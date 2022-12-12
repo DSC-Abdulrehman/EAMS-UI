@@ -207,7 +207,7 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
     <>
       <h4>Registered Vehicles</h4>
       <CenterVehiclesFilter />
-      <PaginationProvider pagination={paginationFactory(paginationOptions)}>
+      {/* <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
             <Pagination
@@ -235,7 +235,7 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
             </Pagination>
           )
         }}
-      </PaginationProvider>
+      </PaginationProvider> */}
     </>
   )
 }
