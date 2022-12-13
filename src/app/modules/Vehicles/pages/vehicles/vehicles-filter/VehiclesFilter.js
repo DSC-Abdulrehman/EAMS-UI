@@ -1,55 +1,53 @@
-import React, { useMemo } from "react"
-import { Formik } from "formik"
-import { isEqual } from "lodash"
-import { useItemUIContext } from "../ItemUIContext"
+import React, { useMemo, useState } from "react";
+import { Formik } from "formik";
+import { isEqual } from "lodash";
+import { useItemUIContext } from "../ItemUIContext";
 
 const prepareFilter = (queryParams, values) => {
-  const { status, type, searchText } = values
-  const newQueryParams = { ...queryParams }
-  const filter = {}
+  const { status, type, searchText } = values;
+  const newQueryParams = { ...queryParams };
+  const filter = {};
   // Filter by status
-  filter.status = status !== "" ? +status : undefined
+  filter.status = status !== "" ? +status : undefined;
   // Filter by type
-  filter.type = type !== "" ? +type : undefined
+  filter.type = type !== "" ? +type : undefined;
   // Filter by all fields
-  filter.searchQuery = searchText
+  filter.searchQuery = searchText;
   if (searchText) {
-    filter.searchQuery = searchText
+    filter.searchQuery = searchText;
   }
-  newQueryParams.filter = filter
-  return newQueryParams
-}
+  newQueryParams.filter = filter;
+  return newQueryParams;
+};
 
-export function Filter({ listLoading }) {
-  const itemUIContext = useItemUIContext()
+export function VehicleFilter({ listLoading }) {
+  const [searchT, setSearchT] = useState("");
+  const itemUIContext = useItemUIContext();
   const usersUIProps = useMemo(() => {
     return {
       queryParams: itemUIContext.queryParams,
       setQueryParams: itemUIContext.setQueryParams,
-    }
-  }, [itemUIContext])
+    };
+  }, [itemUIContext]);
 
   // queryParams, setQueryParams,
   const applyFilter = (values) => {
-    const newQueryParams = prepareFilter(usersUIProps.queryParams, values)
+    const newQueryParams = prepareFilter(usersUIProps.queryParams, values);
     if (!isEqual(newQueryParams, usersUIProps.queryParams)) {
-      newQueryParams.pageNumber = 1
+      newQueryParams.pageNumber = 1;
       // update list by queryParams
-      usersUIProps.setQueryParams(newQueryParams)
+      usersUIProps.setQueryParams(newQueryParams);
     }
-  }
+  };
 
   return (
     <>
       <Formik
         initialValues={{
-          status: "", // values => All=""/Susspended=0/Active=1/Pending=2
-          type: "", // values => All=""/Business=0/Individual=1
           searchText: "",
         }}
         onSubmit={(values) => {
-          //console.log("Filter Value", values)
-          applyFilter(values)
+          applyFilter(values);
         }}
       >
         {({
@@ -60,50 +58,8 @@ export function Filter({ listLoading }) {
           setFieldValue,
         }) => (
           <form onSubmit={handleSubmit} className="form form-label-right">
-            <div className="form-group row">
-              {/* <div className="col-lg-2">
-                <select
-                  className="form-control"
-                  name="status"
-                  placeholder="Filter by Status"
-                  // TODO: Change this code
-                  onChange={(e) => {
-                    setFieldValue("status", e.target.value);
-                    handleSubmit();
-                  }}
-                  onBlur={handleBlur}
-                  value={values.status}
-                >
-                  <option value="">All</option>
-                  <option value="0">Susspended</option>
-                  <option value="1">Active</option>
-                  <option value="2">Pending</option>
-                </select>
-                <small className="form-text text-muted">
-                  <b>Filter</b> by Status
-                </small>
-              </div>
-              <div className="col-lg-2">
-                <select
-                  className="form-control"
-                  placeholder="Filter by Type"
-                  name="type"
-                  onBlur={handleBlur}
-                  onChange={(e) => {
-                    setFieldValue("type", e.target.value);
-                    handleSubmit();
-                  }}
-                  value={values.type}
-                >
-                  <option value="">All</option>
-                  <option value="0">Business</option>
-                  <option value="1">Individual</option>
-                </select>
-                <small className="form-text text-muted">
-                  <b>Filter</b> by Type
-                </small>
-              </div> */}
-              <div className="col-lg-4">
+            <div className="row">
+              <div className="col-12">
                 <input
                   type="text"
                   className="form-control"
@@ -112,12 +68,13 @@ export function Filter({ listLoading }) {
                   onBlur={handleBlur}
                   value={values.searchText}
                   onChange={(e) => {
-                    setFieldValue("searchText", e.target.value)
-                    handleSubmit()
+                    setFieldValue("searchText", e.target.value);
+                    setSearchT(e.target.value);
+                    handleSubmit();
                   }}
                 />
                 <small className="form-text text-muted">
-                  <b>Search</b> in all fields
+                  <b>Search {searchT}</b> in all fields
                 </small>
               </div>
             </div>
@@ -125,5 +82,5 @@ export function Filter({ listLoading }) {
         )}
       </Formik>
     </>
-  )
+  );
 }

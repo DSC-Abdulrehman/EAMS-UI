@@ -1,15 +1,15 @@
-import React, { forwardRef, useEffect, useState } from "react"
-import clsx from "clsx"
-import { isFragment } from "react-is"
+import React, { forwardRef, useEffect, useState } from "react";
+import clsx from "clsx";
+import { isFragment } from "react-is";
 
 export const CardHeaderIcon = forwardRef(({ className }, ref) => (
   <span ref={ref} className={clsx("card-head-icon", className)} />
-))
+));
 
 export const CardHeaderTitle = forwardRef(({ className, ...props }, ref) => (
   // eslint-disable-next-line jsx-a11y/heading-has-content
   <h3 {...props} ref={ref} className={clsx("card-label", className)} />
-))
+));
 
 export const CardHeaderToolbar = forwardRef(
   ({ children, className, ...props }, ref) => (
@@ -17,7 +17,7 @@ export const CardHeaderToolbar = forwardRef(
       {children}
     </div>
   )
-)
+);
 
 export const CardHeader = forwardRef(
   (
@@ -33,62 +33,62 @@ export const CardHeader = forwardRef(
     },
     ref
   ) => {
-    const [top, setTop] = useState(0)
-    const [windowHeight, setWindowHeight] = useState(0)
+    const [top, setTop] = useState(0);
+    const [windowHeight, setWindowHeight] = useState(0);
 
     useEffect(() => {
-      handleResize()
+      handleResize();
 
       function handleResize() {
-        setWindowHeight(window.innerWidth)
+        setWindowHeight(window.innerWidth);
       }
 
-      window.addEventListener("resize", handleResize)
+      window.addEventListener("resize", handleResize);
 
       return () => {
-        window.removeEventListener("resize", handleResize)
-      }
-    })
+        window.removeEventListener("resize", handleResize);
+      };
+    });
 
     useEffect(() => {
       // Skip if sticky is disabled or on initial render when we don't know about window height.
       if (!sticky || windowHeight === 0) {
-        return
+        return;
       }
 
-      const headerElement = document.querySelector(".header")
-      const subheaderElement = document.querySelector(".subheader")
-      const headerMobileElement = document.querySelector(".header-mobile")
+      const headerElement = document.querySelector(".header");
+      const subheaderElement = document.querySelector(".subheader");
+      const headerMobileElement = document.querySelector(".header-mobile");
 
-      let nextMarginTop = 0
+      let nextMarginTop = 0;
 
       // mobile header
       if (window.getComputedStyle(headerElement).height === "0px") {
-        nextMarginTop = headerMobileElement.offsetHeight
+        nextMarginTop = headerMobileElement.offsetHeight;
       } else {
         // desktop header
         if (document.body.classList.contains("header-minimize-topbar")) {
           // hardcoded minimized header height
-          nextMarginTop = 60
+          nextMarginTop = 60;
         } else {
           // normal fixed header
           if (document.body.classList.contains("header-fixed")) {
-            nextMarginTop += headerElement.offsetHeight
+            nextMarginTop += headerElement.offsetHeight;
           }
 
           if (document.body.classList.contains("subheader-fixed")) {
-            nextMarginTop += subheaderElement.offsetHeight
+            nextMarginTop += subheaderElement.offsetHeight;
           }
         }
       }
 
-      setTop(nextMarginTop)
-    }, [sticky, windowHeight])
+      setTop(nextMarginTop);
+    }, [sticky, windowHeight]);
 
     return (
       <div
         ref={ref}
-        className="card-header"
+        className="card-header pt-4"
         style={
           !sticky
             ? undefined
@@ -111,9 +111,9 @@ export const CardHeader = forwardRef(
         {toolbar}
         {children}
       </div>
-    )
+    );
   }
-)
+);
 
 export const CardBody = forwardRef(
   ({ fit, fluid, className, ...props }, ref) => (
@@ -130,11 +130,11 @@ export const CardBody = forwardRef(
       )}
     />
   )
-)
+);
 
 export const CardFooter = forwardRef(({ className, ...props }, ref) => (
   <div {...props} ref={ref} className={clsx("card-footer", className)} />
-))
+));
 
 export const Card = forwardRef(({ fluidHeight, className, ...props }, ref) => (
   <div
@@ -146,17 +146,17 @@ export const Card = forwardRef(({ fluidHeight, className, ...props }, ref) => (
       className
     )}
   />
-))
+));
 
 // Set display names for debugging.
 if (process.env.NODE_ENV !== "production") {
-  Card.displayName = "Card"
+  Card.displayName = "Card";
 
-  CardHeader.displayName = "CardHeader"
-  CardHeaderIcon.displayName = "CardHeaderIcon"
-  CardHeaderTitle.displayName = "CardHeaderTitle"
-  CardHeaderToolbar.displayName = "CardHeaderToolbar"
+  CardHeader.displayName = "CardHeader";
+  CardHeaderIcon.displayName = "CardHeaderIcon";
+  CardHeaderTitle.displayName = "CardHeaderTitle";
+  CardHeaderToolbar.displayName = "CardHeaderToolbar";
 
-  CardBody.displayName = "CardBody"
-  CardFooter.displayName = "CardFooter"
+  CardBody.displayName = "CardBody";
+  CardFooter.displayName = "CardFooter";
 }
