@@ -39,7 +39,8 @@ export function UserProfileDropdown() {
           </span>
           <span className="symbol symbol-35 symbol-light-success">
             <span className="symbol-label font-size-h5 font-weight-bold">
-              {user.firstname}
+              {/* {user.firstname} */}
+              <img class="w-100" src="/media/users/default.jpg" />
             </span>
           </span>
         </div>
@@ -73,8 +74,9 @@ export function UserProfileDropdown() {
                 )})`,
               }}
             >
-              <div className="symbol bg-white-o-15 mr-3">
-                <span className="symbol-label text-success font-weight-bold font-size-h4">
+              <div className="symbol d-flex mr-3">
+                <img class="w-100" src="/media/users/default.jpg" />
+                <span className="text-success font-weight-bold font-size-h4 mt-4 ml-3">
                   {user.firstname}
                 </span>
                 {/*<img alt="Pic" className="hidden" src={user.pic} />*/}
