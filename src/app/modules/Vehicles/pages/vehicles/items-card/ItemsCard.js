@@ -1,41 +1,42 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from "react";
 
 import {
   Card,
   CardBody,
   CardHeader,
   CardHeaderToolbar,
-} from "../../../../../../_metronic/_partials/controls"
-import { ItemsTable } from "../items-table/itemsTable"
-import { useItemUIContext } from "../ItemUIContext"
+} from "../../../../../../_metronic/_partials/controls";
+import { ItemsTable } from "../items-table/itemsTable";
+import { useItemUIContext } from "../ItemUIContext";
+import { VehicleFilter } from "../vehicles-filter/VehiclesFilter";
 
-import { useDispatch, useSelector, shallowEqual } from "react-redux"
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 export function ItemsCard() {
-  const itemsUIContext = useItemUIContext()
+  const itemsUIContext = useItemUIContext();
 
   const centersUIProps = useMemo(() => {
     return {
       newCenterButtonClick: itemsUIContext.newCenterButtonClick,
       openEditCenterDialog: itemsUIContext.openEditCenterDialog,
-    }
-  }, [itemsUIContext])
+    };
+  }, [itemsUIContext]);
 
   const { userAccess } = useSelector(
     (state) => ({
       userAccess: state.auth.userAccess.Users,
     }),
     shallowEqual
-  )
+  );
 
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateUser"
-  )
+  );
 
   return (
     <>
       <Card>
-        <CardHeader title="list">
+        <CardHeader title={<VehicleFilter />}>
           <CardHeaderToolbar>
             {accessUser ? (
               <button
@@ -48,22 +49,6 @@ export function ItemsCard() {
             ) : (
               <></>
             )}
-            {/* {userAccess.find((item) => {
-              if (
-                item.componentName === "CreateUser" ||
-                item.isAccess === true
-              ) {
-                return (
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={usersUIProps.newUserButtonClick}
-                  >
-                    Add New User
-                  </button>
-                )
-              }
-            })} */}
           </CardHeaderToolbar>
         </CardHeader>
 
@@ -72,5 +57,5 @@ export function ItemsCard() {
         </CardBody>
       </Card>
     </>
-  )
+  );
 }

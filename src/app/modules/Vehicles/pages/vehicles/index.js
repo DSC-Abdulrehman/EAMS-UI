@@ -1,14 +1,26 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import { Route } from "react-router-dom"
-import { ItemUIProvider } from "./ItemUIContext"
-import { ItemEditDialog } from "./item-edit-dialog/ItemEditDialog"
-import { ItemDeleteDialog } from "./item-delete-dialog/ItemDeleteDialog"
-import { ItemsCard } from "./items-card/ItemsCard"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import React from "react";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { Route } from "react-router-dom";
+import { ItemUIProvider } from "./ItemUIContext";
+import { ItemEditDialog } from "./item-edit-dialog/ItemEditDialog";
+import { ItemDeleteDialog } from "./item-delete-dialog/ItemDeleteDialog";
+import { ItemsCard } from "./items-card/ItemsCard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  fetchVehicle,
+  fetchCenters,
+  fetchCategory,
+} from "../../_redux/vehiclesActions";
 
 export function ItemPage({ history }) {
+  const dispatch = useDispatch();
+  const { itemForEdit } = useSelector(
+    (state) => ({
+      itemForEdit: state.vehicles.itemForEdit,
+    }),
+    shallowEqual
+  );
   // const { auth } = useSelector((auth) => auth)
   // console.log("UserManagement, Auth: ", auth)
   // const { userAccess } = auth
@@ -27,18 +39,22 @@ export function ItemPage({ history }) {
   // const ForRead = false
   const itemUIEvents = {
     newCenterButtonClick: () => {
-      history.push("/vehicle-details/read-all-vehicle-details/new")
+      dispatch(fetchVehicle(0));
+
+      history.push("/vehicle-details/read-all-vehicle-details/new");
     },
     openEditCenterDialog: (id) => {
-      history.push(`/vehicle-details/read-all-vehicle-details/${id}/edit`)
+      dispatch(fetchVehicle(id));
+      history.push(`/vehicle-details/read-all-vehicle-details/${id}/edit`);
     },
     openDeleteCenterDialog: (id) => {
-      history.push(`/vehicle-details/read-all-vehicle-details/${id}/delete`)
+      history.push(`/vehicle-details/read-all-vehicle-details/${id}/delete`);
     },
     openReadCenterDialog: (id, isUserRead) => {
-      history.push(`/vehicle-details/read-all-vehicle-details/${id}/read`)
+      dispatch(fetchVehicle(id));
+      history.push(`/vehicle-details/read-all-vehicle-details/${id}/read`);
     },
-  }
+  };
   return (
     <ItemUIProvider itemUIEvents={itemUIEvents}>
       <Route exact path="/vehicle-details/read-all-vehicle-details/new">
@@ -46,7 +62,7 @@ export function ItemPage({ history }) {
           <ItemEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/vehicle-details/read-all-vehicle-details")
+              history.push("/vehicle-details/read-all-vehicle-details");
             }}
           />
         )}
@@ -57,7 +73,8 @@ export function ItemPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/vehicle-details/read-all-vehicle-details")
+              dispatch(fetchVehicle(0));
+              history.push("/vehicle-details/read-all-vehicle-details");
             }}
           />
         )}
@@ -69,7 +86,8 @@ export function ItemPage({ history }) {
             id={match && match.params.id}
             itemForRead={true}
             onHide={() => {
-              history.push("/vehicle-details/read-all-vehicle-details")
+              dispatch(fetchVehicle(0));
+              history.push("/vehicle-details/read-all-vehicle-details");
             }}
           />
         )}
@@ -80,7 +98,7 @@ export function ItemPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/vehicle-details/read-all-vehicle-details")
+              history.push("/vehicle-details/read-all-vehicle-details");
             }}
           />
         )}
@@ -121,17 +139,6 @@ export function ItemPage({ history }) {
         draggable
         pauseOnHover
       />
-      {/* <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      /> */}
     </ItemUIProvider>
-  )
+  );
 }

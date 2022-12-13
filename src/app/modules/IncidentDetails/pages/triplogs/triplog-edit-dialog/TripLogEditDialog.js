@@ -1,24 +1,36 @@
-import React, { useEffect, useMemo, useState } from "react"
-import { Modal } from "react-bootstrap"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { TripLogEditForm } from "./TripLogEditForm"
-import { IncidentEditDialogHeader } from "./IncidentEditDialogHeader"
-import { useTripLogsUIContext } from "../TripLogsUIContext"
-import * as actions from "../../../_redux/triplogs/triplogActions"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import React, { useEffect, useMemo, useState } from "react";
+import { Modal } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { TripLogEditForm } from "./TripLogEditForm";
+import { IncidentEditDialogHeader } from "./IncidentEditDialogHeader";
+import { useTripLogsUIContext } from "../TripLogsUIContext";
+import * as actions from "../../../_redux/triplogs/triplogActions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "2rem",
+    marginBottom: "2rem",
+  },
+}));
 
 export function TripLogEditDialog({ id, show, onHide, userForRead }) {
-  const [centerId, setCenter] = useState(0)
-  const triplogsUIContext = useTripLogsUIContext()
+  const classes = useStyles();
+  const [centerId, setCenter] = useState(0);
+  const triplogsUIContext = useTripLogsUIContext();
   const triplogsUIProps = useMemo(() => {
     return {
       initTripLog: triplogsUIContext.initTripLog,
       queryParams: triplogsUIContext.queryParams,
-    }
-  }, [triplogsUIContext])
+    };
+  }, [triplogsUIContext]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { actionsLoading, driverTripForEdit, isuserForRead } = useSelector(
     (state) => ({
       actionsLoading: state.triplogs.actionsLoading,
@@ -31,14 +43,14 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
       // getState: state,
     }),
     shallowEqual
-  )
+  );
   //console.log("driverTripForEdit", driverTripForEdit)
   useEffect(() => {
     // dispatch(actions.fetchIncidentTypes())
     // dispatch(actions.fetchSeverityTypes())
     // dispatch(actions.fetchCenters())
     // dispatch(actions.fetchTripLogs(triplogsUIProps.queryParams))
-    dispatch(actions.fetchTripLog(id))
+    dispatch(actions.fetchTripLog(id));
     // console.log("centerId", centerId)
     // dispatch(
     //   actions.fetchVehicleById({
@@ -55,17 +67,17 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
       // if (incidentForEdit) {
       // }
     }
-  }, [id, dispatch, triplogsUIProps, centerId])
+  }, [id, dispatch, triplogsUIProps, centerId]);
   // console.log("incidentForEdit", incidentForEdit)
   // if (incidentForEdit) {
   //   return
   // }
   const updateTripLog = (incident) => {
     if (!id) {
-      const incidentUpdate = { ...incident }
+      const incidentUpdate = { ...incident };
       dispatch(actions.createIncident(incident)).then((res) => {
-        onHide()
-      })
+        onHide();
+      });
     } else {
       //console.log("i'm in update")
       const {
@@ -85,7 +97,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
         vehicle,
 
         ...rest
-      } = incident
+      } = incident;
 
       //console.log("...rest::", rest)
       // const userUpdatedFields = {
@@ -99,10 +111,10 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
       //   roleId: saveIncident.roleId,
       // }
 
-      dispatch(actions.updateTrip({ ...rest, id }))
-      onHide()
+      dispatch(actions.updateTrip({ ...rest, id }));
+      onHide();
     }
-  }
+  };
 
   return (
     <Modal
@@ -111,15 +123,26 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <IncidentEditDialogHeader id={id} isUserForRead={userForRead} />
-      <TripLogEditForm
-        updateTripLog={updateTripLog}
-        driverTrip={driverTripForEdit || triplogsUIProps.initTripLog}
-        onHide={onHide}
-        isUserForRead={userForRead}
-        setCenter={setCenter}
-      />
-      <ToastContainer
+      {!driverTripForEdit ? (
+        <>
+          <div className={classes.root}>
+            <CircularProgress />
+          </div>{" "}
+        </>
+      ) : (
+        <>
+          <IncidentEditDialogHeader id={id} isUserForRead={userForRead} />
+          <TripLogEditForm
+            updateTripLog={updateTripLog}
+            driverTrip={driverTripForEdit || triplogsUIProps.initTripLog}
+            onHide={onHide}
+            isUserForRead={userForRead}
+            setCenter={setCenter}
+          />
+        </>
+      )}
+
+      {/* <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -129,7 +152,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      />
+      /> */}
     </Modal>
-  )
+  );
 }

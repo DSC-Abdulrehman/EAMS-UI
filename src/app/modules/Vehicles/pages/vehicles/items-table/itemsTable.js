@@ -1,25 +1,25 @@
-import React, { useEffect, useMemo } from "react"
-import BootstrapTable from "react-bootstrap-table-next"
+import React, { useEffect, useMemo } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
   PaginationProvider,
-} from "react-bootstrap-table2-paginator"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
+} from "react-bootstrap-table2-paginator";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
   PleaseWaitMessage,
   sortCaret,
   headerSortingClasses,
-} from "../../../../../../_metronic/_helpers"
-import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter"
-import * as uiHelpers from "../ItemUIHelpers"
-import * as actions from "../../../_redux/vehiclesActions"
-import { useItemUIContext } from "../ItemUIContext"
-import { Pagination } from "../../../../../../_metronic/_partials/controls"
+} from "../../../../../../_metronic/_helpers";
+import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
+import * as uiHelpers from "../ItemUIHelpers";
+import * as actions from "../../../_redux/vehiclesActions";
+import { useItemUIContext } from "../ItemUIContext";
+import { Pagination } from "../../../../../../_metronic/_partials/controls";
 
 export function ItemsTable() {
   //Users UI Context
-  const itemUIContext = useItemUIContext()
+  const itemUIContext = useItemUIContext();
 
   const itemUIProps = useMemo(() => {
     return {
@@ -28,8 +28,8 @@ export function ItemsTable() {
       openReadCenterDialog: itemUIContext.openReadCenterDialog,
       queryParms: itemUIContext.queryParams,
       setQueryParams: itemUIContext.setQueryParams,
-    }
-  }, [itemUIContext])
+    };
+  }, [itemUIContext]);
 
   const { currentState, userAccess } = useSelector(
     (state) => ({
@@ -37,26 +37,34 @@ export function ItemsTable() {
       userAccess: state.auth.userAccess["Vehicle Details"],
     }),
     shallowEqual
-  )
+  );
 
   //console.log("currentState", currentState)
   // Centers Redux state
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.fetchVehicles(itemUIProps.queryParms))
-  }, [itemUIProps.queryParms, dispatch])
+    const fetchData = async () => {
+      await dispatch(actions.fetchVehicles(itemUIProps.queryParms));
+    };
+    fetchData();
+  }, [itemUIProps.queryParms]);
+
+  useEffect(() => {
+    dispatch(actions.fetchCenters());
+    dispatch(actions.fetchCategory());
+  }, []);
   // const isAccessForEdit = false;
   // const isAccessForDelete = false;
 
   const isAccessForEdit = userAccess.find(
     (item) => item.componentName === "UpdateVehicleDetail"
-  )
+  );
 
   const isAccessForDelete = userAccess.find(
     (item) => item.componentName === "DeleteVehicleDetail"
-  )
-  const { totalCount, entities, listLoading } = currentState
+  );
+  const { totalCount, entities, listLoading } = currentState;
   //console.log("currentState listLoading", listLoading)
   // Table columns
   const columns = [
@@ -73,6 +81,9 @@ export function ItemsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "200px",
+      },
     },
     {
       dataField: "regNo",
@@ -109,14 +120,14 @@ export function ItemsTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
       formatter: (cell) => {
-        let dateObj = cell
+        let dateObj = cell;
         if (typeof cell !== "object") {
-          dateObj = new Date(cell)
+          dateObj = new Date(cell);
         }
         return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
           "0" +
           (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`
+        ).slice(-2)}/${dateObj.getUTCFullYear()}`;
       },
     },
     // {
@@ -153,11 +164,11 @@ export function ItemsTable() {
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
-      style: {
-        minWidth: "100px",
-      },
+      // style: {
+      //   minWidth: "100px",
+      // },
     },
-  ]
+  ];
 
   //Table pagination properties
   const paginationOptions = {
@@ -166,7 +177,7 @@ export function ItemsTable() {
     sizePerPageList: uiHelpers.sizePerPageList,
     sizePerPage: itemUIProps.queryParms.pageSize,
     page: itemUIProps.queryParms.pageNumber,
-  }
+  };
 
   return (
     <>
@@ -180,8 +191,8 @@ export function ItemsTable() {
               <BootstrapTable
                 wrapperClasses="table-responsive"
                 bordered={false}
-                classes="table table-head-custom table-vertical-center overflow-hidden"
-                bootstrap4
+                // classes="table table-head-custom table-vertical-center overflow-hidden"
+                // bootstrap4
                 remote
                 keyField="id"
                 data={entities === null ? [] : entities}
@@ -196,7 +207,7 @@ export function ItemsTable() {
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>
             </Pagination>
-          )
+          );
         }}
       </PaginationProvider>
       {/* <BootstrapTable
@@ -210,5 +221,5 @@ export function ItemsTable() {
         columns={columns}
       ></BootstrapTable> */}
     </>
-  )
+  );
 }

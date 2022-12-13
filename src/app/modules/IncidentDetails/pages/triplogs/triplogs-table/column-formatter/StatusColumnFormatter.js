@@ -1,23 +1,11 @@
-import React from "react"
-import {
-  IncidentStatusCssClasses,
-  IncidentStatusTitles,
-} from "../../TripLogsUIHelpers"
+import React from "react";
 
 export const StatusColumnFormatter = (cellContent, row) => (
   <span
     className={`label label-lg label-light-${
-      row.status === "Open" ? "success" : "danger"
+      row?.status?.toLowerCase() == "close" ? "danger" : "success"
     } label-inline`}
   >
     {row.status}
   </span>
-
-  //   <span
-  //     className={`label label-lg label-light-${
-  //       IncidentStatusCssClasses[row.isActive]
-  //     } label-inline`}
-  //   >
-  //     {IncidentStatusTitles[row.isActive]}
-  //   </span>
-)
+);

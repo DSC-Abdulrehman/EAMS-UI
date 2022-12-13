@@ -1,43 +1,43 @@
-import React, { useEffect, useMemo } from "react"
-import { Modal } from "react-bootstrap"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
-import * as actions from "../../../_redux/vehiclesActions"
-import { useItemUIContext } from "../ItemUIContext"
+import React, { useEffect, useMemo } from "react";
+import { Modal } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
+import * as actions from "../../../_redux/vehiclesActions";
+import { useItemUIContext } from "../ItemUIContext";
 
 export function ItemDeleteDialog({ id, show, onHide }) {
   // Centers UI Context
-  const itemUIContext = useItemUIContext()
+  const itemUIContext = useItemUIContext();
   const itemUIProps = useMemo(() => {
     return {
       queryParams: itemUIContext.queryParams,
-    }
-  }, [itemUIContext])
+    };
+  }, [itemUIContext]);
 
   // Customers Redux state
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { isLoading } = useSelector(
     (state) => ({ isLoading: state.vehicles.actionsLoading }),
     shallowEqual
-  )
+  );
   //console.log("isLoading", isLoading)
   // if !id we should close modal
   useEffect(() => {
     if (!id) {
-      onHide()
+      onHide();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
+  }, [id]);
 
   // looking for loading/dispatch
-  useEffect(() => {}, [isLoading, dispatch])
+  useEffect(() => {}, [isLoading, dispatch]);
 
   const deleteItem = () => {
     dispatch(actions.deleteVehicle(id)).then(() => {
-      onHide()
-      dispatch(actions.fetchVehicles(itemUIProps.queryParams))
-    })
-  }
+      onHide();
+      dispatch(actions.fetchVehicles(itemUIProps.queryParams));
+    });
+  };
 
   return (
     <Modal
@@ -55,10 +55,7 @@ export function ItemDeleteDialog({ id, show, onHide }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && (
-          <span>Are you sure to permanently delete this user?</span>
-        )}
-        {isLoading && <span>user is deleting...</span>}
+        <span>Are you sure to permanently delete this vehicle?</span>
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -75,10 +72,10 @@ export function ItemDeleteDialog({ id, show, onHide }) {
             onClick={deleteItem}
             className="btn btn-primary btn-elevate"
           >
-            Delete
+            {isLoading ? <span>Deleting...</span> : <span>Delete</span>}
           </button>
         </div>
       </Modal.Footer>
     </Modal>
-  )
+  );
 }

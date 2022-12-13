@@ -1,19 +1,20 @@
-import React from "react"
-import { useField } from "formik"
-import { FieldFeedbackLabel } from "./FieldFeedbackLabel"
+import React from "react";
+import { useField } from "formik";
+import { FieldFeedbackLabel } from "./FieldFeedbackLabel";
 
 const getFieldCSSClasses = (touched, errors) => {
-  const classes = ["form-control", "form-control-solid"]
+  // Chnage form-control-solid to form-control
+  const classes = ["form-control", "form-control"];
   if (touched && errors) {
-    classes.push("is-invalid-select")
+    classes.push("is-invalid-select");
   }
 
   if (touched && !errors) {
-    classes.push("is-valid-select")
+    classes.push("is-valid-select");
   }
 
-  return classes.join(" ")
-}
+  return classes.join(" ");
+};
 
 export function Select({
   label,
@@ -23,8 +24,8 @@ export function Select({
   children,
   ...props
 }) {
-  const [field, meta] = useField(props)
-  const { touched, error } = meta
+  const [field, meta] = useField(props);
+  const { touched, error } = meta;
   return (
     <>
       {label && <label>Select {label}</label>}
@@ -44,5 +45,5 @@ export function Select({
         />
       )}
     </>
-  )
+  );
 }

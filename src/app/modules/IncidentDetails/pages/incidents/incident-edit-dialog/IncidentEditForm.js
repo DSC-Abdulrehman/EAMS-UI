@@ -1,17 +1,16 @@
-import React, { useEffect } from "react"
-import { Modal } from "react-bootstrap"
-import { Formik, Form, Field } from "formik"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import * as Yup from "yup"
+import React, { useEffect } from "react";
+import { Modal } from "react-bootstrap";
+import { Formik, Form, Field } from "formik";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
 import {
   Input,
   Select,
   DatePickerField,
   TextArea,
-} from "../../../../../../_metronic/_partials/controls"
-import { max } from "date-fns"
-import * as actions from "../../../_redux/incidents/incidentActions"
-
+} from "../../../../../../_metronic/_partials/controls";
+import { max } from "date-fns";
+import * as actions from "../../../_redux/incidents/incidentActions";
 
 // Validation schema
 const incidentEditSchema = Yup.object().shape({
@@ -40,16 +39,16 @@ const incidentEditSchema = Yup.object().shape({
   vehicleId: Yup.mixed()
     .nullable(false)
     .required("Date of Birth is required"),
-})
+});
 
 function validateCenterId(value) {
-  let error
+  let error;
   if (!value) {
-    error = "Required"
+    error = "Required";
   } else if (value === 0) {
-    error = "Invalid email address"
+    error = "Invalid email address";
   }
-  return error
+  return error;
 }
 
 export function IncidentEditForm({
@@ -64,30 +63,29 @@ export function IncidentEditForm({
   isUserForRead,
   setCenter,
 }) {
-  const dispatch = useDispatch()
-  const getCenterId = ((id) =>{
-  
-    const queryParams ={
+  const dispatch = useDispatch();
+
+  const getCenterId = (id) => {
+    const queryParams = {
       filter: {
-        "searchQuery": ""
-    },
+        searchQuery: "",
+      },
       sortOrder: "name",
       pageSize: 10,
       pageNumber: 1,
-      centerId: id
-    }
+      centerId: id,
+    };
 
-    dispatch(actions.fetchVehicleById({...queryParams}))
-    
-  })
+    dispatch(actions.fetchVehicleById({ ...queryParams }));
+  };
 
   const NewIncidentForEdit = {
     ...incident.incident,
     vehicleId: incident.vehicleId,
     centerId: incident.centerId,
-  }
+  };
 
-  const selectedVehicle = incident.vehicleId
+  const selectedVehicle = incident.vehicleId;
   // setCenter(incident.centerId)
   // console.log("NewIncidentForEdit", NewIncidentForEdit)
   // console.log("vehicleByCenterId", vehicleByCenterId)
@@ -99,7 +97,7 @@ export function IncidentEditForm({
         initialValues={NewIncidentForEdit}
         validationSchema={incidentEditSchema}
         onSubmit={(values) => {
-          saveIncident(values)
+          saveIncident(values);
         }}
       >
         {({ errors, touched, isValidating, handleSubmit, handleChange }) => (
@@ -168,7 +166,7 @@ export function IncidentEditForm({
                               >
                                 {response.label}
                               </option>
-                            )
+                            );
                           })
                         ) : (
                           <></>
@@ -189,7 +187,7 @@ export function IncidentEditForm({
                               >
                                 {response.label}
                               </option>
-                            )
+                            );
                           })
                         ) : (
                           <></>
@@ -212,9 +210,9 @@ export function IncidentEditForm({
                         name="centerId"
                         label="Center"
                         onChange={(e) => {
-                          setCenter(e.currentTarget.value)
-                          handleChange(e)
-                          getCenterId(e.currentTarget.value)
+                          setCenter(e.currentTarget.value);
+                          handleChange(e);
+                          getCenterId(e.currentTarget.value);
                         }}
                       >
                         <option>Select Nearest Center</option>
@@ -227,7 +225,7 @@ export function IncidentEditForm({
                               >
                                 {response.label}
                               </option>
-                            )
+                            );
                           })
                         ) : (
                           <></>
@@ -235,33 +233,34 @@ export function IncidentEditForm({
                       </Select>
                     </div>
                   </div>
+
                   <div className="form-group row">
                     <div className="col-lg-12">
                       <Select name="vehicleId" label="vehicle" multiple>
                         {isUserForRead ? (
                           selectedVehicle ? (
                             selectedVehicle.map((res) => {
-                              //console.log("selectedVehicle", res)
                               return (
                                 <option key={res.id} value={res.id}>
                                   {res.regNo}
                                 </option>
-                              )
+                              );
                             })
                           ) : (
                             <></>
                           )
-                        ) : vehicleByCenterId ? (
+                        ) : vehicleByCenterId?.length > 0 ? (
                           vehicleByCenterId.map((res) => {
-                            // console.log("vehicleByCenterId", res)
                             return (
                               <option key={res.id} value={res.id}>
                                 {res.regNo}
                               </option>
-                            )
+                            );
                           })
                         ) : (
-                          <></>
+                          <>
+                            <option>Not Found</option>
+                          </>
                         )}
                         {/* {vehicleByCenterId ? (
                           vehicleByCenterId.map((response) => {
@@ -331,5 +330,5 @@ export function IncidentEditForm({
         )}
       </Formik>
     </>
-  )
+  );
 }

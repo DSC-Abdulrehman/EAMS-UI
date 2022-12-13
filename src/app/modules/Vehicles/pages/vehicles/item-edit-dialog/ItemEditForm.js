@@ -1,40 +1,50 @@
-import React, { useEffect } from "react"
-import { Modal } from "react-bootstrap"
-import { Formik, Form, Field } from "formik"
-import * as Yup from "yup"
+import React, { useState } from "react";
+import { Modal } from "react-bootstrap";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 import {
   Input,
   Select,
   DatePickerField,
-} from "../../../../../../_metronic/_partials/controls"
+} from "../../../../../../_metronic/_partials/controls";
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "3rem",
+    marginBottom: "3rem",
+  },
+}));
 
 // Validation schema
 const itemEditSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, "Minimum 3 symbols")
-    .max(50, "Maximum 50 symbols"),
+    .max(50, "Maximum 50 symbols")
+    .required(),
   regNo: Yup.string()
     .min(3, "Minimum 3 symbols")
-    .max(50, "Maximum 50 symbols"),
-    center: Yup.string(),
-    category: Yup.string(),
-  engineCapacity: Yup.string(),
-  registerCity: Yup.string(),
-  chasis: Yup.string(),
-  milleage: Yup.string(),
-  year: Yup.string(),
-  make: Yup.string(),
-  model: Yup.string(),
-  color: Yup.string(),
-  fuelType: Yup.string(),
-  transmission: Yup.string(),
-  status: Yup.string(),
-  centerId: Yup.number()
-    .required()
-    .positive()
-    .integer(),
-  vehicleCategoryId: Yup.string(),
-})
+    .max(50, "Maximum 50 symbols")
+    .required(),
+  // center: Yup.string(),
+  // category: Yup.string(),
+  engineCapacity: Yup.string().required(),
+  registerCity: Yup.string().required(),
+  chasis: Yup.string().required(),
+  milleage: Yup.string().required(),
+  year: Yup.string().required(),
+  make: Yup.string().required(),
+  model: Yup.string().required(),
+  color: Yup.string().required(),
+  fuelType: Yup.string().required(),
+  transmission: Yup.string().required(),
+  status: Yup.string().required(),
+  centerId: Yup.string().required(),
+  vehicleCategoryId: Yup.string().required(),
+});
 
 export function ItemEditForm({
   saveItem,
@@ -45,17 +55,32 @@ export function ItemEditForm({
   itemForRead,
   category,
 }) {
-
   //console.log("itemfor edit", item)
+  const classes = useStyles();
+  const [Loading, setLoading] = useState(false);
+
+  const enableLoading = () => {
+    setLoading(true);
+  };
+  const disableLoading = () => {
+    setLoading(false);
+  };
   return (
     <>
+      {actionsLoading && (
+        <div className={classes.root}>
+          <CircularProgress />
+        </div>
+      )}
+
       <Formik
         enableReinitialize={true}
         initialValues={item}
         validationSchema={itemEditSchema}
         onSubmit={(values) => {
-          // console.log("saveItem", values)
-          saveItem(values)
+          enableLoading();
+          saveItem(values);
+          // disableLoading();
         }}
       >
         {({ handleSubmit }) => (
@@ -100,6 +125,7 @@ export function ItemEditForm({
                         component={Input}
                         placeholder=""
                         label="vehicle Name"
+                        customFeedbackLabel="hello"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -181,30 +207,42 @@ export function ItemEditForm({
                       />
                     </div>
                     <div className="col-lg-4">
-                      <Field
+                      <Select name="fuelType" label="Fuel Type">
+                        <option value="petrol">Petrol</option>
+                        <option value="gas">Gas</option>
+                      </Select>
+                      {/* <Field
                         name="fuelType"
                         component={Input}
                         placeholder=""
                         label="Fuel Type"
-                      />
+                      /> */}
                     </div>
                     <div className="col-lg-4">
-                      <Field
+                      <Select name="status" label="Status">
+                        <option value="petrol">Available</option>
+                        <option value="gas">Unavailable</option>
+                      </Select>
+                      {/* <Field
                         name="status"
                         component={Input}
                         placeholder=""
                         label="Status"
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-4">
-                      <Field
+                      <Select name="transmission" label="Transmission">
+                        <option value="auto">Auto</option>
+                        <option value="manual">manual</option>
+                      </Select>
+                      {/* <Field
                         name="transmission"
                         component={Input}
                         placeholder=""
                         label="Transmission"
-                      />
+                      /> */}
                     </div>
                     <div className="col-lg-4">
                       <Select name="centerId" label="Center">
@@ -217,7 +255,7 @@ export function ItemEditForm({
                               >
                                 {response.label}
                               </option>
-                            )
+                            );
                           })}
                       </Select>
                     </div>
@@ -232,7 +270,7 @@ export function ItemEditForm({
                               >
                                 {response.label}
                               </option>
-                            )
+                            );
                           })}
                       </Select>
                     </div>
@@ -267,6 +305,9 @@ export function ItemEditForm({
                   className="btn btn-primary btn-elevate"
                 >
                   Save
+                  {Loading && (
+                    <span className="ml-3 mr-3 spinner spinner-white"></span>
+                  )}
                 </button>
               )}
             </Modal.Footer>
@@ -274,5 +315,5 @@ export function ItemEditForm({
         )}
       </Formik>
     </>
-  )
+  );
 }
