@@ -170,7 +170,7 @@ export function SearchDropdown() {
           }}
           id="kt_quick_search_toggle"
         >
-          <Dropdown.Toggle as={DropdownTopbarItemToggler}>
+          {/* <Dropdown.Toggle as={DropdownTopbarItemToggler}>
             <OverlayTrigger
               placement="bottom"
               overlay={<Tooltip id="search-panel-tooltip">Quick search</Tooltip>}
@@ -183,7 +183,7 @@ export function SearchDropdown() {
                 </span>
               </div>
             </OverlayTrigger>
-          </Dropdown.Toggle>
+          </Dropdown.Toggle> */}
           <Dropdown.Menu className="dropdown-menu p-0 m-0 dropdown-menu-right dropdown-menu-anim-up dropdown-menu-lg">
             <div
               id="kt_quick_search_dropdown"
