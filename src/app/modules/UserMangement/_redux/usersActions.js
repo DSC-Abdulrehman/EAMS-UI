@@ -68,6 +68,9 @@ export const deleteUser = (id) => (dispatch) => {
 
 export const createUser = (userForCreation) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }))
+  userForCreation.phNo = userForCreation.phNo.toString()
+  userForCreation.cnic = userForCreation.cnic.toString()
+  console.log(userForCreation)
   return requestFromServer
     .createUser(userForCreation)
     .then((res) => {

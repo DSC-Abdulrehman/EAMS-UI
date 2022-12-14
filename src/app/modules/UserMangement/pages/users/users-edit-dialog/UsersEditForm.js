@@ -130,6 +130,7 @@ export function UserEditForm({
                     <div className="col-lg-4">
                       <Field
                         name="phNo"
+                        type="number"
                         component={Input}
                         placeholder=""
                         label="Phone No"
@@ -138,13 +139,22 @@ export function UserEditForm({
                     <div className="col-lg-4">
                       <Field
                         name="cnic"
+                        type="number"
                         component={Input}
                         placeholder=""
                         label="CNIC"
                       />
                     </div>
                     <div className="col-lg-4">
-                      <Field name="status" component={Input} label="status" />
+                      {/* <Field name="status" component={Input} label="status" /> */}
+                      <Select name="status" label="Status">
+                        <option value="available">
+                          Available
+                        </option>
+                        <option value="not available">
+                          Not Available
+                        </option>
+                      </Select>
                     </div>
                     {!isUserForRead && user.centerId === undefined ? (
                       <div className="col-lg-4">
