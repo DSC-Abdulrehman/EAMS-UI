@@ -61,7 +61,7 @@ export function UsersFilter({ listLoading }) {
           setFieldValue,
         }) => (
           <form onSubmit={handleSubmit} className="form form-label-right">
-            <div className="form-group row">
+            <div className="row">
               {/* <div className="col-lg-2">
                 <select
                   className="form-control"
@@ -104,7 +104,7 @@ export function UsersFilter({ listLoading }) {
                   <b>Filter</b> by Type
                 </small>
               </div> */}
-              <div className="col-lg-4">
+              <div className="col-12">
                 <input
                   type="text"
                   className="form-control"
