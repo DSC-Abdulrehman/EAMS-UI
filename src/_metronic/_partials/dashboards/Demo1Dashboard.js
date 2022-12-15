@@ -16,7 +16,7 @@ export function Demo1Dashboard() {
   return (
     <>
     <div>
-      <img src="/media/logos/wEytfp.png" alt="Edhi Foundation Logo is Here!"  width={"1225px"} height={"400px"} />
+      <img src="/media/logos/slide03.jpg" alt="Edhi Foundation Logo is Here!" />
     </div>
       {/* <div className="row">
         <div className="col-lg-6 col-xxl-4">
