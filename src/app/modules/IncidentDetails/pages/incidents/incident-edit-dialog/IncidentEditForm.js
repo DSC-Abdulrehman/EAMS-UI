@@ -23,7 +23,7 @@ const incidentEditSchema = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Caller Name is required"),
-  callerCNIC: Yup.string().matches(cnicRegExp, "CNIC shold be like 35401-2432321-1").required('Caller CNIC is required'),
+  callerCNIC: Yup.string().matches(cnicRegExp, "CNIC should be like 35401-2432321-1").required('Caller CNIC is required'),
   callerPhoneNo: Yup.string()
     .matches(phoneRegExp ,"Number should be like 03049018107"
     )

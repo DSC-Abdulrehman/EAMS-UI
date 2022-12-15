@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Modal } from "react-bootstrap"
 import { Formik, Form, Field } from "formik"
 import * as Yup from "yup"
@@ -9,6 +9,11 @@ import {
 } from "../../../../../../_metronic/_partials/controls"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import * as actions from "../../../_redux/usersActions"
+
+// Phone Number Regex
+const phoneRegExp =     /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/
+// CNIC Regex
+const cnicRegExp =     /^[0-9]{5}-[0-9]{7}-[0-9]$/
 
 // Validation schema
 const userEditSchema = Yup.object().shape({
@@ -23,22 +28,16 @@ const userEditSchema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email")
     .required("Email is required"),
-  phNo: Yup.string()
-    .min(11, "Minimum 11 symbols")
-    .max(11, "Maximum 11 symbols")
-    .required("Phone is Required"),
-  cnic: Yup.string()
-    .min(13, "Minimum 13 symbols")
-    .max(13, "Maximum 13 symbols")
-    .required("CNIC is Required"),
+  phNo: Yup.string().matches(phoneRegExp, 'Invalid format it should be 03049018107').required('Phone No is required'),
+  cnic: Yup.string().matches(cnicRegExp, "CNIC should be like 35401-2432321-1").required('CNIC is required'),
   password: Yup.string().required("password is required"),
-  status: Yup.string(),
-  centerId: Yup.mixed()
+  status: Yup.string().required("Please select status"),
+  centerId: Yup.string()
     .nullable(false)
-    .required("Date of Birth is required"),
+    .required("Please select center"),
   roleId: Yup.mixed()
     .nullable(false)
-    .required("Date of Birth is required"),
+    .required("Please select role"),
   // ipAddress: Yup.string().required("IP Address is required"),
 })
 
@@ -51,6 +50,10 @@ export function UserEditForm({
   centers,
   isUserForRead,
 }) {
+  const [loading, setLoading] = useState(false)
+  const enableLoading = (() =>{
+    setLoading(true)
+  })
   const dispatch = useDispatch()
   const title = "UserEditForm"
   //console.log(title, user)
@@ -61,11 +64,12 @@ export function UserEditForm({
         initialValues={user}
         validationSchema={userEditSchema}
         onSubmit={(values) => {
+          enableLoading()
           //console.log("User form Values", values)
           saveUser(values)
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, errors }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
@@ -78,6 +82,9 @@ export function UserEditForm({
                   <div className="form-group row">
                     <div className="col-lg-6">
                       <Select name="centerId" label="Center">
+                        <option value="" disabled selected>
+                            Please select center
+                        </option>
                         {centers.map((item) => {
                           return (
                             <option key={item.value} value={item.value}>
@@ -86,9 +93,13 @@ export function UserEditForm({
                           )
                         })}
                       </Select>
+                      {/* <p className="inv-feedback">{errors.centerId ? errors.centerId : ''}</p> */}
                     </div>
                     <div className="col-lg-6">
                       <Select name="roleId" label="Role">
+                        <option value="" disabled selected>
+                            Please select role
+                        </option>
                         {roles.map((item) => {
                           return (
                             <option key={item.value} value={item.value}>
@@ -97,6 +108,7 @@ export function UserEditForm({
                           )
                         })}
                       </Select>
+                      {/* <p className="inv-feedback">{errors.roleId ? errors.roleId : ''}</p> */}
                     </div>
                   </div>
                   <div className="form-group row">
@@ -107,6 +119,7 @@ export function UserEditForm({
                         placeholder="First Name"
                         label="First Name"
                       />
+                      {/* <p className="inv-feedback">{errors.firstName ? errors.firstName : ''}</p> */}
                     </div>
                     <div className="col-lg-4">
                       <Field
@@ -124,30 +137,31 @@ export function UserEditForm({
                         placeholder="Email"
                         label="Email"
                       />
+                      {/* <p className="inv-feedback">{errors.email ? errors.email : ''}</p> */}
                     </div>
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-4">
                       <Field
                         name="phNo"
-                        type="number"
                         component={Input}
-                        placeholder=""
                         label="Phone No"
                       />
+                      {/* <p className="inv-feedback">{errors.phNo ? errors.phNo : ''}</p> */}
                     </div>
                     <div className="col-lg-4">
                       <Field
                         name="cnic"
-                        type="number"
                         component={Input}
-                        placeholder=""
                         label="CNIC"
                       />
+                      {/* <p className="inv-feedback">{errors.cnic ? errors.cnic : ''}</p> */}
                     </div>
                     <div className="col-lg-4">
-                      {/* <Field name="status" component={Input} label="status" /> */}
                       <Select name="status" label="Status">
+                        <option value="" disabled selected>
+                            Please select status
+                        </option>
                         <option value="available">
                           Available
                         </option>
@@ -155,7 +169,10 @@ export function UserEditForm({
                           Not Available
                         </option>
                       </Select>
+                      {/* <p className="inv-feedback">{errors.status ? errors.status : ''}</p> */}
                     </div>
+                  </div>
+                  <div className="form-group row">
                     {!isUserForRead && user.centerId === undefined ? (
                       <div className="col-lg-4">
                         <Field
@@ -165,6 +182,7 @@ export function UserEditForm({
                           placeholder=""
                           label="Password"
                         />
+                        {/* <p className="inv-feedback">{errors.password ? errors.password : ''}</p> */}
                       </div>
                     ) : (
                       <></>
@@ -200,6 +218,7 @@ export function UserEditForm({
                   className="btn btn-primary btn-elevate"
                 >
                   Save
+                  {loading && <span className="ml-3 mr-3 spinner spinner-white"></span>}
                 </button>
               )}
             </Modal.Footer>
