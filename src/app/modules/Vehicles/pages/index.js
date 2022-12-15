@@ -1,8 +1,8 @@
-import React, { Suspense } from "react"
-import { useSelector } from "react-redux"
-import { Redirect, Route, Switch } from "react-router-dom"
-import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout"
-import { ItemPage } from "./vehicles"
+import React, { Suspense } from "react";
+import { useSelector } from "react-redux";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
+import { ItemPage } from "./vehicles";
 
 export default function VehicleManagment() {
   // const { auth } = useSelector((auth) => auth)
@@ -27,15 +27,12 @@ export default function VehicleManagment() {
         {
           <Redirect
             exact={true}
-            from="/vehicle-details"
-            to="/vehicle-details/read-all-vehicle-details"
+            from="/vehicles"
+            to="/vehicles/read-all-vehicles"
           />
         }
-        <ContentRoute
-          path="/vehicle-details/read-all-vehicle-details"
-          component={ItemPage}
-        />
+        <ContentRoute path="/vehicles/read-all-vehicles" component={ItemPage} />
       </Switch>
     </Suspense>
-  )
+  );
 }

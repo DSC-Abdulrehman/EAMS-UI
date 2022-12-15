@@ -41,45 +41,45 @@ export function ItemPage({ history }) {
     newCenterButtonClick: () => {
       dispatch(fetchVehicle(0));
 
-      history.push("/vehicle-details/read-all-vehicle-details/new");
+      history.push("/vehicles/read-all-vehicles/new");
     },
     openEditCenterDialog: (id) => {
       dispatch(fetchVehicle(id));
-      history.push(`/vehicle-details/read-all-vehicle-details/${id}/edit`);
+      history.push(`/vehicles/read-all-vehicles/${id}/edit`);
     },
     openDeleteCenterDialog: (id) => {
-      history.push(`/vehicle-details/read-all-vehicle-details/${id}/delete`);
+      history.push(`/vehicles/read-all-vehicles/${id}/delete`);
     },
     openReadCenterDialog: (id, isUserRead) => {
       dispatch(fetchVehicle(id));
-      history.push(`/vehicle-details/read-all-vehicle-details/${id}/read`);
+      history.push(`/vehicles/read-all-vehicles/${id}/read`);
     },
   };
   return (
     <ItemUIProvider itemUIEvents={itemUIEvents}>
-      <Route exact path="/vehicle-details/read-all-vehicle-details/new">
+      <Route exact path="/vehicles/read-all-vehicles/new">
         {({ history, match }) => (
           <ItemEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/vehicle-details/read-all-vehicle-details");
+              history.push("/vehicles/read-all-vehicles");
             }}
           />
         )}
       </Route>
-      <Route path="/vehicle-details/read-all-vehicle-details/:id/edit">
+      <Route path="/vehicles/read-all-vehicles/:id/edit">
         {({ history, match }) => (
           <ItemEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
               dispatch(fetchVehicle(0));
-              history.push("/vehicle-details/read-all-vehicle-details");
+              history.push("/vehicles/read-all-vehicles");
             }}
           />
         )}
       </Route>
-      <Route path="/vehicle-details/read-all-vehicle-details/:id/read">
+      <Route path="/vehicles/read-all-vehicles/:id/read">
         {({ history, match }) => (
           <ItemEditDialog
             show={match != null}
@@ -87,18 +87,18 @@ export function ItemPage({ history }) {
             itemForRead={true}
             onHide={() => {
               dispatch(fetchVehicle(0));
-              history.push("/vehicle-details/read-all-vehicle-details");
+              history.push("/vehicles/read-all-vehicles");
             }}
           />
         )}
       </Route>
-      <Route path="/vehicle-details/read-all-vehicle-details/:id/delete">
+      <Route path="/vehicles/read-all-vehicles/:id/delete">
         {({ history, match }) => (
           <ItemDeleteDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/vehicle-details/read-all-vehicle-details");
+              history.push("/vehicles/read-all-vehicles");
             }}
           />
         )}

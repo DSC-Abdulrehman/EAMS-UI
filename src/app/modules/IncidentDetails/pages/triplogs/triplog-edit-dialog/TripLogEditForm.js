@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react"
-import { Modal } from "react-bootstrap"
-import { Formik, Form, Field } from "formik"
-import * as Yup from "yup"
+import React, { useEffect, useState } from "react";
+import { Modal } from "react-bootstrap";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 import {
   Input,
   Select,
   DatePickerField,
   TextArea,
-} from "../../../../../../_metronic/_partials/controls"
-import { max } from "date-fns"
+} from "../../../../../../_metronic/_partials/controls";
+import MaskedInput from "react-text-mask";
 
 // Validation schema
 const triplogEditSchema = Yup.object().shape({
-  finalReading: Yup.number().required("Meter Reading Required"),
-  logBookNo: Yup.number().nullable(),
-  price: Yup.number().nullable(),
+  finalReading: Yup.number().required(),
+  logBookNo: Yup.number()
+    .nullable()
+    .required(),
+  price: Yup.number()
+    .nullable()
+    .required(),
   status: Yup.mixed()
     .nullable(false)
     .required("Status is required"),
-})
+});
 
 // function validateCenterId(value) {
 //   let error
@@ -38,6 +42,7 @@ export function TripLogEditForm({
   isUserForRead,
   setCenter,
 }) {
+  const [loading, setLoading] = useState(false);
   const TripStatus = [
     {
       label: "Open",
@@ -48,7 +53,7 @@ export function TripLogEditForm({
     {
       label: "Close",
     },
-  ]
+  ];
   // const DriverTripLog = { ...driverTrip, status }
   // const getStatus = driverTrip
 
@@ -56,15 +61,23 @@ export function TripLogEditForm({
   // if (driverTrip.logBookNo === null) {
   //   var newdriverTripLog = { ...driverTrip, logBookNo: "" }
   // }
-  console.log("incident for edit", driverTrip)
+
+  const enableLoading = () => {
+    setLoading(true);
+  };
+  const disabledLoading = () => {
+    setLoading(false);
+  };
+  console.log("incident for edit", driverTrip);
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={driverTrip}
         validationSchema={triplogEditSchema}
-        onSubmit={(values) => {
-          updateTripLog(values)
+        onSubmit={async (values) => {
+          await enableLoading();
+          updateTripLog(values);
         }}
       >
         {({ errors, touched, isValidating, handleSubmit, handleChange }) => (
@@ -103,7 +116,7 @@ export function TripLogEditForm({
                               >
                                 {response.label}
                               </option>
-                            )
+                            );
                           })
                         ) : (
                           <></>
@@ -151,6 +164,9 @@ export function TripLogEditForm({
                     className="btn btn-primary btn-elevate"
                   >
                     Save
+                    {loading && (
+                      <span className="ml-3 mr-3 spinner spinner-white"></span>
+                    )}
                   </button>
                   <button
                     type="button"
@@ -185,5 +201,5 @@ export function TripLogEditForm({
         )}
       </Formik>
     </>
-  )
+  );
 }

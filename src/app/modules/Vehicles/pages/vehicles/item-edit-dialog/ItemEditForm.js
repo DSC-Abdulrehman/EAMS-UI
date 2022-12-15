@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Validation schema
+const requiredErrorMessage = "This field is required";
 const itemEditSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, "Minimum 3 symbols")
@@ -41,7 +42,7 @@ const itemEditSchema = Yup.object().shape({
   color: Yup.string().required(),
   fuelType: Yup.string().required(),
   transmission: Yup.string().required(),
-  status: Yup.string().required(),
+  status: Yup.string().required(requiredErrorMessage),
   centerId: Yup.string().required(),
   vehicleCategoryId: Yup.string().required(),
 });
@@ -56,6 +57,7 @@ export function ItemEditForm({
   category,
 }) {
   //console.log("itemfor edit", item)
+
   const classes = useStyles();
   const [Loading, setLoading] = useState(false);
 
@@ -83,7 +85,7 @@ export function ItemEditForm({
           // disableLoading();
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, touched, errors }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
@@ -219,16 +221,19 @@ export function ItemEditForm({
                       /> */}
                     </div>
                     <div className="col-lg-4">
-                      <Select name="status" label="Status">
-                        <option value="petrol">Available</option>
-                        <option value="gas">Unavailable</option>
-                      </Select>
                       {/* <Field
                         name="status"
-                        component={Input}
+                        component={Select}
                         placeholder=""
-                        label="Status"
+                        label="status No"
+                        children={}
                       /> */}
+                      <Select name="status" label="Status">
+                        <option>Please Select Option</option>
+                        <option value="Available">Available</option>
+                        <option value="Unavailable">Unavailable</option>
+                      </Select>
+                      {touched.status && errors.status ? errors.status : null}
                     </div>
                   </div>
                   <div className="form-group row">

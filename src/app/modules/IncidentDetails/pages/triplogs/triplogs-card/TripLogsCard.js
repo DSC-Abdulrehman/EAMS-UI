@@ -1,41 +1,41 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from "react";
 
 import {
   Card,
   CardBody,
   CardHeader,
   CardHeaderToolbar,
-} from "../../../../../../_metronic/_partials/controls"
-import { TripLogsTable } from "../triplogs-table/TripsLogsTable"
-import { useTripLogsUIContext } from "../TripLogsUIContext"
-import { UsersFilter } from "../incidents-filter/IncidentsFIlter"
-import { useDispatch, useSelector, shallowEqual } from "react-redux"
+} from "../../../../../../_metronic/_partials/controls";
+import { TripLogsTable } from "../triplogs-table/TripsLogsTable";
+import { useTripLogsUIContext } from "../TripLogsUIContext";
+import { UsersFilter } from "../incidents-filter/IncidentsFIlter";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 export function TripLogsCard() {
-  const incidentsUIContext = useTripLogsUIContext()
+  const incidentsUIContext = useTripLogsUIContext();
   //console.log("incidentsUIContext", incidentsUIContext)
   const incidentsUIProps = useMemo(() => {
     return {
       newUserButtonClick: incidentsUIContext.newUserButtonClick,
       openEditUserDialog: incidentsUIContext.openEditUserDialog,
-    }
-  }, [incidentsUIContext])
+    };
+  }, [incidentsUIContext]);
 
   const { userAccess } = useSelector(
     (state) => ({
       userAccess: state.auth.userAccess.Users,
     }),
     shallowEqual
-  )
+  );
 
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateUser"
-  )
+  );
 
   return (
     <>
       <Card>
-        <CardHeader title="">
+        <CardHeader title={<UsersFilter />}>
           {/* <CardHeaderToolbar>
             {accessUser ? (
               <button
@@ -53,10 +53,9 @@ export function TripLogsCard() {
         </CardHeader>
 
         <CardBody>
-          <UsersFilter />
           <TripLogsTable />
         </CardBody>
       </Card>
     </>
-  )
+  );
 }

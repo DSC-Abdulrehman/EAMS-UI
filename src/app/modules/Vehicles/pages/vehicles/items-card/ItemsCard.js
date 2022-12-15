@@ -24,12 +24,12 @@ export function ItemsCard() {
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Users,
+      userAccess: state?.auth?.userAccess?.Users,
     }),
     shallowEqual
   );
 
-  const accessUser = userAccess.find(
+  const accessUser = userAccess?.find(
     (item) => item.componentName === "CreateUser"
   );
 

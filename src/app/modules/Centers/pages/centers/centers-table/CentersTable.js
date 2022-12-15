@@ -1,26 +1,26 @@
-import React, { useEffect, useMemo } from "react"
-import BootstrapTable from "react-bootstrap-table-next"
+import React, { useEffect, useMemo } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
   PaginationProvider,
-} from "react-bootstrap-table2-paginator"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
+} from "react-bootstrap-table2-paginator";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
   PleaseWaitMessage,
   sortCaret,
   headerSortingClasses,
-} from "../../../../../../_metronic/_helpers"
-import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter"
-import { CreatedColumnFormatter } from "./column-formatter/CreatedColumnFormatter"
-import * as uiHelpers from "../CentersUIHelpers"
-import * as actions from "../../../_redux/centersActions"
-import { useCentersUIContext } from "../CentersUIContext"
-import { Pagination } from "../../../../../../_metronic/_partials/controls"
+} from "../../../../../../_metronic/_helpers";
+import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
+import { CreatedColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
+import * as uiHelpers from "../CentersUIHelpers";
+import * as actions from "../../../_redux/centersActions";
+import { useCentersUIContext } from "../CentersUIContext";
+import { Pagination } from "../../../../../../_metronic/_partials/controls";
 
 export function CentersTable() {
   //Users UI Context
-  const centersUIContext = useCentersUIContext()
+  const centersUIContext = useCentersUIContext();
 
   const centersUIProps = useMemo(() => {
     return {
@@ -29,34 +29,34 @@ export function CentersTable() {
       openReadCenterDialog: centersUIContext.openReadCenterDialog,
       queryParms: centersUIContext.queryParams,
       setQueryParams: centersUIContext.setQueryParams,
-    }
-  }, [centersUIContext])
+    };
+  }, [centersUIContext]);
 
   const { currentStatecenters, userAccess } = useSelector(
     (state) => ({
       currentStatecenters: state.centers,
-      userAccess: state.auth.userAccess.Users,
+      userAccess: state?.auth?.userAccess?.Users,
+      //userAccess: state.auth.userAccess.Users,
     }),
     shallowEqual
-  )
+  );
   // Centers Redux state
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     //console.log("Fetch Centers")
-    dispatch(actions.fetchCenters(centersUIProps.queryParms))
-  }, [centersUIProps.queryParms, dispatch])
+    dispatch(actions.fetchCenters(centersUIProps.queryParms));
+  }, [centersUIProps.queryParms, dispatch]);
 
-  //console.log("userAccess", userAccess, "Current State", currentState)
   const isAccessForEdit = userAccess.find(
     (item) => item.componentName === "UpdateUser"
-  )
+  );
 
   const isAccessForDelete = userAccess.find(
     (item) => item.componentName === "DeleteUser"
-  )
+  );
 
-  const { totalCount, entities, listLoading } = currentStatecenters
+  const { totalCount, entities, listLoading } = currentStatecenters;
   // console.log("currentStatecenters", currentStatecenters)
 
   // Table columns
@@ -96,14 +96,14 @@ export function CentersTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
       formatter: (cell) => {
-        let dateObj = cell
+        let dateObj = cell;
         if (typeof cell !== "object") {
-          dateObj = new Date(cell)
+          dateObj = new Date(cell);
         }
         return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
           "0" +
           (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`
+        ).slice(-2)}/${dateObj.getUTCFullYear()}`;
       },
     },
     // {
@@ -144,7 +144,7 @@ export function CentersTable() {
         minWidth: "100px",
       },
     },
-  ]
+  ];
 
   //Table pagination properties
   const paginationOptions = {
@@ -153,7 +153,7 @@ export function CentersTable() {
     sizePerPageList: uiHelpers.sizePerPageList,
     sizePerPage: centersUIProps.queryParms.pageSize,
     page: centersUIProps.queryParms.pageNumber,
-  }
+  };
 
   return (
     <>
@@ -183,7 +183,7 @@ export function CentersTable() {
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>
             </Pagination>
-          )
+          );
         }}
       </PaginationProvider>
       {/* <BootstrapTable
@@ -197,5 +197,5 @@ export function CentersTable() {
         columns={columns}
       ></BootstrapTable> */}
     </>
-  )
+  );
 }

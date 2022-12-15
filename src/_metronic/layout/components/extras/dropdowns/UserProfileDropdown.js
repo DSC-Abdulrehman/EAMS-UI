@@ -1,24 +1,24 @@
 /* eslint-disable no-restricted-imports */
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
-import React, { useMemo } from "react"
-import { Link } from "react-router-dom"
-import Dropdown from "react-bootstrap/Dropdown"
-import { useSelector } from "react-redux"
-import objectPath from "object-path"
-import { useHtmlClassService } from "../../../_core/MetronicLayout"
-import { toAbsoluteUrl } from "../../../../_helpers"
-import { DropdownTopbarItemToggler } from "../../../../_partials/dropdowns"
+import React, { useMemo } from "react";
+import { Link } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
+import { useSelector } from "react-redux";
+import objectPath from "object-path";
+import { useHtmlClassService } from "../../../_core/MetronicLayout";
+import { toAbsoluteUrl } from "../../../../_helpers";
+import { DropdownTopbarItemToggler } from "../../../../_partials/dropdowns";
 
 export function UserProfileDropdown() {
-  const { user } = useSelector((state) => state.auth)
-  const uiService = useHtmlClassService()
+  const { user } = useSelector((state) => state.auth);
+  const uiService = useHtmlClassService();
   const layoutProps = useMemo(() => {
     return {
       light:
         objectPath.get(uiService.config, "extras.user.dropdown.style") ===
         "light",
-    }
-  }, [uiService])
+    };
+  }, [uiService]);
 
   return (
     <Dropdown drop="down" alignRight>
@@ -40,7 +40,7 @@ export function UserProfileDropdown() {
           <span className="symbol symbol-35 symbol-light-success">
             <span className="symbol-label font-size-h5 font-weight-bold">
               {/* {user.firstname} */}
-              <img class="w-100" src="/media/users/default.jpg" />
+              <img className="w-100" src="/media/users/default.jpg" />
             </span>
           </span>
         </div>
@@ -75,7 +75,7 @@ export function UserProfileDropdown() {
               }}
             >
               <div className="symbol d-flex mr-3">
-                <img class="w-100" src="/media/users/default.jpg" />
+                <img className="w-100" src="/media/users/default.jpg" />
                 <span className="text-success font-weight-bold font-size-h4 mt-4 ml-3">
                   {user.firstname}
                 </span>
@@ -162,5 +162,5 @@ export function UserProfileDropdown() {
         </div>
       </Dropdown.Menu>
     </Dropdown>
-  )
+  );
 }

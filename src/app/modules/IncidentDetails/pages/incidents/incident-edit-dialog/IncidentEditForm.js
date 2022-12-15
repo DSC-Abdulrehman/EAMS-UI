@@ -8,18 +8,32 @@ import {
   Select,
   DatePickerField,
   TextArea,
+  MaskInput,
 } from "../../../../../../_metronic/_partials/controls";
-import { max } from "date-fns";
+import MaskedInput from "react-text-mask";
+import InputMask from "react-input-mask";
+import { TextField } from '@material-ui/core';
 import * as actions from "../../../_redux/incidents/incidentActions";
-
+const phoneRegExp = /\(123\) 456-9109/i
+// const cnicRegExp = "^[0-9+]{5}-[0-9+]{7}-[0-9]{1}$";
 // Validation schema
 const incidentEditSchema = Yup.object().shape({
   callerName: Yup.string()
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Firstname is required"),
-  callerCNIC: Yup.number(),
-  callerPhoneNo: Yup.number().required("Phone is required"),
+  callerCNIC: Yup.number().required(),
+  callerPhoneNo : Yup
+  .string()
+  .test("len", "Invalid Tel No.", (val = "") => {
+    const val_length_without_dashes = val.replace(/-|_/g, "").length;
+    return val_length_without_dashes === 12;
+  })
+  .required("Tel No. is required"),
+  // callerPhoneNo: Yup.string()
+  //   .matches(phoneRegExp ,"Phone number is not valid"
+  //   )
+  //   .required(),
   patientName: Yup.string()
     .max(50)
     .required("Patient Name is Required"),
@@ -100,7 +114,7 @@ export function IncidentEditForm({
           saveIncident(values);
         }}
       >
-        {({ errors, touched, isValidating, handleSubmit, handleChange }) => (
+        {({ errors, values, handleBlur, touched, isValidating, handleSubmit, handleChange }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               <Form className="form form-label-right">
@@ -120,13 +134,52 @@ export function IncidentEditForm({
                         label="Caller CNIC"
                       />
                     </div>
+                    {/* <div className="col-lg-4">
+                      <MaskedInput
+                        mask={[
+                          "(",
+                          /[1-9]/,
+                          /\d/,
+                          /\d/,
+                          ")",
+                          " ",
+                          /\d/,
+                          /\d/,
+                          /\d/,
+                          "-",
+                          /\d/,
+                          /\d/,
+                          /\d/,
+                          /\d/,
+                        ]}
+                        className="form-control"
+                        name="callerPhoneNo"
+                        guide={true}
+                      />
+                    </div> */}
                     <div className="col-lg-4">
+                    <InputMask
+                      mask="99-999999999-9"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.callerPhoneNo}
+                    >
+                      {() => (
+                         <Field
+                         name="callerPhoneNo"
+                         component={Input}
+                         label="Caller Phone No"
+                       />
+                      )}
+                    </InputMask>
+                    </div>
+                    {/* <div className="col-lg-4">
                       <Field
                         name="callerPhoneNo"
-                        component={Input}
+                        component={MaskInput}
                         label="Caller Phone No"
                       />
-                    </div>
+                    </div> */}
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-4">

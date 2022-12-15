@@ -1,45 +1,49 @@
-import React, { Suspense, lazy } from "react"
-import { Redirect, Switch, Route } from "react-router-dom"
-import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout"
-import { BuilderPage } from "./pages/BuilderPage"
-import { MyPage } from "./pages/MyPage"
-import { DashboardPage } from "./pages/DashboardPage"
-import { shallowEqual, useSelector } from "react-redux"
+import React, { Suspense, lazy } from "react";
+import { Redirect, Switch, Route } from "react-router-dom";
+import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
+import { BuilderPage } from "./pages/BuilderPage";
+import { MyPage } from "./pages/MyPage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { shallowEqual, useSelector } from "react-redux";
 //import SettingsPage from "./modules/Settings/pages/SettingsPage"
 
 const GoogleMaterialPage = lazy(() =>
   import("./modules/GoogleMaterialExamples/GoogleMaterialPage")
-)
+);
 const ReactBootstrapPage = lazy(() =>
   import("./modules/ReactBootstrapExamples/ReactBootstrapPage")
-)
+);
 const ECommercePage = lazy(() =>
   import("./modules/ECommerce/pages/eCommercePage")
-)
-const SettingsPage = lazy(() => import("./modules/Settings/pages/SettingsPage"))
+);
+const SettingsPage = lazy(() =>
+  import("./modules/Settings/pages/SettingsPage")
+);
 
-const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"))
+const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
 
+const test = () => {
+  return <h1>Hello</h1>;
+};
 const IncidentDetailsManagment = lazy(() =>
   import("./modules/IncidentDetails/pages")
-)
+);
 
-const UserManagment = lazy(() => import("./modules/UserMangement/pages"))
+const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
 
-const Centers = lazy(() => import("./modules/Centers/pages"))
+const Centers = lazy(() => import("./modules/Centers/pages"));
 
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
   centers: Centers,
-  vehicledetails: VehicleManagment,
+  vehicles: VehicleManagment,
   incidentdetails: IncidentDetailsManagment,
-}
+};
 
 export default function BasePage() {
-  const auth = useSelector(({ auth }) => auth, shallowEqual)
-  const UserAccess = auth?.userAccess
-
+  const auth = useSelector(({ auth }) => auth, shallowEqual);
+  const UserAccess = auth?.userAccess;
   //console.log("UserAccess on basepage, Route: ", UserAccess)
   // useEffect(() => {
   //   console.log('Base page');
@@ -66,18 +70,19 @@ export default function BasePage() {
           
         })} */}
         {Object.keys(UserAccess).map((access, key) => {
-          const accessName = access.replace(/ /g, "").toLowerCase()
+          const accessName = access.replace(/ /g, "").toLowerCase();
           const path = access
             .split(" ")
             .join("-")
-            .toLowerCase()
+            .toLowerCase();
           {
             /* const accessName = access
-            .split(" ")
-            .join("-")
-            .toLowerCase()
-          { */
+              .split(" ")
+              .join("-")
+              .toLowerCase()
+              { */
           }
+
           // console.log("access: ", { access, key, accessName })
           // console.log("Route", ROUTES[accessName])
           {
@@ -95,11 +100,11 @@ export default function BasePage() {
                 path={`/${path}`}
                 component={ROUTES[accessName]}
               />
-            )
+            );
         })}
 
         <Redirect to="error/error-v1" />
       </Switch>
     </Suspense>
-  )
+  );
 }

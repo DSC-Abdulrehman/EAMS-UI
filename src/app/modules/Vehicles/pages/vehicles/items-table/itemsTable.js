@@ -34,7 +34,7 @@ export function ItemsTable() {
   const { currentState, userAccess } = useSelector(
     (state) => ({
       currentState: state.vehicles,
-      userAccess: state.auth.userAccess["Vehicle Details"],
+      userAccess: state?.auth?.userAccess["Vehicles"],
     }),
     shallowEqual
   );
@@ -54,8 +54,6 @@ export function ItemsTable() {
     dispatch(actions.fetchCenters());
     dispatch(actions.fetchCategory());
   }, []);
-  // const isAccessForEdit = false;
-  // const isAccessForDelete = false;
 
   const isAccessForEdit = userAccess.find(
     (item) => item.componentName === "UpdateVehicleDetail"
@@ -65,7 +63,7 @@ export function ItemsTable() {
     (item) => item.componentName === "DeleteVehicleDetail"
   );
   const { totalCount, entities, listLoading } = currentState;
-  //console.log("currentState listLoading", listLoading)
+
   // Table columns
   const columns = [
     {

@@ -1,44 +1,44 @@
-import React, { useMemo } from "react"
-import { Formik } from "formik"
-import { isEqual } from "lodash"
-import { useTripLogsUIContext } from "../TripLogsUIContext"
+import React, { useMemo } from "react";
+import { Formik } from "formik";
+import { isEqual } from "lodash";
+import { useTripLogsUIContext } from "../TripLogsUIContext";
 
 const prepareFilter = (queryParams, values) => {
-  const { status, type, searchText } = values
-  const newQueryParams = { ...queryParams }
-  const filter = {}
+  const { status, type, searchText } = values;
+  const newQueryParams = { ...queryParams };
+  const filter = {};
   // Filter by status
-  filter.status = status !== "" ? +status : undefined
+  filter.status = status !== "" ? +status : undefined;
   // Filter by type
-  filter.type = type !== "" ? +type : undefined
+  filter.type = type !== "" ? +type : undefined;
   // Filter by all fields
-  filter.searchQuery = searchText
+  filter.searchQuery = searchText;
   if (searchText) {
-    filter.searchQuery = searchText
+    filter.searchQuery = searchText;
     // filter.email = searchText
   }
-  newQueryParams.filter = filter
-  return newQueryParams
-}
+  newQueryParams.filter = filter;
+  return newQueryParams;
+};
 
 export function UsersFilter({ listLoading }) {
-  const triplogsUIContext = useTripLogsUIContext()
+  const triplogsUIContext = useTripLogsUIContext();
   const usersUIProps = useMemo(() => {
     return {
       queryParams: triplogsUIContext.queryParams,
       setQueryParams: triplogsUIContext.setQueryParams,
-    }
-  }, [triplogsUIContext])
+    };
+  }, [triplogsUIContext]);
 
   // queryParams, setQueryParams,
   const applyFilter = (values) => {
-    const newQueryParams = prepareFilter(usersUIProps.queryParams, values)
+    const newQueryParams = prepareFilter(usersUIProps.queryParams, values);
     if (!isEqual(newQueryParams, usersUIProps.queryParams)) {
-      newQueryParams.pageNumber = 1
+      newQueryParams.pageNumber = 1;
       // update list by queryParams
-      usersUIProps.setQueryParams(newQueryParams)
+      usersUIProps.setQueryParams(newQueryParams);
     }
-  }
+  };
 
   return (
     <>
@@ -50,7 +50,7 @@ export function UsersFilter({ listLoading }) {
         }}
         onSubmit={(values) => {
           //console.log("Filter Value", values)
-          applyFilter(values)
+          applyFilter(values);
         }}
       >
         {({
@@ -61,7 +61,7 @@ export function UsersFilter({ listLoading }) {
           setFieldValue,
         }) => (
           <form onSubmit={handleSubmit} className="form form-label-right">
-            <div className="form-group row">
+            <div className="row">
               {/* <div className="col-lg-2">
                 <select
                   className="form-control"
@@ -104,7 +104,7 @@ export function UsersFilter({ listLoading }) {
                   <b>Filter</b> by Type
                 </small>
               </div> */}
-              <div className="col-lg-4">
+              <div className="col-12">
                 <input
                   type="text"
                   className="form-control"
@@ -113,8 +113,8 @@ export function UsersFilter({ listLoading }) {
                   onBlur={handleBlur}
                   value={values.searchText}
                   onChange={(e) => {
-                    setFieldValue("searchText", e.target.value)
-                    handleSubmit()
+                    setFieldValue("searchText", e.target.value);
+                    handleSubmit();
                   }}
                 />
                 <small className="form-text text-muted">
@@ -126,5 +126,5 @@ export function UsersFilter({ listLoading }) {
         )}
       </Formik>
     </>
-  )
+  );
 }

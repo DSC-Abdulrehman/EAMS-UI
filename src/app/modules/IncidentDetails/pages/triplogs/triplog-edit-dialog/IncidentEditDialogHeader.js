@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { shallowEqual, useSelector } from "react-redux"
-import { Modal } from "react-bootstrap"
-import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
+import React, { useState, useEffect } from "react";
+import { shallowEqual, useSelector } from "react-redux";
+import { Modal } from "react-bootstrap";
+import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
 export function IncidentEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("");
 
   const { driverTripForEdit, actionsLoading } = useSelector(
     (state) => ({
@@ -13,17 +13,17 @@ export function IncidentEditDialogHeader({ id, isUserForRead }) {
       actionsLoading: state.triplogs.actionsLoading,
     }),
     shallowEqual
-  )
+  );
   //console.log(";current state for incident", actionsLoading)
   useEffect(() => {
-    let _title = id ? "" : "Add Incident"
+    let _title = id ? "" : "Add Incident";
     if (driverTripForEdit) {
-      _title = `Edit Trip Log of'`
+      _title = `Edit Trip Log`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
-    setTitle(_title)
-  }, [driverTripForEdit, actionsLoading])
+    setTitle(_title);
+  }, [driverTripForEdit, actionsLoading]);
 
   return (
     <>
@@ -32,5 +32,5 @@ export function IncidentEditDialogHeader({ id, isUserForRead }) {
         <Modal.Title id="example-modal-sizes-title-lg">{title}</Modal.Title>
       </Modal.Header>
     </>
-  )
+  );
 }
