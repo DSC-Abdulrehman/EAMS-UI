@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useState } from "react"
 import { Modal } from "react-bootstrap"
 import { Formik, Form, Field } from "formik"
 import * as Yup from "yup"
@@ -7,9 +7,11 @@ import {
   Select,
   DatePickerField,
 } from "../../../../../../_metronic/_partials/controls"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import * as actions from "../../../_redux/centersActions"
+// import { shallowEqual, useDispatch, useSelector } from "react-redux"
+// import * as actions from "../../../_redux/centersActions"
 import { CentersVehiclesTable } from "../centers-vehicles-table/CentersVehiclesTable"
+
+const phoneRegExp =     /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/
 
 // Validation schema
 const userEditSchema = Yup.object().shape({
@@ -17,29 +19,11 @@ const userEditSchema = Yup.object().shape({
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
     .required("Center Name is required"),
-  // lastName: Yup.string()
-  //   .min(3, "Minimum 3 symbols")
-  //   .max(50, "Maximum 50 symbols")
-  //   .required("Lastname is required"),
-  // email: Yup.string()
-  //   .email("Invalid email")
-  //   .required("Email is required"),
-  phoneNo: Yup.string()
-    .min(11, "Minimum 11 symbols")
-    .max(11, "Maximum 11 symbols")
-    .required("Phone is Required"),
-  // cnic: Yup.string()
-  //   .min(13, "Minimum 13 symbols")
-  //   .max(13, "Maximum 13 symbols")
-  //   .required("CNIC is Required"),
-  // password: Yup.string().required("password is required"),
-  // centerId: Yup.mixed()
-  //   .nullable(false)
-  //   .required("Date of Birth is required"),
-  // roleId: Yup.mixed()
-  //   .nullable(false)
-  //   .required("Date of Birth is required"),
-  // ipAddress: Yup.string().required("IP Address is required"),
+  phoneNo: Yup.string().matches(phoneRegExp, 'Invalid format it should be 03049018107').required('Phone No is required'),
+  location : Yup.string().required("Location is Required"),
+  longitude: Yup.string().required('Lognitude is required'),
+  latitude : Yup.string().required('Latitude is required')
+  
 })
 
 export function CenterEditForm({
@@ -53,9 +37,11 @@ export function CenterEditForm({
   vehiclesForCenter,
   totalCount,
 }) {
-  const dispatch = useDispatch()
-  const title = "UserEditForm"
-
+  
+const [loading, setLoading] = useState(false)
+const enableLoading = (() =>{
+  setLoading(true)
+})
   return (
     <>
       <Formik
@@ -63,7 +49,9 @@ export function CenterEditForm({
         initialValues={center}
         validationSchema={userEditSchema}
         onSubmit={(values) => {
+          enableLoading()
           saveCenter(values)
+          
         }}
       >
         {({ handleSubmit }) => (
@@ -77,28 +65,7 @@ export function CenterEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="form-group row">
-                    {/* <div className="col-lg-6">
-                      <Select name="centerId" label="Center">
-                        {centers.map((item) => {
-                          return (
-                            <option key={item.value} value={item.value}>
-                              {item.label}
-                            </option>
-                          )
-                        })}
-                      </Select>
-                    </div> */}
-                    {/* <div className="col-lg-6">
-                      <Select name="roleId" label="Role">
-                        {roles.map((item) => {
-                          return (
-                            <option key={item.value} value={item.value}>
-                              {item.label}
-                            </option>
-                          )
-                        })}
-                      </Select>
-                    </div> */}
+                    
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-6">
@@ -187,6 +154,7 @@ export function CenterEditForm({
                   className="btn btn-primary btn-elevate"
                 >
                   Save
+                  {loading && <span className="ml-3 mr-3 spinner spinner-white"></span>}
                 </button>
               )}
             </Modal.Footer>

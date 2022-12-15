@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo , useState} from "react"
 import { Modal } from "react-bootstrap"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
@@ -7,6 +7,7 @@ import { useCentersUIContext } from "../CentersUIContext"
 
 export function CenterDeleteDialog({ id, show, onHide }) {
   // Centers UI Context
+  const [loading, setLoading] = useState(false)
   const centersUIContext = useCentersUIContext()
   const centersUIProps = useMemo(() => {
     return {
@@ -20,7 +21,9 @@ export function CenterDeleteDialog({ id, show, onHide }) {
     (state) => ({ isLoading: state.customers.actionsLoading }),
     shallowEqual
   )
-
+  const enableLoading = (() =>{
+    setLoading(true)
+  })
   // if !id we should close modal
   useEffect(() => {
     if (!id) {
@@ -34,6 +37,7 @@ export function CenterDeleteDialog({ id, show, onHide }) {
 
   const deleteUser = () => {
     // server request for deleting customer by id
+    enableLoading()
     dispatch(actions.deleteCenter(id)).then(() => {
       onHide()
       // refresh list after deletion
@@ -60,9 +64,9 @@ export function CenterDeleteDialog({ id, show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         {!isLoading && (
-          <span>Are you sure to permanently delete this user?</span>
+          <span>Are you sure to permanently delete this center?</span>
         )}
-        {isLoading && <span>user is deleting...</span>}
+        
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -80,6 +84,7 @@ export function CenterDeleteDialog({ id, show, onHide }) {
             className="btn btn-primary btn-elevate"
           >
             Delete
+            {loading && <span className="ml-3 mr-3 spinner spinner-white"></span>}
           </button>
         </div>
       </Modal.Footer>

@@ -35,7 +35,7 @@ export function CentersCard() {
   return (
     <>
       <Card>
-        <CardHeader title="list">
+        <CardHeader title={<CenterFilter />}>
           <CardHeaderToolbar>
             {accessUser ? (
               <button
@@ -68,7 +68,7 @@ export function CentersCard() {
         </CardHeader>
 
         <CardBody>
-          <CenterFilter />
+          
           <CentersTable />
         </CardBody>
       </Card>

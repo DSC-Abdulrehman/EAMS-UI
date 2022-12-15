@@ -67,6 +67,7 @@ export function CentersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+     
     },
     {
       dataField: "name",
@@ -74,6 +75,9 @@ export function CentersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "location",
@@ -81,6 +85,9 @@ export function CentersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "phoneNo",
@@ -88,6 +95,9 @@ export function CentersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "createdAt",
@@ -104,6 +114,9 @@ export function CentersTable() {
           "0" +
           (dateObj.getUTCMonth() + 1)
         ).slice(-2)}/${dateObj.getUTCFullYear()}`;
+      },
+      style: {
+        minWidth: "130px",
       },
     },
     // {
@@ -134,14 +147,14 @@ export function CentersTable() {
         openDeleteCenterDialog: centersUIProps.openDeleteCenterDialog,
         openReadCenterDialog: centersUIProps.openReadCenterDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        // isAccessForDelete: isAccessForDelete
-        //   ? isAccessForDelete.isAccess
-        //   : false,
+        isAccessForDelete: isAccessForDelete
+          ? isAccessForDelete.isAccess
+          : false,
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
       style: {
-        minWidth: "100px",
+        minWidth: "170px",
       },
     },
   ];

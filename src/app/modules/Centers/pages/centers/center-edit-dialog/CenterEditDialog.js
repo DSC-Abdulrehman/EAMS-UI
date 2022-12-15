@@ -48,7 +48,6 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
     shallowEqual
   )
 
-  console.log("centerForEdit", centerForEdit)
 
   useEffect(() => {
     if (id) {
