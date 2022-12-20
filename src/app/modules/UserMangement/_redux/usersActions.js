@@ -159,3 +159,11 @@ export const fetchCenters = () => (dispatch) => {
     dispatch(actions.CentersFetched(entities))
   })
 }
+
+export const fetchUserStatusTypes = () => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }))
+  return requestFromServer.getAllUserStatusTypes().then((response) => {
+    const entities = response.data?.data
+    dispatch(actions.UserStatusTypesFetched(entities))
+  })
+}

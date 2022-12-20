@@ -7,6 +7,7 @@ const initialUsersState = {
   entities: null,
   roles: null,
   centers: null,
+  userStatusTypes: null,
   userForEdit: undefined,
   lastError: null,
   userForRead: false,
@@ -89,6 +90,12 @@ export const usersSlice = createSlice({
       state.listLoading = false
       state.error = null
       state.centers = entities
+    },
+    UserStatusTypesFetched: (state, action) => {
+      const entities = action.payload
+      state.listLoading = false
+      state.error = null
+      state.userStatusTypes = entities
     },
   },
 })

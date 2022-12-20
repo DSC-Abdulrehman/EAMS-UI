@@ -24,6 +24,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
     userForEdit,
     roles,
     centers,
+    userStatusTypes,
     isuserForRead,
   } = useSelector(
     (state) => ({
@@ -31,6 +32,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
       userForEdit: state.users.userForEdit,
       roles: state.users.roles,
       centers: state.users.centers,
+      userStatusTypes: state.users.userStatusTypes,
       isuserForRead: state.users.userForRead,
     }),
     shallowEqual
@@ -42,6 +44,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
     dispatch(actions.fetchUser(id))
     dispatch(actions.fetchRoles())
     dispatch(actions.fetchCenters())
+    dispatch(actions.fetchUserStatusTypes())
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
   }, [id, dispatch])
   //console.log("userForEdit", userForEdit)
@@ -84,6 +87,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
         onHide={onHide}
         roles={roles}
         centers={centers}
+        userStatusTypes={userStatusTypes}
         isUserForRead={userForRead}
       />
       <ToastContainer

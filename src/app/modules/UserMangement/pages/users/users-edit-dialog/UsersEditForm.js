@@ -48,6 +48,7 @@ export function UserEditForm({
   onHide,
   roles,
   centers,
+  userStatusTypes,
   isUserForRead,
 }) {
   const [loading, setLoading] = useState(false)
@@ -162,12 +163,19 @@ export function UserEditForm({
                         <option value="" disabled selected>
                             Please select status
                         </option>
-                        <option value="available">
+                        {userStatusTypes.map((item) => {
+                          return (
+                            <option key={item.value} value={item.label}>
+                              {item.label}
+                            </option>
+                          )
+                        })}
+                        {/* <option value="available">
                           Available
                         </option>
                         <option value="not available">
                           Not Available
-                        </option>
+                        </option> */}
                       </Select>
                       {/* <p className="inv-feedback">{errors.status ? errors.status : ''}</p> */}
                     </div>
