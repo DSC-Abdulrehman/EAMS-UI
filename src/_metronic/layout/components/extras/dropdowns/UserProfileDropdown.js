@@ -22,7 +22,6 @@ export function UserProfileDropdown() {
   }, [uiService]);
 
 
-  console.log("user", user)
   return (
     
 

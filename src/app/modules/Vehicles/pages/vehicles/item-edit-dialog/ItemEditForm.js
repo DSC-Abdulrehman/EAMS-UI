@@ -6,6 +6,7 @@ import {
   Input,
   Select,
   DatePickerField,
+  CustumSelect,
 } from "../../../../../../_metronic/_partials/controls";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -25,26 +26,28 @@ const itemEditSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
-    .required(),
+    .required("Name is required"),
   regNo: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
-    .required(),
+    .required("Registration No is required"),
   // center: Yup.string(),
   // category: Yup.string(),
-  engineCapacity: Yup.string().required(),
-  registerCity: Yup.string().required(),
-  chasis: Yup.string().required(),
-  milleage: Yup.string().required(),
-  year: Yup.string().required(),
-  make: Yup.string().required(),
-  model: Yup.string().required(),
-  color: Yup.string().required(),
-  fuelType: Yup.string().required(),
-  transmission: Yup.string().required(),
-  status: Yup.string().required(requiredErrorMessage),
-  centerId: Yup.string().required(),
-  vehicleCategoryId: Yup.string().required(),
+  engineCapacity: Yup.string().required("Engine capacity is required"),
+  registerCity: Yup.string().required("Register city is required"),
+  chasis: Yup.string().required("Chasis is required"),
+  milleage: Yup.string().required("Milleage is required"),
+  year: Yup.string()
+    .required("Register year is required")
+    .matches(/^\d*[1-9]\d*$/, "Year should be number"),
+  make: Yup.string().required("Maker name is required"),
+  model: Yup.string().required("Model No is required"),
+  color: Yup.string().required("Color is required"),
+  fuelType: Yup.string().required("Fuel type is required"),
+  status: Yup.string().required("Status is required"),
+  transmission: Yup.string(),
+  centerId: Yup.string().required("Cneter Id is required"),
+  vehicleCategoryId: Yup.string().required("Vehicle category is required"),
 });
 
 export function ItemEditForm({
@@ -61,12 +64,23 @@ export function ItemEditForm({
   const classes = useStyles();
   const [Loading, setLoading] = useState(false);
 
+  const fuelTypeOptions = [
+    {
+      value: "Pertol",
+      name: "Pertol",
+    },
+    {
+      value: "Gas",
+      name: "Gas",
+    },
+  ];
   const enableLoading = () => {
     setLoading(true);
   };
   const disableLoading = () => {
     setLoading(false);
   };
+
   return (
     <>
       {actionsLoading && (
@@ -85,7 +99,14 @@ export function ItemEditForm({
           // disableLoading();
         }}
       >
-        {({ handleSubmit, touched, errors }) => (
+        {({
+          handleSubmit,
+          touched,
+          errors,
+          handleChange,
+          handleBlur,
+          values,
+        }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
@@ -209,48 +230,82 @@ export function ItemEditForm({
                       />
                     </div>
                     <div className="col-lg-4">
-                      <Select name="fuelType" label="Fuel Type">
-                        <option value="petrol">Petrol</option>
-                        <option value="gas">Gas</option>
-                      </Select>
-                      {/* <Field
-                        name="fuelType"
-                        component={Input}
-                        placeholder=""
+                      <Select
                         label="Fuel Type"
-                      /> */}
+                        name="fuelType"
+                        value={values.fuelType}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        <option value="Pertol" label="Petrol" />
+                        <option value="Gas" label="Gas" />
+                      </Select>
+                      {errors.fuelType && touched.fuelType && (
+                        <div className="invalid-text">{errors.fuelType}</div>
+                      )}
                     </div>
                     <div className="col-lg-4">
-                      {/* <Field
+                      <Select
+                        label="Status"
                         name="status"
-                        component={Select}
-                        placeholder=""
-                        label="status No"
-                        children={}
-                      /> */}
-                      <Select name="status" label="Status">
-                        <option>Please Select Option</option>
-                        <option value="Available">Available</option>
-                        <option value="Unavailable">Unavailable</option>
+                        value={values.status}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        <option value="Available" label="Available" />
+                        <option value="Unavailable" label="Unavailable" />
                       </Select>
-                      {touched.status && errors.status ? errors.status : null}
+                      {errors.status && touched.status && (
+                        <div className="invalid-text">{errors.status}</div>
+                      )}
                     </div>
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-4">
-                      <Select name="transmission" label="Transmission">
-                        <option value="auto">Auto</option>
-                        <option value="manual">manual</option>
-                      </Select>
-                      {/* <Field
-                        name="transmission"
-                        component={Input}
-                        placeholder=""
+                      <Select
                         label="Transmission"
-                      /> */}
+                        name="transmission"
+                        value={values.transmission}
+                      >
+                        <option value="" label="Select Type" />
+                        <option value="auto" label="Auto" />
+                        <option value="manual" label="Manual" />
+                      </Select>
+                      {errors.transmission && touched.transmission && (
+                        <div className="invalid-text">
+                          {errors.transmission}
+                        </div>
+                      )}
                     </div>
                     <div className="col-lg-4">
-                      <Select name="centerId" label="Center">
+                      <Select
+                        label="Center"
+                        name="centerId"
+                        value={values.centerId}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {centerName &&
+                          centerName.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                                label={response.label}
+                              />
+                            );
+                          })}
+                      </Select>
+                      {errors.centerId && touched.centerId && (
+                        <div className="invalid-text">{errors.centerId}</div>
+                      )}
+                      {/* <Select name="centerId" label="Center">
                         {centerName &&
                           centerName.map((response) => {
                             return (
@@ -262,10 +317,36 @@ export function ItemEditForm({
                               </option>
                             );
                           })}
-                      </Select>
+                      </Select> */}
                     </div>
                     <div className="col-lg-4">
-                      <Select name="vehicleCategoryId" label="Vehicle Category">
+                      <Select
+                        label="Vehicle Category"
+                        name="vehicleCategoryId"
+                        value={values.vehicleCategoryId}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {category &&
+                          category.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                                label={response.label}
+                              />
+                            );
+                          })}
+                      </Select>
+                      {errors.vehicleCategoryId &&
+                        touched.vehicleCategoryId && (
+                          <div className="invalid-text">
+                            {errors.vehicleCategoryId}
+                          </div>
+                        )}
+                      {/* <Select name="vehicleCategoryId" label="Vehicle Category">
                         {category &&
                           category.map((response) => {
                             return (
@@ -277,7 +358,7 @@ export function ItemEditForm({
                               </option>
                             );
                           })}
-                      </Select>
+                      </Select> */}
                     </div>
                   </div>
                 </fieldset>

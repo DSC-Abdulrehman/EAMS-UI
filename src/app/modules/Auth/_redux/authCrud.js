@@ -6,7 +6,7 @@ export const REQUEST_PASSWORD_URL = "api/auth/forgot-password"
 // export const ME_URL = `${process.env.REACT_APP_API_URL}/auth/refresh-tokens`
 
 export function login(email, password) {
-  console.log(LOGIN_URL)
+ 
   return axios.post(LOGIN_URL, { email, password })
 }
 

@@ -56,11 +56,11 @@ export function ItemsTable() {
   }, []);
 
   const isAccessForEdit = userAccess.find(
-    (item) => item.componentName === "UpdateVehicleDetail"
+    (item) => item.componentName === "UpdateVehicle"
   );
 
   const isAccessForDelete = userAccess.find(
-    (item) => item.componentName === "DeleteVehicleDetail"
+    (item) => item.componentName === "DeleteVehicle"
   );
   const { totalCount, entities, listLoading } = currentState;
 
@@ -80,7 +80,7 @@ export function ItemsTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "200px",
+        minWidth: "130px",
       },
     },
     {
@@ -89,6 +89,9 @@ export function ItemsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
     // {
     //   dataField: "engineCapacity",
@@ -103,6 +106,9 @@ export function ItemsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "category.name",
@@ -110,6 +116,19 @@ export function ItemsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "status",
+      text: "Status",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "createdAt",
@@ -126,6 +145,9 @@ export function ItemsTable() {
           "0" +
           (dateObj.getUTCMonth() + 1)
         ).slice(-2)}/${dateObj.getUTCFullYear()}`;
+      },
+      style: {
+        minWidth: "130px",
       },
     },
     // {
@@ -155,16 +177,14 @@ export function ItemsTable() {
         openEditCenterDialog: itemUIProps.openEditCenterDialog,
         openDeleteCenterDialog: itemUIProps.openDeleteCenterDialog,
         openReadCenterDialog: itemUIProps.openReadCenterDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
+        isAccessForEdit: isAccessForEdit?.isAccess,
+        isAccessForDelete: isAccessForDelete?.isAccess,
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
-      // style: {
-      //   minWidth: "100px",
-      // },
+      style: {
+        minWidth: "170px",
+      },
     },
   ];
 
@@ -208,16 +228,6 @@ export function ItemsTable() {
           );
         }}
       </PaginationProvider>
-      {/* <BootstrapTable
-        wrapperClasses="table-responsive"
-        bordered={false}
-        classes="table table-head-custom table-vertical-center overflow-hidden"
-        bootstrap4
-        remote
-        keyField="id"
-        data={entities === null ? [] : entities}
-        columns={columns}
-      ></BootstrapTable> */}
     </>
   );
 }

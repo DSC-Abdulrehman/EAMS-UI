@@ -1,36 +1,36 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from "react";
 
 import {
   Card,
   CardBody,
   CardHeader,
   CardHeaderToolbar,
-} from "../../../../../../_metronic/_partials/controls"
-import { CentersTable } from "../centers-table/CentersTable"
-import { useCentersUIContext } from "../CentersUIContext"
-import { useSelector, shallowEqual } from "react-redux"
-import { CenterFilter } from "../centers-filter/CenterFilter"
+} from "../../../../../../_metronic/_partials/controls";
+import { CentersTable } from "../centers-table/CentersTable";
+import { useCentersUIContext } from "../CentersUIContext";
+import { useSelector, shallowEqual } from "react-redux";
+import { CenterFilter } from "../centers-filter/CenterFilter";
 
 export function CentersCard() {
-  const centersUIContext = useCentersUIContext()
+  const centersUIContext = useCentersUIContext();
 
   const centersUIProps = useMemo(() => {
     return {
       newCenterButtonClick: centersUIContext.newCenterButtonClick,
       openEditCenterDialog: centersUIContext.openEditCenterDialog,
-    }
-  }, [centersUIContext])
+    };
+  }, [centersUIContext]);
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Users,
+      userAccess: state?.auth?.userAccess?.Centers,
     }),
     shallowEqual
-  )
-
+  );
+  console.log("userAccess", userAccess);
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateUser"
-  )
+    (item) => item.componentName === "CreateCenter"
+  );
 
   return (
     <>
@@ -68,10 +68,9 @@ export function CentersCard() {
         </CardHeader>
 
         <CardBody>
-          
           <CentersTable />
         </CardBody>
       </Card>
     </>
-  )
+  );
 }

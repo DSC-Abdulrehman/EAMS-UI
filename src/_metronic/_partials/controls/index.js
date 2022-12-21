@@ -18,6 +18,7 @@ export { Checkbox } from "./forms/Checkbox";
 export { HeaderCheckbox } from "./forms/HeaderCheckbox";
 export { TextArea } from "./forms/TextArea";
 export { MaskInput } from "./forms/MaskInput";
+export { CustumSelect } from "./forms/CustumSelect";
 
 // Paginations
 export { Pagination } from "./pagination/Pagination";

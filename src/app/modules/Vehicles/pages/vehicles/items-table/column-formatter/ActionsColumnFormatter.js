@@ -18,6 +18,7 @@ export function ActionsColumnFormatter(
   }
 ) {
   const isUserRead = false
+  
   //console.log("isAccessForEdit, isAccessForDelete", isAccessForEdit, isAccessForDelete)
   // const { userAccess } = useSelector(
   //   (state) => ({

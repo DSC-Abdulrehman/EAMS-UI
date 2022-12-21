@@ -35,7 +35,7 @@ export function CentersTable() {
   const { currentStatecenters, userAccess } = useSelector(
     (state) => ({
       currentStatecenters: state.centers,
-      userAccess: state?.auth?.userAccess?.Users,
+      userAccess: state?.auth?.userAccess?.Centers,
       //userAccess: state.auth.userAccess.Users,
     }),
     shallowEqual
@@ -49,11 +49,11 @@ export function CentersTable() {
   }, [centersUIProps.queryParms, dispatch]);
 
   const isAccessForEdit = userAccess.find(
-    (item) => item.componentName === "UpdateUser"
+    (item) => item.componentName === "UpdateCenter"
   );
 
   const isAccessForDelete = userAccess.find(
-    (item) => item.componentName === "DeleteUser"
+    (item) => item.componentName === "DeleteCenter"
   );
 
   const { totalCount, entities, listLoading } = currentStatecenters;
@@ -67,7 +67,6 @@ export function CentersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-     
     },
     {
       dataField: "name",

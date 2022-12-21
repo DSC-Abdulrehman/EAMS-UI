@@ -1,51 +1,51 @@
-import React, { createContext, useContext, useState, useCallback } from "react"
-import { isEqual, isFunction } from "lodash"
-import { initialFilter, initialTripLogFilter } from "./IncidentsUIHelpers"
+import React, { createContext, useContext, useState, useCallback } from "react";
+import { isEqual, isFunction } from "lodash";
+import { initialFilter, initialTripLogFilter } from "./IncidentsUIHelpers";
 
-const IncidentsUIContext = createContext()
+const IncidentsUIContext = createContext();
 
 export function useIncidentsUIContext() {
-  return useContext(IncidentsUIContext)
+  return useContext(IncidentsUIContext);
 }
 
-export const IncidentsUIConsumer = IncidentsUIContext.Consumer
+export const IncidentsUIConsumer = IncidentsUIContext.Consumer;
 
 export function IncidentsUIProvider({ incidentsUIEvents, children }) {
-  const [queryParams, setQueryParamsBase] = useState(initialFilter)
-  const [ids, setIds] = useState([])
+  const [queryParams, setQueryParamsBase] = useState(initialFilter);
+  const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
-        nextQueryParams = nextQueryParams(prevQueryParams)
+        nextQueryParams = nextQueryParams(prevQueryParams);
       }
 
       if (isEqual(prevQueryParams, nextQueryParams)) {
-        return prevQueryParams
+        return prevQueryParams;
       }
 
-      return nextQueryParams
-    })
-  }, [])
+      return nextQueryParams;
+    });
+  }, []);
 
   const [secondQueryParams, setSecondQueryParamsBase] = useState(
     initialTripLogFilter
-  )
+  );
   const setSecondQueryParams = useCallback((nextQueryParams) => {
     setSecondQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
-        nextQueryParams = nextQueryParams(prevQueryParams)
+        nextQueryParams = nextQueryParams(prevQueryParams);
       }
 
       if (isEqual(prevQueryParams, nextQueryParams)) {
-        return prevQueryParams
+        return prevQueryParams;
       }
 
-      return nextQueryParams
-    })
-  }, [])
+      return nextQueryParams;
+    });
+  }, []);
 
   const initIncident = {
-    callerName: null,
+    callerName: "",
     callerCNIC: "",
     callerPhoneNo: "",
     patientName: "",
@@ -57,7 +57,7 @@ export function IncidentsUIProvider({ incidentsUIEvents, children }) {
     incidentSeverityId: undefined,
     centerId: undefined,
     vehicleId: undefined,
-  }
+  };
 
   const value = {
     queryParams,
@@ -73,10 +73,10 @@ export function IncidentsUIProvider({ incidentsUIEvents, children }) {
     openDeleteUserDialog: incidentsUIEvents.openDeleteUserDialog,
     openReadUserDialog: incidentsUIEvents.openReadUserDialog,
     openTripLogDialog: incidentsUIEvents.openTripLogDialog,
-  }
+  };
   return (
     <IncidentsUIContext.Provider value={value}>
       {children}
     </IncidentsUIContext.Provider>
-  )
+  );
 }

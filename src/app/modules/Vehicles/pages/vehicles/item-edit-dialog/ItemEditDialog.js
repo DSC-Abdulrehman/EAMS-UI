@@ -13,7 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    display: "flex",
     justifyContent: "center",
     marginTop: "2rem",
     marginBottom: "2rem",
@@ -94,8 +93,6 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
       dispatch(actions.updateVehicle(itemUpdatedFields));
       onHide();
     }
-    console.log("itemForEdit", itemForEdit);
-    console.log("itemUIProps.initItem", itemUIProps.initItem);
   };
 
   return (

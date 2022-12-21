@@ -1,47 +1,67 @@
-import * as requestFromServer from "./triplogCrud"
-import { TriplogSlice, callTypes } from "./triplogSlice"
-import { toast } from "react-toastify"
+import * as requestFromServer from "./triplogCrud";
+import { TriplogSlice, callTypes } from "./triplogSlice";
+import { toast } from "react-toastify";
 
-const { actions } = TriplogSlice
+const { actions } = TriplogSlice;
 
 export const fetchTripLogs = (queryparm) => async (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.list }))
+  dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer
     .getAllTripLogs(queryparm)
     .then((response) => {
-      dispatch(actions.TripLogsFetched(response))
+      dispatch(actions.TripLogsFetched(response));
     })
     .catch((error) => {
-      error.clientMessage = "Can't find customers"
-      dispatch(actions.catchError({ error, callType: callTypes.list }))
-    })
-}
+      error.clientMessage = "Can't find customers";
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
 
 export const fetchTripLog = (id) => (dispatch) => {
   if (!id) {
-    return dispatch(actions.driverTripFetched({ driverTripForEdit: undefined }))
+    return dispatch(
+      actions.driverTripFetched({ driverTripForEdit: undefined })
+    );
   }
 
-  dispatch(actions.startCall({ callType: callTypes.action }))
+  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .getDriverTripById({ id: id })
     .then((response) => {
-      const entities = response.data?.data
-      dispatch(actions.driverTripFetched({ driverTripForEdit: entities }))
+      const entities = response.data?.data;
+      dispatch(actions.driverTripFetched({ driverTripForEdit: entities }));
     })
     .catch((error) => {
-      error.clientMessage = "Can't find Incident"
-      dispatch(actions.catchError({ error, callType: callTypes.action }))
-    })
-}
+      error.clientMessage = "Can't find Incident";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
 
 export const deleteIncident = (id) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }))
+  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .deleteIncident({ id: id })
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
-      dispatch(actions.incidentDeleted({ id: id }))
+      dispatch(actions.incidentDeleted({ id: id }));
       toast.success(response.data.message + " Deleted", {
         position: "top-right",
         autoClose: 5000,
@@ -50,21 +70,30 @@ export const deleteIncident = (id) => (dispatch) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
+      });
     })
     .catch((error) => {
-      error.clientMessage = "can't delete user"
-      dispatch(actions.catchError({ error, callType: callTypes.action }))
-      toast.error("Error 😣")
-    })
-}
+      error.clientMessage = "can't delete user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    });
+};
+
 export const createIncident = (incidentForCreation) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }))
+  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createIncident(incidentForCreation)
     .then((res) => {
-      const incident = res.data?.data
-      dispatch(actions.incidentCreated(incident))
+      const incident = res.data?.data;
+      dispatch(actions.incidentCreated(incident));
       toast.success(res.data.message, {
         position: "top-right",
         autoClose: 5000,
@@ -73,12 +102,12 @@ export const createIncident = (incidentForCreation) => (dispatch) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
+      });
     })
     .catch((error) => {
-      error.clientMessage = "Can't create incident"
-      dispatch(actions.catchError({ error, callType: callTypes.action }))
-      toast.error("Something Went Wrong", {
+      error.clientMessage = "Can't create incident";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -86,18 +115,17 @@ export const createIncident = (incidentForCreation) => (dispatch) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
-    })
-}
+      });
+    });
+};
+
 export const updateTrip = (updatedData) => (dispatch) => {
-  console.log("updatedData TripLog", updatedData)
-  dispatch(actions.startCall({ callType: callTypes.action }))
+  dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateTripLog(updatedData)
     .then((response) => {
-      const updatedTrip = response.data?.data
-      console.log("IncidentAction Res::", response)
-      dispatch(actions.tripUpdated({ updatedTrip }))
+      const updatedTrip = response.data?.data;
+      dispatch(actions.tripUpdated({ updatedTrip }));
       toast.success(response.data.message + " Updated", {
         position: "top-right",
         autoClose: 5000,
@@ -106,12 +134,11 @@ export const updateTrip = (updatedData) => (dispatch) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
+      });
     })
     .catch((error) => {
-      // console.log("error User update", error)
-      //error.clientMessage = "Can't update User"
-      toast.error(error, {
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -119,10 +146,9 @@ export const updateTrip = (updatedData) => (dispatch) => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      })
-      dispatch(actions.catchError({ error, callType: callTypes.action }))
-    })
-}
+      });
+    });
+};
 // export const fetchIncidentTypes = () => (dispatch) => {
 //   dispatch(actions.startCall({ callType: callTypes.list }))
 //   return requestFromServer

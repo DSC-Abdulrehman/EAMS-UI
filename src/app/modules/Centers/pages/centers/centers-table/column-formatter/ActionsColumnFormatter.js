@@ -1,7 +1,7 @@
-import React from "react"
-import SVG from "react-inlinesvg"
-import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers"
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
+import React from "react";
+import SVG from "react-inlinesvg";
+import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export function ActionsColumnFormatter(
   cellContent,
@@ -16,7 +16,7 @@ export function ActionsColumnFormatter(
     isAccessForDelete,
   }
 ) {
-  const isUserRead = false
+  const isUserRead = false;
   // const { userAccess } = useSelector(
   //   (state) => ({
   //     userAccess: state.auth.userAccess.Users,
@@ -70,7 +70,7 @@ export function ActionsColumnFormatter(
         >
           <a
             title="Delete customer"
-            className="btn btn-icon btn-light btn-hover-danger btn-sm"
+            className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
             onClick={() => openDeleteCenterDialog(row.id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-danger">
@@ -80,5 +80,5 @@ export function ActionsColumnFormatter(
         </OverlayTrigger>
       )}
     </>
-  )
+  );
 }

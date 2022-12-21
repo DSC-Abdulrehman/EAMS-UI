@@ -74,6 +74,9 @@ export function UsersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "lastName",
@@ -81,38 +84,56 @@ export function UsersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
     },
-    // {
-    //   dataField: "email",
-    //   text: "Email",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    // },
+    {
+      dataField: "email",
+      text: "Email",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "150px",
+      },
+    },
     {
       dataField: "cnic",
       text: "CNIC",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      style: {
+        minWidth: "160px",
+      },
     },
     {
       dataField: "phNo",
       text: "Phone",
       sort: false,
       sortCaret: sortCaret,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "role.name",
       text: "Role",
       sort: false,
       sortCaret: sortCaret,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "center.name",
       text: "Center",
       sort: false,
       sortCaret: sortCaret,
+      style: {
+        minWidth: "130px",
+      },
     },
     {
       dataField: "action",
@@ -131,7 +152,7 @@ export function UsersTable() {
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
       style: {
-        minWidth: "100px",
+        minWidth: "170px",
       },
     },
   ];

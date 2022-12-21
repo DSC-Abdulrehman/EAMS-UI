@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -10,18 +10,21 @@ import {
 } from "../../../../../../_metronic/_partials/controls";
 import MaskedInput from "react-text-mask";
 
+//Regex for Positive numbers
+
+const PositiveRegex = /^[1-9]+[0-9]*$/;
 // Validation schema
 const triplogEditSchema = Yup.object().shape({
-  finalReading: Yup.number().required(),
-  logBookNo: Yup.number()
+  finalReading: Yup.string().required(" Final reading is required"),
+  logBookNo: Yup.string()
     .nullable()
-    .required(),
-  price: Yup.number()
+    .matches(PositiveRegex, "Value should be number")
+    .required("Log Book No. is required"),
+  price: Yup.string()
     .nullable()
-    .required(),
-  status: Yup.mixed()
-    .nullable(false)
-    .required("Status is required"),
+    .matches(PositiveRegex, "Value should be number")
+    .required("Price is required"),
+  status: Yup.string().required("Status is required"),
 });
 
 // function validateCenterId(value) {
@@ -41,8 +44,8 @@ export function TripLogEditForm({
   onHide,
   isUserForRead,
   setCenter,
+  loading,
 }) {
-  const [loading, setLoading] = useState(false);
   const TripStatus = [
     {
       label: "Open",
@@ -62,25 +65,17 @@ export function TripLogEditForm({
   //   var newdriverTripLog = { ...driverTrip, logBookNo: "" }
   // }
 
-  const enableLoading = () => {
-    setLoading(true);
-  };
-  const disabledLoading = () => {
-    setLoading(false);
-  };
-  console.log("incident for edit", driverTrip);
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={driverTrip}
         validationSchema={triplogEditSchema}
-        onSubmit={async (values) => {
-          await enableLoading();
+        onSubmit={(values) => {
           updateTripLog(values);
         }}
       >
-        {({ errors, touched, isValidating, handleSubmit, handleChange }) => (
+        {({ handleSubmit }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               <Form className="form form-label-right">
@@ -106,6 +101,30 @@ export function TripLogEditForm({
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-4">
+                      {/* <Select
+                        label="Status"
+                        name="status"
+                        value={values.status}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {TripStatus &&
+                          TripStatus.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                                label={response.label}
+                              />
+                            );
+                          })}
+                      </Select>
+                      {errors.status && touched.status && (
+                        <div className="invalid-text">{errors.status}</div>
+                      )} */}
+
                       <Select name="status" label="Status">
                         {TripStatus ? (
                           TripStatus.map((response) => {

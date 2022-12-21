@@ -1,17 +1,21 @@
-import React, { useMemo, useEffect, useState, useRef } from "react"
+import React, { useMemo, useEffect, useState, useRef } from "react";
 import {
   Card,
   CardBody,
   CardHeader,
   CardHeaderToolbar,
-} from "../../../../../../_metronic/_partials/controls"
+} from "../../../../../../_metronic/_partials/controls";
+import {
+  Input,
+  Checkbox,
+} from "../../../../../../_metronic/_partials/controls";
 // import { Formik, Form} from "formik"
 // import   'react-bootstrap/Form'
 // import Card from 'react-bootstrap/Card'
-import { Row, Col, Form } from "react-bootstrap"
-import { useDispatch } from "react-redux"
-import { shallowEqual, useSelector } from "react-redux"
-import * as actions from "../../../_redux/roles/rolesAction"
+import { Row, Col, Form } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
+import * as actions from "../../../_redux/roles/rolesAction";
 import {
   DB_COLUMNS,
   FormClasses,
@@ -19,9 +23,9 @@ import {
   OperationStatus,
   RedirectURLs,
   TOAST_CONFIG,
-} from "../../../../../utils/constants"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+} from "../../../../../utils/constants";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function RolesAccess({
   history,
@@ -42,14 +46,14 @@ export function RolesAccess({
       currentState: state.roles.accessRights,
     }),
     shallowEqual
-  )
+  );
 
   // const currentState = useSelector((state) => ({
   //   entities: state.entities,
   // }))
 
   //Role Redux State
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   // Serer call by params
@@ -57,7 +61,7 @@ export function RolesAccess({
   //     actions.accessRights({ roleId: id, sortBy: "name", limit: 10, page: 1 })
   //     )
   //   }, [id, dispatch])
-  const newdata = Object.entries(currentState)
+  const newdata = Object.entries(currentState);
   // newdata.push(currentState);
 
   // console.log("currentState_new", Object.keys(currentState).length)
@@ -73,15 +77,15 @@ export function RolesAccess({
 
   // }
 
-  const [isChecked, setIsChecked] = React.useState(true)
+  const [isChecked, setIsChecked] = React.useState(true);
 
   // const [isChecked, setIsChecked] = useState()
 
   const onCheckboxChange = async (event) => {
-    const target = event.currentTarget
-    const name = target.name
-    const id = target.id
-    const checked = target.checked
+    const target = event.currentTarget;
+    const name = target.name;
+    const id = target.id;
+    const checked = target.checked;
     // console.log("Access Right", {
     //   roleId: name,
     //   resourceId: id,
@@ -95,17 +99,17 @@ export function RolesAccess({
         resourceId: id,
         isAccess: checked,
       })
-    )
+    );
 
     setIsChecked({
       ...isChecked,
       [id]: checked, // using "id" seems to not work here.
-    })
-  }
+    });
+  };
 
   return (
     <>
-      <h1>Role Access page</h1>
+      <h1 className="mb-10">Role Access page</h1>
       {newdata.map((dd, index) => (
         <Card key={index}>
           <CardBody>
@@ -118,8 +122,8 @@ export function RolesAccess({
               <Col lg={10}>
                 <Row>
                   {dd[1].map((right, rightindex) => (
-                    <Col lg={2} key={rightindex}>
-                      <div className="form-check">
+                    <Col lg={3} key={rightindex}>
+                      <div className="row">
                         <input
                           type="checkbox"
                           className="form-check-input"
@@ -155,5 +159,5 @@ export function RolesAccess({
         pauseOnHover
       />
     </>
-  )
+  );
 }

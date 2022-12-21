@@ -15,9 +15,13 @@ import {
 export function Demo1Dashboard() {
   return (
     <>
-    <div>
-      <img src="/media/logos/slide03.jpg" alt="Edhi Foundation Logo is Here!" />
-    </div>
+      <div>
+        <img
+          className="w-100"
+          src="/media/logos/slide03.jpg"
+          alt="Edhi Foundation Logo is Here!"
+        />
+      </div>
       {/* <div className="row">
         <div className="col-lg-6 col-xxl-4">
           <MixedWidget1 className="card-stretch gutter-b" />

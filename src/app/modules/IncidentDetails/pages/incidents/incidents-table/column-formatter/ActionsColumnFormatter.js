@@ -1,8 +1,8 @@
-import React from "react"
-import SVG from "react-inlinesvg"
-import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers"
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
+import React from "react";
+import SVG from "react-inlinesvg";
+import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 export function ActionsColumnFormatter(
   cellContent,
   row,
@@ -17,7 +17,7 @@ export function ActionsColumnFormatter(
     isAccessForDelete,
   }
 ) {
-  const isUserRead = false
+  const isUserRead = false;
   // const { userAccess } = useSelector(
   //   (state) => ({
   //     userAccess: state.auth.userAccess,
@@ -46,7 +46,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {/* {isAccessForEdit && (
+      {isAccessForEdit && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>}
         >
@@ -62,7 +62,7 @@ export function ActionsColumnFormatter(
             </span>
           </a>
         </OverlayTrigger>
-      )} */}
+      )}
 
       <> </>
       {isAccessForDelete && (
@@ -103,5 +103,5 @@ export function ActionsColumnFormatter(
         </a>
       </OverlayTrigger>
     </>
-  )
+  );
 }

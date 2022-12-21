@@ -1,14 +1,14 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from "react";
 import {
   Card,
   CardBody,
   CardHeader,
   CardHeaderToolbar,
-} from "../../../../../../_metronic/_partials/controls"
+} from "../../../../../../_metronic/_partials/controls";
 // import Form from 'react-bootstrap/Form'
 // import Card from 'react-bootstrap/Card'
-import Row from "react-bootstrap"
-import Col from "react-bootstrap"
+import Row from "react-bootstrap";
+import Col from "react-bootstrap";
 // import moment from 'moment'
 import {
   DB_COLUMNS,
@@ -17,8 +17,8 @@ import {
   OperationStatus,
   RedirectURLs,
   TOAST_CONFIG,
-} from "../../../../../utils/constants"
-import { Formik, Field } from "formik"
+} from "../../../../../utils/constants";
+import { Formik, Field } from "formik";
 // import { RolesTable } from "./role-table/RolesTable"
 // import { useRolesUIContext } from "./RolesUIContext"
 // import { RolesFilter } from "./role-filter/RolesFilter"
@@ -61,5 +61,5 @@ export function AccessRightPage() {
         </Row>
       </CardBody>
     </Card>
-  )
+  );
 }

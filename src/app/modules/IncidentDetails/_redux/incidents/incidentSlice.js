@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialIncidentState = {
   listLoading: false,
@@ -12,104 +12,109 @@ const initialIncidentState = {
   incidentForEdit: undefined,
   lastError: null,
   TripLog: null,
-}
+};
 
 export const callTypes = {
   list: "list",
   action: "action",
-}
+};
 
 export const incidentSlice = createSlice({
   name: "incidents",
   initialState: initialIncidentState,
   reducers: {
     catchError: (state, action) => {
-      state.error = `${action.type}: ${action.payload.error}`
+      state.error = `${action.type}: ${action.payload.error}`;
       if (action.payload.callType === callTypes.list) {
-        state.listLoading = false
+        state.listLoading = false;
       } else {
-        state.actionsLoading = false
+        state.actionsLoading = false;
       }
     },
     startCall: (state, action) => {
-      state.error = null
+      state.error = null;
       if (action.payload.callType === callTypes.list) {
-        state.listLoading = true
+        state.listLoading = true;
       } else {
-        state.actionsLoading = true
+        state.actionsLoading = true;
       }
     },
     incidentsFetched: (state, action) => {
-      const entities = action.payload.data?.data.rows
-      const totalResult = action.payload.data?.data.totalResults
-      state.listLoading = false
-      state.error = null
-      state.entities = entities
-      state.totalCount = totalResult
+      const entities = action.payload.data?.data.rows;
+      const totalResult = action.payload.data?.data.totalResults;
+      state.listLoading = false;
+      state.error = null;
+      state.entities = entities;
+      state.totalCount = totalResult;
     },
     //get Incident By ID
     incidentFetched: (state, action) => {
-      state.actionsLoading = false
-      state.incidentForEdit = action.payload.incidentForEdit
-      state.error = null
+      state.actionsLoading = false;
+      state.incidentForEdit = action.payload.incidentForEdit;
+      state.error = null;
     },
     incidentDeleted: (state, action) => {
-      state.error = null
-      state.actionsLoading = false
+      state.error = null;
+      state.actionsLoading = false;
       state.entities = state.entities.filter(
         (el) => el.id !== action.payload.id
-      )
+      );
     },
     incidentCreated: (state, action) => {
-      const entities = action.payload
-      state.actionsLoading = false
-      state.error = null
-      state.entities.push(entities)
+      const entities = action.payload;
+      state.actionsLoading = false;
+      state.error = null;
+      state.entities.push(entities);
     },
     incidentUpdated: (state, action) => {
-      state.error = null
-      state.actionsLoading = false
+      state.error = null;
+      state.actionsLoading = false;
       // state.entities.push(action.payload)
       state.entities = state.entities.map((entity) => {
         if (entity.id === action.payload.updatedIncident.id) {
-          return action.payload.updatedIncident
+          return action.payload.updatedIncident;
         }
 
-        return entity
-      })
+        return entity;
+      });
     },
     IncidentTypesFetched: (state, action) => {
-      const incidentTypes = action.payload
-      state.listLoading = false
-      state.error = null
-      state.incidentTypes = incidentTypes
+      const incidentTypes = action.payload;
+      state.listLoading = false;
+      state.error = null;
+      state.incidentTypes = incidentTypes;
     },
     incidentSeverityfetched: (state, action) => {
-      const incidentSeverity = action.payload
-      state.listLoading = false
-      state.error = null
-      state.incidentSeverity = incidentSeverity
+      const incidentSeverity = action.payload;
+      state.listLoading = false;
+      state.error = null;
+      state.incidentSeverity = incidentSeverity;
     },
     CentersFetched: (state, action) => {
-      const entities = action.payload
-      state.listLoading = false
-      state.error = null
-      state.centers = entities
+      const entities = action.payload;
+      state.listLoading = false;
+      state.error = null;
+      state.centers = entities;
     },
     vehicleFetchedByCenterId: (state, action) => {
-      const entities = action.payload
+      const entities = action.payload;
       // console.log("action.payload", action.payload)
-      state.listLoading = false
-      state.error = null
-      state.vehicleByCenterId = entities
+      state.listLoading = false;
+      state.error = null;
+      state.vehicleByCenterId = entities;
     },
     tripLogFetched: (state, action) => {
-      const entities = action.payload.data?.data.rows
-      const totalResult = action.payload.data?.data.totalResults
-      state.listLoading = false
-      state.error = null
-      state.TripLog = entities
+      const entities = action.payload.data?.data.rows;
+      const totalResult = action.payload.data?.data.totalResults;
+      state.listLoading = false;
+      state.error = null;
+      state.TripLog = entities;
       // state.totalCount = totalResult
     },
+    incidentReinitial: (state, action) => {
+      state.actionsLoading = false;
+      state.incidentForEdit = undefined;
+      state.error = null;
+    },
   },
-})
+});
