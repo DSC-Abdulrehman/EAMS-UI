@@ -25,6 +25,7 @@ export function UserEditForm({
   onHide,
   roles,
   centers,
+  userStatusTypes,
   isUserForRead,
   values,
 }) {
@@ -306,31 +307,27 @@ export function UserEditForm({
                       {/* <p className="inv-feedback">{errors.cnic ? errors.cnic : ''}</p> */}
                     </div>
                     <div className="col-lg-4">
-                      {/* <Select
-                        label="Status"
-                        name="status"
-                        value={statusOption.status}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ display: "block" }}
-                      >
-                         <option value="" label="Select Type" /> 
-                        {statusOption &&
-                          statusOption.map((response) => {
-                            return (
-                              <option
-                                key={response.value}
-                                value={response.value}
-                                label={response.label}
-                              />
-                            );
-                          })}
-
-                         <option value="Available" label="Available" />
+                      <Select name="status" label="Status">
+                        <option value="" disabled selected>
+                          Please select status
+                        </option>
+                        {userStatusTypes.map((item) => {
+                          return (
+                            <option key={item.value} value={item.label}>
+                              {item.label}
+                            </option>
+                          );
+                        })}
+                        {/* <option value="available">
+                          Available
+                        </option>
+                        <option value="not available">
+                          Not Available
+                        </option> */}
                       </Select>
                       {errors.status && touched.status && (
                         <div className="invalid-text">{errors.status}</div>
-                      )} */}
+                      )}
 
                       {/* <Select name="status" label="Status">
                         <option value="">Please select status</option>
