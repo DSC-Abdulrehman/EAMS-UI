@@ -57,40 +57,57 @@ export function IncidentEditForm({
   IncidentType,
   incidentSeverityOption,
   vehicleByCenterId,
+  vehiclesForDropdown,
   centers,
   isUserForRead,
   setCenter,
   loading,
+  
 }) {
   const logTitle = " IncidentEditForm() ";
   const dispatch = useDispatch();
   const [incidentSeverityState, setIncidentSeverityState] = useState();
   const getCenterId = (id) => {
     const queryParams = {
-      filter: {
-        searchQuery: "",
-      },
-      sortOrder: "name",
-      pageSize: 10,
-      pageNumber: 1,
+      // filter: {
+      //   searchQuery: "",
+      // },
+      // sortOrder: "name",
+      // pageSize: 10,
+      // pageNumber: 1,
       centerId: id,
+      available: true,
+      inProgress: false
     };
 
     dispatch(actions.fetchVehicleById({ ...queryParams }));
   };
+  const getVehicleIdsForDropdown = (id) => {
+    const queryParams = {
+      centerId: id,
+      available: true,
+      inProgress: false
+    };
+
+    dispatch(actions.fetchVehicleByDropdown({ ...queryParams }));
+  };
 
   const queryParamsOnLoad = {
-    filter: {
-      searchQuery: "",
-    },
-    sortOrder: "name",
-    pageSize: 10,
-    pageNumber: 1,
+    // filter: {
+    //   searchQuery: "",
+    // },
+    available: true,
+    inProgress: false,
+    // sortOrder: "name",
+    // pageSize: 10,
+    // pageNumber: 1,
     centerId: incident?.centerId,
   };
 
   useEffect(() => {
-    dispatch(actions.fetchVehicleById({ ...queryParamsOnLoad }));
+    // dispatch(actions.fetchVehicleById({ ...queryParamsOnLoad }));
+    console.log(queryParamsOnLoad)
+    dispatch(actions.fetchVehicleByDropdown({ ...queryParamsOnLoad }));
   }, [incident?.centerId]);
   // This code os
   const NewIncidentForEdit = {
@@ -331,7 +348,7 @@ export function IncidentEditForm({
                           onChange={(e) => {
                             setCenter(e.currentTarget.value);
                             handleChange(e);
-                            getCenterId(e.currentTarget.value);
+                            getVehicleIdsForDropdown(e.currentTarget.value);
                           }}
                           onBlur={handleBlur}
                           style={{ display: "block" }}
@@ -393,7 +410,7 @@ export function IncidentEditForm({
                         </div>
                       </>
                     )}
-                    {vehicleByCenterId && (
+                    {vehiclesForDropdown && (
                       <>
                         <div className="form-group row">
                           <div className="col-lg-12">
@@ -401,16 +418,17 @@ export function IncidentEditForm({
                               name="vehicleId"
                               label="vehicle"
                               multiple
-                              value={values?.vehicleId?.id}
+                              value={values?.vehicleId?.value}
                             >
-                              {vehicleByCenterId.length > 0 ? (
+                              {vehiclesForDropdown.length > 0 ? (
                                 <>
-                                  {vehicleByCenterId.map((response) => {
+                                {console.log(vehiclesForDropdown)}
+                                  {vehiclesForDropdown.map((response) => {
                                     return (
                                       <option
-                                        key={response.id}
-                                        value={response.id}
-                                        label={response.regNo}
+                                        key={response.value}
+                                        value={response.value}
+                                        label={response.label}
                                       />
                                     );
                                   })}

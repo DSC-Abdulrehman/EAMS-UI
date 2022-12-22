@@ -12,6 +12,7 @@ const initialIncidentState = {
   incidentForEdit: undefined,
   lastError: null,
   TripLog: null,
+  vehiclesForDropdown: null
 };
 
 export const callTypes = {
@@ -102,6 +103,13 @@ export const incidentSlice = createSlice({
       state.listLoading = false;
       state.error = null;
       state.vehicleByCenterId = entities;
+    },
+    fetchVehiclesForDropdown: (state, action) => {
+      const entities = action.payload;
+      // console.log("action.payload", action.payload)
+      state.listLoading = false;
+      state.error = null;
+      state.vehiclesForDropdown = entities;
     },
     tripLogFetched: (state, action) => {
       const entities = action.payload.data?.data.rows;
