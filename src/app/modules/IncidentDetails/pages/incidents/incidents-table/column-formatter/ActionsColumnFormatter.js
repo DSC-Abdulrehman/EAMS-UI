@@ -46,7 +46,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && (
+      {isAccessForEdit && row.status !== "Close" && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>}
         >
