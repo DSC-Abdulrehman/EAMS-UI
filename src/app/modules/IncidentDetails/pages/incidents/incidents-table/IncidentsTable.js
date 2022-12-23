@@ -36,14 +36,15 @@ export function IncidentsTable() {
     };
   }, [incidentsUIContext]);
 
-  const { currentState, userAccess } = useSelector(
+  const { currentState, userAccess, editAccessStatus } = useSelector(
     (state) => ({
       currentState: state.incidentDetails,
       userAccess: state.auth.userAccess,
+      editAccessStatus: state,
     }),
     shallowEqual
   );
-
+  console.log("editAccessStatus", editAccessStatus);
   const { totalCount, entities, listLoading } = currentState;
   const dispatch = useDispatch();
 
@@ -82,6 +83,9 @@ export function IncidentsTable() {
     return forDelete?.isAccess;
   };
 
+  const AccessAccordingStatus = () => {
+    return;
+  };
   //console.log("isAccessForEdit", userAccess)
   // Table columns
   const columns = [
@@ -133,7 +137,7 @@ export function IncidentsTable() {
       sortCaret: sortCaret,
     },
     {
-      dataField: "isActive",
+      dataField: "status",
       text: "Status",
       sort: false,
       sortCaret: sortCaret,

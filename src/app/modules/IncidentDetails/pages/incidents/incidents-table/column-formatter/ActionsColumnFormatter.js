@@ -65,7 +65,7 @@ export function ActionsColumnFormatter(
       )}
 
       <> </>
-      {isAccessForDelete && (
+      {/* {isAccessForDelete && (
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">Delete Incident</Tooltip>
@@ -84,7 +84,7 @@ export function ActionsColumnFormatter(
             </span>
           </a>
         </OverlayTrigger>
-      )}
+      )} */}
 
       <OverlayTrigger
         overlay={<Tooltip id="products-edit-tooltip">View Trip Log</Tooltip>}

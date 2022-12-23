@@ -196,7 +196,7 @@ export function UserEditForm({
                         onBlur={handleBlur}
                         style={{ display: "block" }}
                       >
-                        <option value="" label="Select Type" />
+                        <option value="" label="Select Center" />
                         {centers &&
                           centers.map((response) => {
                             return (
@@ -236,7 +236,7 @@ export function UserEditForm({
                         onBlur={handleBlur}
                         style={{ display: "block" }}
                       >
-                        <option value="" label="Select Type" />
+                        <option value="" label="Select Role" />
                         {roles &&
                           roles.map((response) => {
                             return (
@@ -311,7 +311,7 @@ export function UserEditForm({
                         <option value="" disabled selected>
                           Please select status
                         </option>
-                        {userStatusTypes.map((item) => {
+                        {userStatusTypes?.map((item) => {
                           return (
                             <option key={item.value} value={item.label}>
                               {item.label}
@@ -337,7 +337,7 @@ export function UserEditForm({
                         {errors.status ? errors.status : ""}
                       </p> */}
 
-                      <Field name="status" component={Input} label="Status" />
+                      {/* <Field name="status" component={Input} label="Status" /> */}
                     </div>
                   </div>
                   <div className="form-group row">

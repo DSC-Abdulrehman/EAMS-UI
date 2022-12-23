@@ -164,7 +164,9 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
           ...rest,
           centerId: parseInt(rest.centerId),
           id: parseInt(id),
-          newVehicleId: vehicleId == null ? [parseInt(vehicleId)] : [],
+          newVehicleId: [...rest.oldVehicleId, parseInt(vehicleId)],
+
+          // newVehicleId: vehicleId != null ? [parseInt(vehicleId)] : [],
         })
       ).then((res) => {
         disabledLoading();

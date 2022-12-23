@@ -1,16 +1,16 @@
-import React from "react"
+import React from "react";
 import {
   IncidentStatusCssClasses,
   IncidentStatusTitles,
-} from "../../IncidentsUIHelpers"
+} from "../../IncidentsUIHelpers";
 
 export const StatusColumnFormatter = (cellContent, row) => (
   <span
     className={`label label-lg label-light-${
-      row.isActive === true ? "success" : "danger"
+      row.status === "Open" ? "success" : "danger"
     } label-inline`}
   >
-    {row.isActive === true ? "Open" : "Close"}
+    {row.status}
   </span>
 
   //   <span
@@ -20,4 +20,4 @@ export const StatusColumnFormatter = (cellContent, row) => (
   //   >
   //     {IncidentStatusTitles[row.isActive]}
   //   </span>
-)
+);
