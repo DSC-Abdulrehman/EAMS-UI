@@ -46,28 +46,23 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit &&
-        row.status !== "Close" && (
-          <OverlayTrigger
-            overlay={
-              <Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>
-            }
+      {isAccessForEdit && row.status !== "Close" && (
+        <OverlayTrigger
+          overlay={<Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>}
+        >
+          <a
+            title=""
+            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+            onClick={() => openEditUserDialog(row.id)}
           >
-            <a
-              title=""
-              className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-              onClick={() => openEditUserDialog(row.id)}
-            >
-              <span className="svg-icon svg-icon-md svg-icon-primary">
-                <SVG
-                  src={toAbsoluteUrl(
-                    "/media/svg/icons/Communication/Write.svg"
-                  )}
-                />
-              </span>
-            </a>
-          </OverlayTrigger>
-        )}
+            <span className="svg-icon svg-icon-md svg-icon-primary">
+              <SVG
+                src={toAbsoluteUrl("/media/svg/icons/Communication/Write.svg")}
+              />
+            </span>
+          </a>
+        </OverlayTrigger>
+      )}
 
       <> </>
       {/* {isAccessForDelete && (

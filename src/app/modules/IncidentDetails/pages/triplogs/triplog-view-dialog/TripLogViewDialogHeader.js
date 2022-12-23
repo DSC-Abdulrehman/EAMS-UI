@@ -18,7 +18,7 @@ export function TripLogViewDialogHeader({ id, isUserForRead }) {
   useEffect(() => {
     let _title = id ? "" : "Add Incident"
     if (driverTripForEdit) {
-      _title = `View Trip Log '`
+      _title = `View Trip Log`
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

@@ -159,17 +159,22 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
       //   lastName: saveIncident.lastName,
       //   roleId: saveIncident.roleId,
       // }
-      console.log("newVehicleId:: ", vehicleId);
+      console.log("newVehicleId: ", vehicleId);
       enableLoading();
 
       // Converting all strings to number
       let vehicleidsConversionToNumber;
-      if (vehicleId.length) {
+      if (vehicleId.length && vehicleId[0].id) {
+        vehicleidsConversionToNumber = vehicleId.map(function(x) {
+          return parseInt(x.id, 10);
+        });
+      } else {
         vehicleidsConversionToNumber = vehicleId.map(function(x) {
           return parseInt(x, 10);
         });
-      }
 
+      }
+      console.log('vehicleidsConversionToNumber', vehicleidsConversionToNumber)
       dispatch(
         actions.updateIncident({
           ...rest,
