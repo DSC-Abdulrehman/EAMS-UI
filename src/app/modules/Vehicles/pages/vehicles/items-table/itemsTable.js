@@ -39,7 +39,7 @@ export function ItemsTable() {
     shallowEqual
   );
 
-  //console.log("currentState", currentState)
+  //console.log("currentState", currentState);
   // Centers Redux state
   const dispatch = useDispatch();
 
@@ -86,6 +86,16 @@ export function ItemsTable() {
     {
       dataField: "regNo",
       text: "Reg No",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "driver.firstName",
+      text: "Driver",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

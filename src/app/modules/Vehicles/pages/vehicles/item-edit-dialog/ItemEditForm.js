@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDrivers } from "../../../_redux/vehiclesActions";
 import * as Yup from "yup";
 import {
   Input,
@@ -47,7 +49,9 @@ const itemEditSchema = Yup.object().shape({
   status: Yup.string().required("Status is required"),
   transmission: Yup.string(),
   centerId: Yup.string().required("Cneter Id is required"),
+  driverId: Yup.string().required("Driver Id is required"),
   vehicleCategoryId: Yup.string().required("Vehicle category is required"),
+  engineNo: Yup.string().required(" Engine No is required"),
 });
 
 export function ItemEditForm({
@@ -59,10 +63,23 @@ export function ItemEditForm({
   itemForRead,
   category,
 }) {
-  //console.log("itemfor edit", item)
-
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
+  const [cetnerId, setCenterId] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchDrivers(cetnerId));
+  }, [cetnerId]);
+
+  useEffect(() => {
+    dispatch(fetchDrivers(item.centerId));
+  }, [item.centerId]);
+  const drivers = useSelector((state) => {
+    return state?.vehicles?.drivers;
+  });
+
+  console.log("itemfor edit", item);
 
   const fuelTypeOptions = [
     {
@@ -230,6 +247,14 @@ export function ItemEditForm({
                       />
                     </div>
                     <div className="col-lg-4">
+                      <Field
+                        name="engineNo"
+                        component={Input}
+                        placeholder=""
+                        label="Engine No."
+                      />
+                    </div>
+                    <div className="col-lg-4">
                       <Select
                         label="Fuel Type"
                         name="fuelType"
@@ -246,6 +271,8 @@ export function ItemEditForm({
                         <div className="invalid-text">{errors.fuelType}</div>
                       )}
                     </div>
+                  </div>
+                  <div className="form-group row">
                     <div className="col-lg-4">
                       <Select
                         label="Status"
@@ -263,8 +290,6 @@ export function ItemEditForm({
                         <div className="invalid-text">{errors.status}</div>
                       )}
                     </div>
-                  </div>
-                  <div className="form-group row">
                     <div className="col-lg-4">
                       <Select
                         label="Transmission"
@@ -280,44 +305,6 @@ export function ItemEditForm({
                           {errors.transmission}
                         </div>
                       )}
-                    </div>
-                    <div className="col-lg-4">
-                      <Select
-                        label="Center"
-                        name="centerId"
-                        value={values.centerId}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ display: "block" }}
-                      >
-                        <option value="" label="Select Type" />
-                        {centerName &&
-                          centerName.map((response) => {
-                            return (
-                              <option
-                                key={response.value}
-                                value={response.value}
-                                label={response.label}
-                              />
-                            );
-                          })}
-                      </Select>
-                      {errors.centerId && touched.centerId && (
-                        <div className="invalid-text">{errors.centerId}</div>
-                      )}
-                      {/* <Select name="centerId" label="Center">
-                        {centerName &&
-                          centerName.map((response) => {
-                            return (
-                              <option
-                                key={response.value}
-                                value={response.value}
-                              >
-                                {response.label}
-                              </option>
-                            );
-                          })}
-                      </Select> */}
                     </div>
                     <div className="col-lg-4">
                       <Select
@@ -359,6 +346,74 @@ export function ItemEditForm({
                             );
                           })}
                       </Select> */}
+                    </div>
+                  </div>
+                  <div className="from-group row">
+                    <div className="col-lg-4">
+                      <Select
+                        label="Center"
+                        name="centerId"
+                        value={values.centerId}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setCenterId(e.target.value);
+                        }}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {centerName &&
+                          centerName.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                                label={response.label}
+                              />
+                            );
+                          })}
+                      </Select>
+                      {errors.centerId && touched.centerId && (
+                        <div className="invalid-text">{errors.centerId}</div>
+                      )}
+                      {/* <Select name="centerId" label="Center">
+                        {centerName &&
+                          centerName.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                              >
+                                {response.label}
+                              </option>
+                            );
+                          })}
+                      </Select> */}
+                    </div>
+                    <div className="col-lg-4">
+                      <Select
+                        label="Driver"
+                        name="driverId"
+                        defalutvalue={values.driverId}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {drivers &&
+                          drivers.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                                label={response.label}
+                              />
+                            );
+                          })}
+                      </Select>
+                      {errors.driverId && touched.driverId && (
+                        <div className="invalid-text">{errors.driverId}</div>
+                      )}
                     </div>
                   </div>
                 </fieldset>

@@ -28,7 +28,7 @@ export function ActionsColumnFormatter(
   // const isAccessForEdit = userAccess.find(
   //   (item) => item.componentName === "UpdateUser"
   // )
-  //console.log("userAccess", userAccess)
+
   return (
     <>
       <OverlayTrigger
@@ -46,23 +46,28 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && (
-        <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>}
-        >
-          <a
-            title=""
-            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-            onClick={() => openEditUserDialog(row.id)}
+      {isAccessForEdit &&
+        row.status !== "Close" && (
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>
+            }
           >
-            <span className="svg-icon svg-icon-md svg-icon-primary">
-              <SVG
-                src={toAbsoluteUrl("/media/svg/icons/Communication/Write.svg")}
-              />
-            </span>
-          </a>
-        </OverlayTrigger>
-      )}
+            <a
+              title=""
+              className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+              onClick={() => openEditUserDialog(row.id)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-primary">
+                <SVG
+                  src={toAbsoluteUrl(
+                    "/media/svg/icons/Communication/Write.svg"
+                  )}
+                />
+              </span>
+            </a>
+          </OverlayTrigger>
+        )}
 
       <> </>
       {/* {isAccessForDelete && (

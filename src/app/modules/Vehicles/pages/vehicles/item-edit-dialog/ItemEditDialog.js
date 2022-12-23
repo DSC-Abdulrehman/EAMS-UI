@@ -89,6 +89,7 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
         status: item.status,
         centerId: item.centerId,
         vehicleCategoryId: item.vehicleCategoryId,
+        DriverId: item.DriverId,
       };
       dispatch(actions.updateVehicle(itemUpdatedFields));
       onHide();

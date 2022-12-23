@@ -160,3 +160,16 @@ export const fetchCategory = () => (dispatch) => {
       })
   );
 };
+
+export const fetchDrivers = (id) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+
+  return requestFromServer
+    .getAllDrivers(id)
+    .then((response) => {
+      dispatch(actions.driversByCetner(response?.data?.data));
+    })
+    .catch((error) => {
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
+};

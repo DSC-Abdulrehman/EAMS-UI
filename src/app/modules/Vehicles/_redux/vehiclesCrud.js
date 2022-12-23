@@ -32,6 +32,16 @@ export function getAllCenters() {
   return axios.get(`${USERS_URL}/settings/read-all-centers-master-data`);
 }
 
+//get All Drivers that available in Center
+
+export function getAllDrivers(id) {
+  return axios.post(`${USERS_URL}/settings/read-all-drivers-master-data`, {
+    centerId: id,
+    available: true,
+    notAvailable: false,
+  });
+}
+
 //get All Vehicle categories
 export function getAllCategories() {
   return axios.get(
