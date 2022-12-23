@@ -41,6 +41,7 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
     incidentSeverity,
     centers,
     vehicleByCenterId,
+    vehiclesForDropdown,
     getState,
   } = useSelector(
     (state) => ({
@@ -51,11 +52,12 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
       incidentSeverity: state.incidentDetails.incidentSeverity,
       centers: state.incidentDetails.centers,
       vehicleByCenterId: state.incidentDetails.vehicleByCenterId,
+      vehiclesForDropdown: state.incidentDetails.vehiclesForDropdown,
       getState: state,
     }),
     shallowEqual
   );
-  // console.log("incident orignal data", incidentForEdit);
+  console.log("incident orignal data", vehiclesForDropdown);
   if (incidentForEdit) {
     var NewIncidentForEdit = {
       ...incidentForEdit?.incident,
@@ -159,12 +161,21 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
       // }
       console.log("newVehicleId:: ", vehicleId);
       enableLoading();
+
+      // Converting all strings to number
+      let vehicleidsConversionToNumber;
+      if(vehicleId.length) {
+        vehicleidsConversionToNumber = vehicleId.map(function (x) { 
+          return parseInt(x, 10); 
+        });
+      }
+
       dispatch(
         actions.updateIncident({
           ...rest,
           centerId: parseInt(rest.centerId),
           id: parseInt(id),
-          newVehicleId: vehicleId == null ? [parseInt(vehicleId)] : [],
+          newVehicleId: vehicleidsConversionToNumber != null ? [...vehicleidsConversionToNumber, ...rest.oldVehicleId] : [],
         })
       ).then((res) => {
         disabledLoading();
@@ -196,6 +207,7 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
             incidentSeverityOption={incidentSeverity}
             centers={centers}
             vehicleByCenterId={vehicleByCenterId}
+            vehiclesForDropdown={vehiclesForDropdown}
             onHide={onHide}
             isUserForRead={userForRead}
             setCenter={setCenter}

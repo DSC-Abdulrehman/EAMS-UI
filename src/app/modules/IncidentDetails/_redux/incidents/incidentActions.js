@@ -122,7 +122,7 @@ export const createIncident = (incidentForCreation) => (dispatch) => {
     });
 };
 export const updateIncident = (incident) => (dispatch) => {
-  // console.log("updatedIncident data", incident)
+  console.log("updatedIncident data", incident)
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateIncident(incident)
@@ -192,11 +192,17 @@ export const fetchCenters = () => (dispatch) => {
   });
 };
 export const fetchVehicleById = (queryParams) => (dispatch) => {
-  //console.log("queryparams is", queryParams)
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getVehicleById(queryParams).then((response) => {
     const entities = response.data?.data?.rows;
     dispatch(actions.vehicleFetchedByCenterId(entities));
+  });
+};
+export const fetchVehicleByDropdown = (queryParams) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+  return requestFromServer.getVehicleForDropdown(queryParams).then((response) => {
+    const entities = response.data?.data;
+    dispatch(actions.fetchVehiclesForDropdown(entities));
   });
 };
 export const fetchTripLog = (queryparm) => async (dispatch) => {

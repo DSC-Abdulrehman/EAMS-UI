@@ -25,7 +25,6 @@ export function getIncidentById(id) {
 
 //Update
 export function updateIncident(updatedData) {
-  console.log("updated data::", updatedData);
   return axios.put(
     `${USERS_URL}/incidentdetails/update-incident-detail`,
     updatedData
@@ -60,6 +59,14 @@ export function getAllCenters() {
 export function getVehicleById(body) {
   return axios.post(
     `${USERS_URL}/vehicles/read-all-vehicles-by-centerId`,
+    body
+  );
+}
+
+// get Vehicle By id
+export function getVehicleForDropdown(body) {
+  return axios.post(
+    `${USERS_URL}/settings/read-all-vehicles-by-centerId-master-data`,
     body
   );
 }
