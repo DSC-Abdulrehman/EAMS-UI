@@ -120,6 +120,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
       // }
 
       enableLoading();
+      delete rest.driverId;
       dispatch(actions.updateTrip({ ...rest, id })).then((res) => {
         disabledLoading();
         onHide();

@@ -103,6 +103,7 @@ export function IncidentEditForm({
     // pageNumber: 1,
     centerId: incident?.centerId,
   };
+  console.log('incident', incident)
 
   useEffect(() => {
     // dispatch(actions.fetchVehicleById({ ...queryParamsOnLoad }));

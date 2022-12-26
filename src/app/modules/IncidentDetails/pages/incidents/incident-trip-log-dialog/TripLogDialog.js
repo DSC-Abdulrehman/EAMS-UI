@@ -42,25 +42,38 @@ export function TripLogDialog({ id, show, onHide, userForRead }) {
       text: "Center",
     },
     {
-      dataField: "dateTime",
-      text: "dateTime",
+      dataField: "status",
+      text: "Status",
     },
     {
-      dataField: "finalReading",
-      text: "Final Reading",
+      dataField: "vehicle.regNo",
+      text: "RegistrationNo",
     },
     {
-      dataField: "initialReading",
-      text: "initialReading",
+      dataField: "driver.phNo",
+      text: "DriverPhoneNo",
+    },
+    {
+      dataField: "driver.firstName",
+      text: "DriverName",
     },
     {
       dataField: "logBookNo",
       text: "LogBook",
     },
     {
-      dataField: "status",
-      text: "Status",
+      dataField: "dateTime",
+      text: "DateTime",
     },
+    {
+      dataField: "initialReading",
+      text: "initialReading",
+    },
+    {
+      dataField: "finalReading",
+      text: "FinalReading",
+    },
+    
   ];
 
   return (
