@@ -86,6 +86,20 @@ export function TripLogsTable() {
       headerSortingClasses,
     },
     {
+      dataField: "driver.firstName",
+      text: "DriverName",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+    },
+    {
+      dataField: "driver.phNo",
+      text: "DriverPhoneNumber",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+    },
+    {
       dataField: "dateTime",
       text: "Start Time",
       sort: false,
