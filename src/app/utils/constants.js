@@ -168,9 +168,10 @@ export class RedirectURLs {
 // type spinnerAnimationType = 'border' | 'grow'
 
 export const DateTimeFormats = {
-  General1: "MMMM Do YYYY - h:mm a",
-  General: "d MMM H:m a",
-};
+  General1: 'MMMM Do YYYY - h:mm a',
+  General: 'd MMM H:m a',
+}
+
 export const REGEX = {
   PhoneNumber: /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/,
 };

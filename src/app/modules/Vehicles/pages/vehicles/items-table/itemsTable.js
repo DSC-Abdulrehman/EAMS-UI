@@ -12,6 +12,7 @@ import {
   headerSortingClasses,
 } from "../../../../../../_metronic/_helpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
+import { DatetimeColumnFormatter } from "./column-formatter/genericColumnFormatter";
 import * as uiHelpers from "../ItemUIHelpers";
 import * as actions from "../../../_redux/vehiclesActions";
 import { useItemUIContext } from "../ItemUIContext";
@@ -146,19 +147,20 @@ export function ItemsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: (cell) => {
-        let dateObj = cell;
-        if (typeof cell !== "object") {
-          dateObj = new Date(cell);
-        }
-        return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          "0" +
-          (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`;
-      },
-      style: {
-        minWidth: "130px",
-      },
+      formatter: DatetimeColumnFormatter
+      // (cell) => {
+      //   let dateObj = cell;
+      //   if (typeof cell !== "object") {
+      //     dateObj = new Date(cell);
+      //   }
+      //   return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+      //     "0" +
+      //     (dateObj.getUTCMonth() + 1)
+      //   ).slice(-2)}/${dateObj.getUTCFullYear()}`;
+      // },
+      // style: {
+      //   minWidth: "130px",
+      // },
     },
     // {
     //   dataField: "phNo",
