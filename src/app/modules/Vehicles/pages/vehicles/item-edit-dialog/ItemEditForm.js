@@ -50,6 +50,7 @@ const itemEditSchema = Yup.object().shape({
   transmission: Yup.string(),
   centerId: Yup.string().required("Cneter Id is required"),
   driverId: Yup.string().required("Driver Id is required"),
+  oldDriverId: Yup.string(),
   vehicleCategoryId: Yup.string().required("Vehicle category is required"),
   engineNo: Yup.string().required(" Engine No is required"),
 });
@@ -67,6 +68,8 @@ export function ItemEditForm({
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
   const [cetnerId, setCenterId] = useState(0);
+  const [driverId, setDriverId] = useState(item.driverId);
+  const oldDriverId = item.driverId;
 
   useEffect(() => {
     dispatch(fetchDrivers(cetnerId));
@@ -75,6 +78,7 @@ export function ItemEditForm({
   useEffect(() => {
     dispatch(fetchDrivers(item.centerId));
   }, [item.centerId]);
+  
   const drivers = useSelector((state) => {
     return state?.vehicles?.drivers;
   });
@@ -348,6 +352,18 @@ export function ItemEditForm({
                       </Select> */}
                     </div>
                   </div>
+                  {item?.driver && (
+                    <>
+                      <div className="form-group row mt-5">
+                        <div className="col-lg-12">
+                          <small>Assigned driver</small>
+                          <ul>
+                            <li>{item?.driver.firstName}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </>
+                  )}
                   <div className="from-group row">
                     <div className="col-lg-4">
                       <Select
@@ -394,8 +410,12 @@ export function ItemEditForm({
                       <Select
                         label="Driver"
                         name="driverId"
-                        defalutvalue={values.driverId}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setDriverId(e.target.value);
+                          console.log('Set driver id', driverId)
+                        }}
+                        value={values.driverId}
                         onBlur={handleBlur}
                         style={{ display: "block" }}
                       >
@@ -414,6 +434,12 @@ export function ItemEditForm({
                       {errors.driverId && touched.driverId && (
                         <div className="invalid-text">{errors.driverId}</div>
                       )}
+                      <Field
+                        type="text"
+                        name="oldDriverId"
+                        component={Input}
+                        style={{ display: "none" }}
+                      />
                     </div>
                   </div>
                 </fieldset>

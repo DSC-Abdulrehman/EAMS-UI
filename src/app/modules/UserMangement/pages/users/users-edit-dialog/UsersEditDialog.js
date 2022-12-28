@@ -67,6 +67,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
         lastName: user.lastName,
         roleId: user.roleId,
         centerId: user.centerId,
+        status: user.status,
       };
       dispatch(actions.updateUser(userUpdatedFields));
       onHide();

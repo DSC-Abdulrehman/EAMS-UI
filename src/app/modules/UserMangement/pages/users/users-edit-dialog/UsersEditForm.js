@@ -9,6 +9,7 @@ import {
 } from "../../../../../../_metronic/_partials/controls";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/usersActions";
+import { login } from "../../../../Auth/_redux/authCrud";
 
 // Phone Number Regex
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -307,10 +308,10 @@ export function UserEditForm({
                       {/* <p className="inv-feedback">{errors.cnic ? errors.cnic : ''}</p> */}
                     </div>
                     <div className="col-lg-4">
-                      <Select name="status" label="Status">
-                        <option value="" disabled selected>
+                      <Select name="status" label="Status" value={values.status.trim()} onChange={handleChange}>
+                        {/* <option value="" disabled>
                           Please select status
-                        </option>
+                        </option> */}
                         {userStatusTypes?.map((item) => {
                           return (
                             <option key={item.value} value={item.label}>
@@ -318,12 +319,6 @@ export function UserEditForm({
                             </option>
                           );
                         })}
-                        {/* <option value="available">
-                          Available
-                        </option>
-                        <option value="not available">
-                          Not Available
-                        </option> */}
                       </Select>
                       {errors.status && touched.status && (
                         <div className="invalid-text">{errors.status}</div>

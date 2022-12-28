@@ -116,6 +116,20 @@ export function CentersVehiclesTable({ vehiclesForCenter, totalCount }) {
       headerSortingClasses,
     },
     {
+      dataField: "driver.firstName",
+      text: "Driver Name",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+    },
+    {
+      dataField: "driver.phNo",
+      text: "Driver Phone Number",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+    },
+    {
       dataField: "name",
       text: "Vehicle Name",
       sort: false,

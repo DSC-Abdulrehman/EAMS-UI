@@ -130,12 +130,12 @@ export function IncidentsTable() {
       sort: false,
       sortCaret: sortCaret,
     },
-    {
-      dataField: "location",
-      text: "Location",
-      sort: false,
-      sortCaret: sortCaret,
-    },
+    // {
+    //   dataField: "location",
+    //   text: "Location",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    // },
     {
       dataField: "status",
       text: "Status",

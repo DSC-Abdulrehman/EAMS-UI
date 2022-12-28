@@ -97,7 +97,7 @@ export const createVehicle = (item) => (dispatch) => {
 };
 
 export const updateVehicle = (user) => (dispatch) => {
-  //console.log("updatedUser data", user)
+  console.log("Update Vehicle data", user)
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(user)

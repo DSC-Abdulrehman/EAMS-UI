@@ -40,7 +40,7 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
     shallowEqual
   );
 
-  //console.log("itemForEdit", itemForEdit)
+  // console.log("itemForEdit", itemForEdit)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,7 +89,8 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
         status: item.status,
         centerId: item.centerId,
         vehicleCategoryId: item.vehicleCategoryId,
-        DriverId: item.DriverId,
+        driverId: item.driverId,
+        oldDriverId: item.oldDriverId,
       };
       dispatch(actions.updateVehicle(itemUpdatedFields));
       onHide();
