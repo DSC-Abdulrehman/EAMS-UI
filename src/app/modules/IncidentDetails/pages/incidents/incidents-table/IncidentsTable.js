@@ -19,6 +19,7 @@ import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useIncidentsUIContext } from "../IncidentsUIContext";
 import * as columnFormatters from "./column-formatter";
 
+
 export function IncidentsTable() {
   //Users UI Context
   const incidentsUIContext = useIncidentsUIContext();
@@ -149,16 +150,17 @@ export function IncidentsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: (cell) => {
-        let dateObj = cell;
-        if (typeof cell !== "object") {
-          dateObj = new Date(cell);
-        }
-        return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          "0" +
-          (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`;
-      },
+      formatter: columnFormatters.DatetimeColumnFormatter,
+      // (cell) => {
+      //   let dateObj = cell;
+      //   if (typeof cell !== "object") {
+      //     dateObj = new Date(cell);
+      //   }
+      //   return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+      //     "0" +
+      //     (dateObj.getUTCMonth() + 1)
+      //   ).slice(-2)}/${dateObj.getUTCFullYear()}`;
+      // },
     },
     {
       dataField: "action",

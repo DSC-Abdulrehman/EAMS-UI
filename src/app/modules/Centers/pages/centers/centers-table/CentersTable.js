@@ -13,6 +13,7 @@ import {
 } from "../../../../../../_metronic/_helpers";
 import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
 import { CreatedColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
+import { DatetimeColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
 import * as uiHelpers from "../CentersUIHelpers";
 import * as actions from "../../../_redux/centersActions";
 import { useCentersUIContext } from "../CentersUIContext";
@@ -104,19 +105,20 @@ export function CentersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: (cell) => {
-        let dateObj = cell;
-        if (typeof cell !== "object") {
-          dateObj = new Date(cell);
-        }
-        return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          "0" +
-          (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`;
-      },
-      style: {
-        minWidth: "130px",
-      },
+      formatter: DatetimeColumnFormatter
+      // (cell) => {
+      //   let dateObj = cell;
+      //   if (typeof cell !== "object") {
+      //     dateObj = new Date(cell);
+      //   }
+      //   return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+      //     "0" +
+      //     (dateObj.getUTCMonth() + 1)
+      //   ).slice(-2)}/${dateObj.getUTCFullYear()}`;
+      // },
+      // style: {
+      //   minWidth: "130px",
+      // },
     },
     // {
     //   dataField: "phNo",

@@ -5,6 +5,8 @@ import {
   CustomerStatusCssClasses,
   CustomerStatusTitles,
 } from "../../CentersUIHelpers"
+import { getDate } from '../../../../../../utils/common'
+
 
 export function CreatedColumnFormatter(cellContent, row) {
   //   const getLabelCssClasses = () => {
@@ -14,3 +16,10 @@ export function CreatedColumnFormatter(cellContent, row) {
   //   }
   return <span>{cellContent}</span>
 }
+export const DatetimeColumnFormatter = (cellContent, row) => (
+  <span
+    className={`badge badge-light-success  ${getDate(cellContent)}`}
+  >
+    {getDate(cellContent)}
+  </span>
+);

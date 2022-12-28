@@ -79,16 +79,17 @@ export function RolesTable() {
       dataField: "createdAt",
       text: "Created At",
       sort: true,
-      formatter: (cell) => {
-        let dateObj = cell
-        if (typeof cell !== "object") {
-          dateObj = new Date(cell)
-        }
-        return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          "0" +
-          (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`
-      },
+      formatter: columnFormatters.DatetimeColumnFormatter
+      //  (cell) => {
+      //   let dateObj = cell
+      //   if (typeof cell !== "object") {
+      //     dateObj = new Date(cell)
+      //   }
+      //   return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+      //     "0" +
+      //     (dateObj.getUTCMonth() + 1)
+      //   ).slice(-2)}/${dateObj.getUTCFullYear()}`
+      // },
     },
     // {
     //   dataField: "updatedAt",
