@@ -66,7 +66,7 @@ export function ActionsColumnFormatter(
       <> </>
       {isAccessForDelete && (
         <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Delete Center</Tooltip>}
+          overlay={<Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>}
         >
           <a
             title="Delete customer"
@@ -74,7 +74,7 @@ export function ActionsColumnFormatter(
             onClick={() => openDeleteCenterDialog(row.id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-danger">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/General/Trash.svg")} />
+              <SVG src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")} />
             </span>
           </a>
         </OverlayTrigger>

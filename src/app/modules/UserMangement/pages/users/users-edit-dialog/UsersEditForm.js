@@ -190,7 +190,7 @@ export function UserEditForm({
                   <div className="form-group row">
                     <div className="col-lg-6">
                       <Select
-                        label="Center"
+                        label="Center*"
                         name="centerId"
                         value={values.centerId}
                         onChange={handleChange}
@@ -230,7 +230,7 @@ export function UserEditForm({
                     </div>
                     <div className="col-lg-6">
                       <Select
-                        label="Role"
+                        label="Role*"
                         name="roleId"
                         value={values.roleId}
                         onChange={handleChange}
@@ -275,7 +275,7 @@ export function UserEditForm({
                         name="firstName"
                         component={Input}
                         placeholder="First Name"
-                        label="First Name"
+                        label="First Name*"
                       />
                       {/* <p className="inv-feedback">{errors.firstName ? errors.firstName : ''}</p> */}
                     </div>
@@ -284,7 +284,7 @@ export function UserEditForm({
                         name="lastName"
                         component={Input}
                         placeholder="Last Name"
-                        label="Last Name"
+                        label="Last Name*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -293,22 +293,22 @@ export function UserEditForm({
                         name="email"
                         component={Input}
                         placeholder="Email"
-                        label="Email"
+                        label="Email*"
                       />
                       {/* <p className="inv-feedback">{errors.email ? errors.email : ''}</p> */}
                     </div>
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-4">
-                      <Field name="phNo" component={Input} label="Phone No" />
+                      <Field name="phNo" component={Input} label="Phone No*" />
                       {/* <p className="inv-feedback">{errors.phNo ? errors.phNo : ''}</p> */}
                     </div>
                     <div className="col-lg-4">
-                      <Field name="cnic" component={Input} label="CNIC" />
+                      <Field name="cnic" component={Input} label="CNIC*" />
                       {/* <p className="inv-feedback">{errors.cnic ? errors.cnic : ''}</p> */}
                     </div>
                     <div className="col-lg-4">
-                      <Select name="status" label="Status" value={values.status.trim()} onChange={handleChange}>
+                      <Select name="status" label="Status*" value={values.status.trim()} onChange={handleChange}>
                         {/* <option value="" disabled>
                           Please select status
                         </option> */}
@@ -343,7 +343,7 @@ export function UserEditForm({
                           type="password"
                           component={Input}
                           placeholder=""
-                          label="Password"
+                          label="Password*"
                         />
                       </div>
                     ) : (

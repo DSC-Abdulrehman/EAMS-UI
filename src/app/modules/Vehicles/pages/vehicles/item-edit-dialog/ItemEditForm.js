@@ -168,7 +168,7 @@ export function ItemEditForm({
                         name="name"
                         component={Input}
                         placeholder=""
-                        label="vehicle Name"
+                        label="vehicle Name*"
                         customFeedbackLabel="hello"
                       />
                     </div>
@@ -177,7 +177,7 @@ export function ItemEditForm({
                         name="regNo"
                         component={Input}
                         placeholder=""
-                        label="Registration No"
+                        label="Registration No*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -185,7 +185,7 @@ export function ItemEditForm({
                         name="engineCapacity"
                         component={Input}
                         placeholder=""
-                        label="Engine Capacity"
+                        label="Engine Capacity*"
                       />
                     </div>
                   </div>
@@ -195,7 +195,7 @@ export function ItemEditForm({
                         name="registerCity"
                         component={Input}
                         placeholder=""
-                        label="Register City"
+                        label="Register City*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -203,7 +203,7 @@ export function ItemEditForm({
                         name="chasis"
                         component={Input}
                         placeholder=""
-                        label="Chasis"
+                        label="Chasis*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -211,7 +211,7 @@ export function ItemEditForm({
                         name="milleage"
                         component={Input}
                         placeholder=""
-                        label="Milleage"
+                        label="Milleage*"
                       />
                     </div>
                   </div>
@@ -221,7 +221,7 @@ export function ItemEditForm({
                         name="year"
                         component={Input}
                         placeholder=""
-                        label="Year"
+                        label="Year*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -229,7 +229,7 @@ export function ItemEditForm({
                         name="make"
                         component={Input}
                         placeholder=""
-                        label="Make"
+                        label="Make*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -237,7 +237,7 @@ export function ItemEditForm({
                         name="model"
                         component={Input}
                         placeholder=""
-                        label="Model"
+                        label="Model*"
                       />
                     </div>
                   </div>
@@ -247,7 +247,7 @@ export function ItemEditForm({
                         name="color"
                         component={Input}
                         placeholder=""
-                        label="Color"
+                        label="Color*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -255,12 +255,12 @@ export function ItemEditForm({
                         name="engineNo"
                         component={Input}
                         placeholder=""
-                        label="Engine No."
+                        label="Engine No.*"
                       />
                     </div>
                     <div className="col-lg-4">
                       <Select
-                        label="Fuel Type"
+                        label="Fuel Type*"
                         name="fuelType"
                         value={values.fuelType}
                         onChange={handleChange}
@@ -279,7 +279,7 @@ export function ItemEditForm({
                   <div className="form-group row">
                     <div className="col-lg-4">
                       <Select
-                        label="Status"
+                        label="Status*"
                         name="status"
                         value={values.status}
                         onChange={handleChange}
@@ -312,7 +312,7 @@ export function ItemEditForm({
                     </div>
                     <div className="col-lg-4">
                       <Select
-                        label="Vehicle Category"
+                        label="Vehicle Category*"
                         name="vehicleCategoryId"
                         value={values.vehicleCategoryId}
                         onChange={handleChange}
@@ -367,7 +367,7 @@ export function ItemEditForm({
                   <div className="from-group row">
                     <div className="col-lg-4">
                       <Select
-                        label="Center"
+                        label="Center*"
                         name="centerId"
                         value={values.centerId}
                         onChange={(e) => {
@@ -408,7 +408,7 @@ export function ItemEditForm({
                     </div>
                     <div className="col-lg-4">
                       <Select
-                        label="Driver"
+                        label="Driver*"
                         name="driverId"
                         onChange={(e) => {
                           handleChange(e);

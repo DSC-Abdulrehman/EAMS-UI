@@ -187,7 +187,7 @@ export function IncidentEditForm({
                         <Field
                           name="callerName"
                           component={Input}
-                          label="Caller Name"
+                          label="Caller Name*"
                         />
                       </div>
                       <div className="col-lg-4">
@@ -201,7 +201,7 @@ export function IncidentEditForm({
                         <Field
                           name="callerPhoneNo"
                           component={Input}
-                          label="Caller Phone No"
+                          label="Caller Phone No*"
                         />
                       </div>
                     </div>
@@ -224,17 +224,17 @@ export function IncidentEditForm({
                         <Field
                           name="location"
                           component={Input}
-                          label="Location"
+                          label="Location*"
                         />
                       </div>
                     </div>
                     <div className="form-group row">
                       <div className="col-lg-4">
-                        <Field name="area" component={Input} label="Area" />
+                        <Field name="area" component={Input} label="Area*" />
                       </div>
                       <div className="col-lg-4">
                         <Select
-                          label="Incident Type"
+                          label="Incident Type*"
                           name="incidentTypeId"
                           defaultValue={values?.incidentTypeId}
                           onChange={handleChange}
@@ -279,7 +279,7 @@ export function IncidentEditForm({
                       </div>
                       <div className="col-lg-4">
                         <Select
-                          label="Incident Severity"
+                          label="Incident Severity*"
                           name="incidentSeverityId"
                           defaultValue={values?.incidentSeverityId}
                           onChange={(e) => {
@@ -343,7 +343,7 @@ export function IncidentEditForm({
                     <div className="form-group row">
                       <div className="col-lg-12">
                         <Select
-                          label="Center"
+                          label="Center*"
                           name="centerId"
                           defaultValue={values?.centerId}
                           onChange={(e) => {
@@ -417,7 +417,7 @@ export function IncidentEditForm({
                           <div className="col-lg-12">
                             <Select
                               name="vehicleId"
-                              label="vehicle"
+                              label="vehicle*"
                               multiple
                               value={values?.vehicleId?.value}
                             >

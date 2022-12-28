@@ -74,7 +74,7 @@ const enableLoading = (() =>{
                         name="name"
                         component={Input}
                         placeholder="Center Name"
-                        label="Center Name"
+                        label="Center Name*"
                       />
                     </div>
                     <div className="col-lg-6">
@@ -82,7 +82,7 @@ const enableLoading = (() =>{
                         name="phoneNo"
                         component={Input}
                         placeholder=""
-                        label="Phone No"
+                        label="Phone No*"
                       />
                     </div>
                   </div>
@@ -92,7 +92,7 @@ const enableLoading = (() =>{
                         name="location"
                         component={Input}
                         placeholder="Location"
-                        label="Location"
+                        label="Location*"
                       />
                     </div>
                     <div className="col-lg-6">
@@ -100,7 +100,7 @@ const enableLoading = (() =>{
                         name="longitude"
                         component={Input}
                         placeholder="Longitude"
-                        label="Longitude"
+                        label="Longitude*"
                       />
                     </div>
                   </div>
@@ -110,7 +110,7 @@ const enableLoading = (() =>{
                         name="latitude"
                         component={Input}
                         placeholder="Latitude"
-                        label="Latitude"
+                        label="Latitude*"
                       />
                     </div>
                   </div>
