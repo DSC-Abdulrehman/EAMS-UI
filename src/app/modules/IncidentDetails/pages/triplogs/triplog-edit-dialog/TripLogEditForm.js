@@ -83,6 +83,32 @@ export function TripLogEditForm({
                   <div className="form-group row">
                     <div className="col-lg-4">
                       <Field
+                        name="vehicle.driver.firstName"
+                        component={Input}
+                        label="Driver Name"
+                        disabled
+                      />
+                    </div>
+                    <div className="col-lg-4">
+                      <Field
+                        name="vehicle.regNo"
+                        component={Input}
+                        label="Registration Number"
+                        disabled
+                      />
+                    </div>
+                    <div className="col-lg-4">
+                      <Field
+                        name="initialReading"
+                        component={Input}
+                        label="Initial Reading"
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-lg-4">
+                      <Field
                         name="finalReading"
                         component={Input}
                         label="Final Reading"
