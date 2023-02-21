@@ -35,7 +35,7 @@ export function SearchAbleSelect({
         id={id}
         onBlure={onBlure}
         onChange={onChange}
-        defaultValue={options[value - 1]}
+        //defaultValue={options[value - 1]}
         defaultOptions={options}
         loadOptions={promiseOptions}
       />

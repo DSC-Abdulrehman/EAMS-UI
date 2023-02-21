@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { shallowEqual, useSelector } from "react-redux"
-import { Modal } from "react-bootstrap"
-import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
+import React, { useState, useEffect } from "react";
+import { shallowEqual, useSelector } from "react-redux";
+import { Modal } from "react-bootstrap";
+import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
 export function IncidentEditDialogHeader({ id, isUserForRead }) {
   //const userForEdit = false
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("");
 
   const { incidentForEdit, actionsLoading } = useSelector(
     (state) => ({
@@ -13,17 +13,17 @@ export function IncidentEditDialogHeader({ id, isUserForRead }) {
       actionsLoading: state.incidentDetails.actionsLoading,
     }),
     shallowEqual
-  )
+  );
   // console.log(";current state for incident", incidentForEdit)
   useEffect(() => {
-    let _title = id ? "" : "Add Incident"
-    if (incidentForEdit && id) {
-      _title = `Edit Incident for '${incidentForEdit.callerName}'`
+    let _title = id ? "" : "Add Incident";
+    if (incidentForEdit?.incident && id) {
+      _title = `Edit Incident for '${incidentForEdit?.incident?.callerName}'`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
-    setTitle(_title)
-  }, [incidentForEdit, actionsLoading])
+    setTitle(_title);
+  }, [incidentForEdit, actionsLoading]);
 
   return (
     <>
@@ -34,5 +34,5 @@ export function IncidentEditDialogHeader({ id, isUserForRead }) {
         </Modal.Title>
       </Modal.Header>
     </>
-  )
+  );
 }

@@ -1,48 +1,58 @@
-import React, { useEffect, useMemo } from "react"
-import { Modal } from "react-bootstrap"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
-import * as actions from "../../../_redux/centersActions"
-import { useCentersUIContext } from "../CentersUIContext"
+import React, { useEffect, useMemo, useState } from "react";
+import { Modal } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
+import * as actions from "../../../_redux/centersActions";
+import { useCentersUIContext } from "../CentersUIContext";
 
 export function CenterDeleteDialog({ id, show, onHide }) {
   // Centers UI Context
-  const centersUIContext = useCentersUIContext()
+  const [loading, setLoading] = useState(false);
+  const centersUIContext = useCentersUIContext();
   const centersUIProps = useMemo(() => {
     return {
       queryParams: centersUIContext.queryParams,
-    }
-  }, [centersUIContext])
+    };
+  }, [centersUIContext]);
 
   // Customers Redux state
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { isLoading } = useSelector(
     (state) => ({ isLoading: state.customers.actionsLoading }),
     shallowEqual
-  )
+  );
+  const enableLoading = () => {
+    setLoading(true);
+  };
 
+  const disabledLoading = () => {
+    setLoading(false);
+  };
   // if !id we should close modal
   useEffect(() => {
     if (!id) {
-      onHide()
+      onHide();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id])
+  }, [id]);
 
   // looking for loading/dispatch
-  useEffect(() => {}, [isLoading, dispatch])
+  useEffect(() => {}, [isLoading, dispatch]);
 
   const deleteUser = () => {
     // server request for deleting customer by id
+    enableLoading();
     dispatch(actions.deleteCenter(id)).then(() => {
-      onHide()
+      onHide();
       // refresh list after deletion
-      dispatch(actions.fetchCenters(centersUIProps.queryParams))
+      dispatch(actions.fetchCenters(centersUIProps.queryParams));
       // clear selections list
       // usersUIProps.setIds([]);
       // closing delete modal
-    })
-  }
+
+      disabledLoading();
+    });
+  };
 
   return (
     <Modal
@@ -60,9 +70,8 @@ export function CenterDeleteDialog({ id, show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         {!isLoading && (
-          <span>Are you sure to permanently delete this user?</span>
+          <span>Are you sure to permanently delete this center?</span>
         )}
-        {isLoading && <span>user is deleting...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -80,9 +89,12 @@ export function CenterDeleteDialog({ id, show, onHide }) {
             className="btn btn-primary btn-elevate"
           >
             Delete
+            {loading && (
+              <span className="ml-3 mr-3 spinner spinner-white"></span>
+            )}
           </button>
         </div>
       </Modal.Footer>
     </Modal>
-  )
+  );
 }

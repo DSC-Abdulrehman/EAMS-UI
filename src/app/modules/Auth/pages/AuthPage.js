@@ -58,13 +58,13 @@ export function AuthPage() {
                   &copy; 2022 Dynasoft Cloud PVT Ltd.
                 </div>
                 <div className="d-flex">
-                  <Link to="/terms" className="text-white">
+                  <Link to={{ pathname: "https://edhi.org/privacy-policy/"}} target="_blank" className="text-white">
                     Privacy
                   </Link>
-                  <Link to="/terms" className="text-white ml-10">
+                  <Link to={{ pathname: "https://edhi.org"}} target="_blank" className="text-white ml-10">
                     Legal
                   </Link>
-                  <Link to="/terms" className="text-white ml-10">
+                  <Link to={{ pathname: "https://edhi.org/contact-us/"}} target="_blank" className="text-white ml-10">
                     Contact
                   </Link>
                 </div>

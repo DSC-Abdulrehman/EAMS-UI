@@ -18,6 +18,7 @@ export function ActionsColumnFormatter(
   }
 ) {
   const isUserRead = false
+  
   //console.log("isAccessForEdit, isAccessForDelete", isAccessForEdit, isAccessForDelete)
   // const { userAccess } = useSelector(
   //   (state) => ({
@@ -64,12 +65,12 @@ export function ActionsColumnFormatter(
       <> </>
       {isAccessForDelete && (
         <a
-          title="Delete customer"
+          title="Mark Inactive"
           className="btn btn-icon btn-light btn-hover-danger btn-sm"
           onClick={() => openDeleteCenterDialog(row.id)}
         >
           <span className="svg-icon svg-icon-md svg-icon-danger">
-            <SVG src={toAbsoluteUrl("/media/svg/icons/General/Trash.svg")} />
+            <SVG src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")} />
           </span>
         </a>
       )}

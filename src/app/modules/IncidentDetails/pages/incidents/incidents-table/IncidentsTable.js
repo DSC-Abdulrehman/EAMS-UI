@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from "react"
-import BootstrapTable from "react-bootstrap-table-next"
+import React, { useEffect, useMemo } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
   PaginationProvider,
-} from "react-bootstrap-table2-paginator"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import * as actions from "../../../_redux/incidents/incidentActions"
+} from "react-bootstrap-table2-paginator";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../_redux/incidents/incidentActions";
 import {
   getSelectRow,
   getHandlerTableChange,
@@ -12,16 +12,17 @@ import {
   PleaseWaitMessage,
   sortCaret,
   headerSortingClasses,
-} from "../../../../../../_metronic/_helpers"
-import * as uiHelpers from "../IncidentsUIHelpers"
+} from "../../../../../../_metronic/_helpers";
+import * as uiHelpers from "../IncidentsUIHelpers";
 // import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter"
-import { Pagination } from "../../../../../../_metronic/_partials/controls"
-import { useIncidentsUIContext } from "../IncidentsUIContext"
-import * as columnFormatters from "./column-formatter"
+import { Pagination } from "../../../../../../_metronic/_partials/controls";
+import { useIncidentsUIContext } from "../IncidentsUIContext";
+import * as columnFormatters from "./column-formatter";
+
 
 export function IncidentsTable() {
   //Users UI Context
-  const incidentsUIContext = useIncidentsUIContext()
+  const incidentsUIContext = useIncidentsUIContext();
 
   const incidentsUIProps = useMemo(() => {
     return {
@@ -33,37 +34,36 @@ export function IncidentsTable() {
       openDeleteUserDialog: incidentsUIContext.openDeleteUserDialog,
       openReadUserDialog: incidentsUIContext.openReadUserDialog,
       openTripLogDialog: incidentsUIContext.openTripLogDialog,
-    }
-  }, [incidentsUIContext])
+    };
+  }, [incidentsUIContext]);
 
-  const { currentState, userAccess } = useSelector(
+  const { currentState, userAccess, editAccessStatus } = useSelector(
     (state) => ({
       currentState: state.incidentDetails,
       userAccess: state.auth.userAccess,
+      editAccessStatus: state,
     }),
     shallowEqual
-  )
-
-  // console.log("userAccess", userAccess["Incident Details"])
-
-  const { totalCount, entities, listLoading } = currentState
-  const dispatch = useDispatch()
-
-
+  );
+  console.log("editAccessStatus", editAccessStatus);
+  const { totalCount, entities, listLoading } = currentState;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
-      await dispatch(actions.fetchIncidentTypes())
-      await dispatch(actions.fetchSeverityTypes())
-      await dispatch(actions.fetchCenters())
+      await dispatch(actions.fetchIncidents(incidentsUIProps.queryParams));
+      await dispatch(actions.fetchCenters());
     }
     fetchData();
-   
-  }, [])
+  }, [incidentsUIProps.queryParams]);
+
+  useEffect(() => {
+    dispatch(actions.fetchIncidentTypes());
+    dispatch(actions.fetchSeverityTypes());
+  }, []);
 
   // useEffect(() => {
-    
+
   //   dispatch(actions.fetchIncidents(incidentsUIProps.queryParams))
   //   dispatch(actions.fetchIncidentTypes())
   //   dispatch(actions.fetchSeverityTypes())
@@ -73,17 +73,20 @@ export function IncidentsTable() {
   const AccessForEdit = () => {
     const forEdit = userAccess["Incident Details"].find(
       (item) => item.componentName === "UpdateIncidentDetail"
-    )
-    return forEdit?.isAccess
-  }
+    );
+    return forEdit?.isAccess;
+  };
 
   const AccessForDelete = () => {
     const forDelete = userAccess["Incident Details"].find(
       (item) => item.componentName === "DeleteIncidentDetail"
-    )
-    return forDelete?.isAccess
-  }
+    );
+    return forDelete?.isAccess;
+  };
 
+  const AccessAccordingStatus = () => {
+    return;
+  };
   //console.log("isAccessForEdit", userAccess)
   // Table columns
   const columns = [
@@ -108,34 +111,34 @@ export function IncidentsTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
     },
-    // {
-    //   dataField: "center",
-    //   text: "Center",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    // },
     {
-      dataField: "incidentSeverity.name",
-      text: "Severity",
+      dataField: "location",
+      text: "Location",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
     },
+    // {
+    //   dataField: "incidentSeverity.name",
+    //   text: "Severity",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    // },
     {
       dataField: "patientName",
       text: "Patient Name",
       sort: false,
       sortCaret: sortCaret,
     },
+    // {
+    //   dataField: "location",
+    //   text: "Location",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    // },
     {
-      dataField: "location",
-      text: "Location",
-      sort: false,
-      sortCaret: sortCaret,
-    },
-    {
-      dataField: "isActive",
+      dataField: "status",
       text: "Status",
       sort: false,
       sortCaret: sortCaret,
@@ -147,16 +150,17 @@ export function IncidentsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: (cell) => {
-        let dateObj = cell
-        if (typeof cell !== "object") {
-          dateObj = new Date(cell)
-        }
-        return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          "0" +
-          (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`
-      },
+      formatter: columnFormatters.DatetimeColumnFormatter,
+      // (cell) => {
+      //   let dateObj = cell;
+      //   if (typeof cell !== "object") {
+      //     dateObj = new Date(cell);
+      //   }
+      //   return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+      //     "0" +
+      //     (dateObj.getUTCMonth() + 1)
+      //   ).slice(-2)}/${dateObj.getUTCFullYear()}`;
+      // },
     },
     {
       dataField: "action",
@@ -177,7 +181,7 @@ export function IncidentsTable() {
         minWidth: "100px",
       },
     },
-  ]
+  ];
 
   //Table pagination properties
   const paginationOptions = {
@@ -186,7 +190,7 @@ export function IncidentsTable() {
     sizePerPageList: uiHelpers.sizePerPageList,
     sizePerPage: incidentsUIProps.queryParams.pageSize,
     page: incidentsUIProps.queryParams.pageNumber,
-  }
+  };
 
   return (
     <>
@@ -220,7 +224,7 @@ export function IncidentsTable() {
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>
             </Pagination>
-          )
+          );
         }}
       </PaginationProvider>
       {/* <BootstrapTable
@@ -234,5 +238,5 @@ export function IncidentsTable() {
         columns={columns}
       ></BootstrapTable> */}
     </>
-  )
+  );
 }

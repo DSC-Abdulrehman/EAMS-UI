@@ -49,7 +49,7 @@ export function LanguageSelectorDropdown() {
         as={DropdownTopbarItemToggler}
         id="dropdown-toggle-my-cart"
       >
-        <OverlayTrigger
+        {/* <OverlayTrigger
           placement="bottom"
           overlay={
             <Tooltip id="language-panel-tooltip">Pakistan</Tooltip>
@@ -63,7 +63,7 @@ export function LanguageSelectorDropdown() {
               alt = "Pakistan"
             />
           </div>
-        </OverlayTrigger>
+        </OverlayTrigger> */}
       </Dropdown.Toggle>
      {/* // Dropdown.Menu Remve from Here by Jawad is replaced at the end of the Code */}
     </Dropdown>

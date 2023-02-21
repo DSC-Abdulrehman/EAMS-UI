@@ -1,4 +1,5 @@
 import React from "react";
+import { getDate } from '../../../../../../utils/common'
 
 export const StatusColumnFormatter = (cellContent, row) => (
   <span
@@ -7,5 +8,13 @@ export const StatusColumnFormatter = (cellContent, row) => (
     } label-inline`}
   >
     {row.status}
+  </span>
+);
+
+export const DatetimeColumnFormatter = (cellContent, row) => (
+  <span
+    className={`badge badge-light-success  ${getDate(cellContent)}`}
+  >
+    {getDate(cellContent)}
   </span>
 );

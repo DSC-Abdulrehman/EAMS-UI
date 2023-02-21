@@ -18,6 +18,8 @@ import * as uiHelpers from "../TripLogsUIHelpers"
 import { Pagination } from "../../../../../../_metronic/_partials/controls"
 import { useTripLogsUIContext } from "../TripLogsUIContext"
 import * as columnFormatters from "./column-formatter"
+import { FormClasses, Http, OperationStatus, RedirectURLs } from '../../../../../utils/constants'
+import { getDate, listingRedirection } from '../../../../../utils/common'
 
 export function TripLogsTable() {
   //Users UI Context
@@ -86,23 +88,38 @@ export function TripLogsTable() {
       headerSortingClasses,
     },
     {
+      dataField: "driver.firstName",
+      text: "DriverName",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+    },
+    {
+      dataField: "driver.phNo",
+      text: "Contact",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+    },
+    {
       dataField: "dateTime",
       text: "Start Time",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: (cell) => {
-        let dateObj = cell
-        if (typeof cell !== "object") {
-          dateObj = new Date(cell)
-        }
-        return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          "0" +
-          (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()} ${dateObj.toLocaleTimeString(
-          "en-US"
-        )} `
-      },
+      formatter: columnFormatters.DatetimeColumnFormatter,
+      // (cell) => {
+      //   let dateObj = cell
+      //   if (typeof cell !== "object") {
+      //     dateObj = new Date(cell)
+      //   }
+      //   return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+      //     "0" +
+      //     (dateObj.getUTCMonth() + 1)
+      //   ).slice(-2)}/${dateObj.getUTCFullYear()} ${dateObj.toLocaleTimeString(
+      //     "en-US"
+      //   )} `
+      // },
     },
     {
       dataField: "endDateTime",
@@ -110,6 +127,8 @@ export function TripLogsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
+      formatter: columnFormatters.DatetimeColumnFormatter,
+
     },
     {
       dataField: "finalReading",
@@ -127,7 +146,7 @@ export function TripLogsTable() {
     },
     {
       dataField: "logBookNo",
-      text: "log BookNo",
+      text: "log BkNo",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -139,23 +158,27 @@ export function TripLogsTable() {
       sortCaret: sortCaret,
       formatter: columnFormatters.StatusColumnFormatter,
     },
-    {
-      dataField: "createdAt",
-      text: "Created At",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      formatter: (cell) => {
-        let dateObj = cell
-        if (typeof cell !== "object") {
-          dateObj = new Date(cell)
-        }
-        return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          "0" +
-          (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`
-      },
-    },
+    // {
+    //   dataField: "createdAt",
+    //   text: "Created At",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   formatter: columnFormatters.DatetimeColumnFormatter,
+        // (cell) => { 
+          // return `${getDate(cell)}`
+          // return <span className={`label label-sm label-light `}>{getDate(cell)}</span>
+          // let dateObj = cell
+          // if (typeof cell !== "object") {
+          //   dateObj = new Date(cell)
+          // }
+          // return `${getDate(cell)}`
+          // return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+          //   "0" +
+          //   (dateObj.getUTCMonth() + 1)
+          // ).slice(-2)}/${dateObj.getUTCFullYear()}`
+        // },
+    // },
     {
       dataField: "action",
       text: "Actions",

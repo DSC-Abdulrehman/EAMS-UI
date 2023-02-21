@@ -69,7 +69,7 @@ export function ActionsColumnFormatter(
       {isAccessForDelete && (
         <OverlayTrigger
           overlay={
-            <Tooltip id="products-edit-tooltip">Deactivate User</Tooltip>
+            <Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>
           }
         >
           <a
@@ -79,7 +79,7 @@ export function ActionsColumnFormatter(
           >
             <span className="svg-icon svg-icon-md svg-icon-danger">
               <SVG
-                src={toAbsoluteUrl("/media/svg/icons/General/Trash.svg")}
+                src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
                 title=""
               />
             </span>

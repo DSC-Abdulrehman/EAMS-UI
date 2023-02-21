@@ -23,19 +23,19 @@ export function CentersCard() {
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state.auth.userAccess.Users,
+      userAccess: state?.auth?.userAccess?.Centers,
     }),
     shallowEqual
   );
-
+  console.log("userAccess", userAccess);
   const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateUser"
+    (item) => item.componentName === "CreateCenter"
   );
 
   return (
     <>
       <Card>
-        <CardHeader title="list">
+        <CardHeader title={<CenterFilter />}>
           <CardHeaderToolbar>
             {accessUser ? (
               <button
@@ -68,7 +68,6 @@ export function CentersCard() {
         </CardHeader>
 
         <CardBody>
-          <CenterFilter />
           <CentersTable />
         </CardBody>
       </Card>

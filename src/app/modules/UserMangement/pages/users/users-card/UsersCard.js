@@ -35,7 +35,7 @@ export function UsersCard() {
   return (
     <>
       <Card>
-        <CardHeader title="">
+        <CardHeader title={<UsersFilter />}>
           <CardHeaderToolbar>
             {accessUser ? (
               <button
@@ -68,7 +68,7 @@ export function UsersCard() {
         </CardHeader>
 
         <CardBody>
-          <UsersFilter />
+          
           <UsersTable />
         </CardBody>
       </Card>

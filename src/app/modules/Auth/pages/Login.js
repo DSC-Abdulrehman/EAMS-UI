@@ -166,14 +166,14 @@ function Login(props) {
             </div>
           ) : null}
         </div>
-        <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
-          <Link
+        <div className="form-group d-flex flex-wrap justify-content-end align-items-center">
+          {/* <Link
             to="/auth/forgot-password"
             className="text-dark-50 text-hover-primary my-3 mr-2"
             id="kt_login_forgot"
           >
             <FormattedMessage id="AUTH.GENERAL.FORGOT_BUTTON" />
-          </Link>
+          </Link> */}
           <button
             id="kt_login_signin_submit"
             type="submit"

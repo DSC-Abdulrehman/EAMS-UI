@@ -35,7 +35,7 @@ export function RoleEditForm({ onHide, saveRole, role, actionsLoading, loading }
                       name="name"
                       component={Input}
                       placeholder="Role Name"
-                      label="Role Name"
+                      label="Role Name*"
                     />
                   </div>
                 </div>

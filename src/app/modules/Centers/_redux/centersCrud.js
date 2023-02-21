@@ -31,7 +31,7 @@ export function deleteRequest(body) {
 
 export function getVehiclesById(body) {
   return axios.post(
-    `${USERS_URL}/vehicledetails/read-all-vehicles-by-centerId`,
+    `${USERS_URL}/vehicles/read-all-vehicles-by-centerId`,
     body
   );
 }

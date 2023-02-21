@@ -1,8 +1,8 @@
-import React from "react"
-import SVG from "react-inlinesvg"
-import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers"
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
+import React from "react";
+import SVG from "react-inlinesvg";
+import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 export function ActionsColumnFormatter(
   cellContent,
   row,
@@ -17,7 +17,7 @@ export function ActionsColumnFormatter(
     isAccessForDelete,
   }
 ) {
-  const isUserRead = false
+  const isUserRead = false;
   // const { userAccess } = useSelector(
   //   (state) => ({
   //     userAccess: state.auth.userAccess,
@@ -28,7 +28,7 @@ export function ActionsColumnFormatter(
   // const isAccessForEdit = userAccess.find(
   //   (item) => item.componentName === "UpdateUser"
   // )
-  //console.log("userAccess", userAccess)
+
   return (
     <>
       <OverlayTrigger
@@ -46,7 +46,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {/* {isAccessForEdit && (
+      {isAccessForEdit && row.status !== "Close" && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit Incident</Tooltip>}
         >
@@ -62,10 +62,10 @@ export function ActionsColumnFormatter(
             </span>
           </a>
         </OverlayTrigger>
-      )} */}
+      )}
 
       <> </>
-      {isAccessForDelete && (
+      {/* {isAccessForDelete && (
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">Delete Incident</Tooltip>
@@ -84,7 +84,7 @@ export function ActionsColumnFormatter(
             </span>
           </a>
         </OverlayTrigger>
-      )}
+      )} */}
 
       <OverlayTrigger
         overlay={<Tooltip id="products-edit-tooltip">View Trip Log</Tooltip>}
@@ -103,5 +103,5 @@ export function ActionsColumnFormatter(
         </a>
       </OverlayTrigger>
     </>
-  )
+  );
 }

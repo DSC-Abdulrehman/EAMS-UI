@@ -4,38 +4,38 @@ import React, {
   useState,
   useCallback,
   Children,
-} from "react"
-import { isEqual, isFunction } from "lodash"
-import { initialFilter } from "./ItemUIHelpers"
+} from "react";
+import { isEqual, isFunction } from "lodash";
+import { initialFilter } from "./ItemUIHelpers";
 
-const ItemUIContext = createContext()
+const ItemUIContext = createContext();
 
 export function useItemUIContext() {
-  return useContext(ItemUIContext)
+  return useContext(ItemUIContext);
 }
 
-export const ItemUIConsumer = ItemUIContext.Consumer
+export const ItemUIConsumer = ItemUIContext.Consumer;
 // const initialFilter = {
 //   sortBy: "name",
 //   limit: 10,
 //   page: 1,
 // }
 export function ItemUIProvider({ itemUIEvents, children }) {
-  const [queryParams, setQueryParamsBase] = useState(initialFilter)
-  const [ids, setIds] = useState([])
+  const [queryParams, setQueryParamsBase] = useState(initialFilter);
+  const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
-        nextQueryParams = nextQueryParams(prevQueryParams)
+        nextQueryParams = nextQueryParams(prevQueryParams);
       }
 
       if (isEqual(prevQueryParams, nextQueryParams)) {
-        return prevQueryParams
+        return prevQueryParams;
       }
 
-      return nextQueryParams
-    })
-  }, [])
+      return nextQueryParams;
+    });
+  }, []);
   const initItem = {
     name: "",
     regNo: "",
@@ -49,13 +49,14 @@ export function ItemUIProvider({ itemUIEvents, children }) {
     color: "",
     fuelType: "",
     transmission: "",
-    status:"",
+    status: "",
     centerId: "",
     vehicleCategoryId: "",
-    engineNo: "213132",
+    driverId: "",
+    engineNo: "",
     category: undefined,
-    center:undefined
-  }
+    center: undefined,
+  };
 
   const value = {
     queryParams,
@@ -68,8 +69,8 @@ export function ItemUIProvider({ itemUIEvents, children }) {
     openEditCenterDialog: itemUIEvents.openEditCenterDialog,
     openDeleteCenterDialog: itemUIEvents.openDeleteCenterDialog,
     openReadCenterDialog: itemUIEvents.openReadCenterDialog,
-  }
+  };
   return (
     <ItemUIContext.Provider value={value}>{children}</ItemUIContext.Provider>
-  )
+  );
 }

@@ -97,7 +97,7 @@ export const createVehicle = (item) => (dispatch) => {
 };
 
 export const updateVehicle = (user) => (dispatch) => {
-  //console.log("updatedUser data", user)
+  console.log("Update Vehicle data", user)
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(user)
@@ -159,4 +159,17 @@ export const fetchCategory = () => (dispatch) => {
         dispatch(actions.catchError({ error, callType: callTypes.list }));
       })
   );
+};
+
+export const fetchDrivers = (id) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.list }));
+
+  return requestFromServer
+    .getAllDrivers(id)
+    .then((response) => {
+      dispatch(actions.driversByCetner(response?.data?.data));
+    })
+    .catch((error) => {
+      dispatch(actions.catchError({ error, callType: callTypes.list }));
+    });
 };

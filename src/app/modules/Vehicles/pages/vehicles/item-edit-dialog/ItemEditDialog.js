@@ -13,7 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
-    display: "flex",
     justifyContent: "center",
     marginTop: "2rem",
     marginBottom: "2rem",
@@ -41,7 +40,7 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
     shallowEqual
   );
 
-  //console.log("itemForEdit", itemForEdit)
+  // console.log("itemForEdit", itemForEdit)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,12 +89,12 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
         status: item.status,
         centerId: item.centerId,
         vehicleCategoryId: item.vehicleCategoryId,
+        driverId: item.driverId,
+        oldDriverId: item.oldDriverId,
       };
       dispatch(actions.updateVehicle(itemUpdatedFields));
       onHide();
     }
-    console.log("itemForEdit", itemForEdit);
-    console.log("itemUIProps.initItem", itemUIProps.initItem);
   };
 
   return (

@@ -141,7 +141,7 @@ export function CenterEditForm({
                         name="name"
                         component={Input}
                         placeholder="Center Name"
-                        label="Center Name"
+                        label="Center Name*"
                       />
                     </div>
                     <div className="col-lg-6">
@@ -149,7 +149,7 @@ export function CenterEditForm({
                         name="phoneNo"
                         component={Input}
                         placeholder=""
-                        label="Phone No"
+                        label="Phone No*"
                       />
                     </div>
                   </div>
@@ -159,7 +159,7 @@ export function CenterEditForm({
                         name="location"
                         component={Input}
                         placeholder="Location"
-                        label="Location"
+                        label="Location*"
                       />
                     </div>
                     <div className="col-lg-6">
@@ -167,7 +167,7 @@ export function CenterEditForm({
                         name="longitude"
                         component={Input}
                         placeholder="Longitude"
-                        label="Longitude"
+                        label="Longitude*"
                       />
                     </div>
                   </div>
@@ -177,7 +177,7 @@ export function CenterEditForm({
                         name="latitude"
                         component={Input}
                         placeholder="Latitude"
-                        label="Latitude"
+                        label="Latitude*"
                       />
                     </div>
                   </div>

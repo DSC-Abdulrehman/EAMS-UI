@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Modal } from "react-bootstrap"
 import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
@@ -6,6 +6,7 @@ import * as actions from "../../../_redux/usersActions"
 import { useUsersUIContext } from "../UsersUIContext"
 
 export function UserDeleteDialog({ id, show, onHide }) {
+  const [loading, setLoading] = useState(false)
   // Customers UI Context
   const usersUIContext = useUsersUIContext()
   const usersUIProps = useMemo(() => {
@@ -21,6 +22,14 @@ export function UserDeleteDialog({ id, show, onHide }) {
     shallowEqual
   )
 
+  const enableLoading = (() =>{
+    setLoading(true)
+  })
+
+  const disableLoading = (() =>{
+    setLoading(false)
+  })
+
   // if !id we should close modal
   useEffect(() => {
     if (!id) {
@@ -34,6 +43,7 @@ export function UserDeleteDialog({ id, show, onHide }) {
 
   const deleteUser = () => {
     // server request for deleting customer by id
+    enableLoading()
     dispatch(actions.deleteUser(id)).then(() => {
       onHide()
       // refresh list after deletion
@@ -41,6 +51,7 @@ export function UserDeleteDialog({ id, show, onHide }) {
       // clear selections list
       // usersUIProps.setIds([]);
       // closing delete modal
+      disableLoading()
     })
   }
 
@@ -78,6 +89,7 @@ export function UserDeleteDialog({ id, show, onHide }) {
             className="btn btn-primary btn-elevate"
           >
             Delete
+            {loading && <span className="ml-3 mr-3 spinner spinner-white"></span>}
           </button>
         </div>
       </Modal.Footer>

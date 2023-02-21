@@ -17,6 +17,15 @@ export const fetchIncidents = (queryparm) => async (dispatch) => {
     .catch((error) => {
       error.clientMessage = "Can't find customers";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
 };
 export const fetchIncident = (id) => async (dispatch) => {
@@ -37,7 +46,19 @@ export const fetchIncident = (id) => async (dispatch) => {
     .catch((error) => {
       error.clientMessage = "Can't find Incident";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
+};
+export const reInitialIncident = () => (dispatch) => {
+  dispatch(actions.incidentReinitial());
 };
 export const deleteIncident = (id) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
@@ -113,9 +134,8 @@ export const updateIncident = (incident) => (dispatch) => {
       });
     })
     .catch((error) => {
-      // console.log("error User update", error)
-      //error.clientMessage = "Can't update User"
-      toast.error(error, {
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -124,7 +144,6 @@ export const updateIncident = (incident) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
     });
 };
 export const fetchIncidentTypes = () => async (dispatch) => {
@@ -137,7 +156,16 @@ export const fetchIncidentTypes = () => async (dispatch) => {
     })
     .catch((error) => {
       error.clientMessage = "Can't find roles";
-      dispatch(actions.catchError({ error, callType: callTypes.list }));
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
 };
 export const fetchSeverityTypes = () => async (dispatch) => {
@@ -157,7 +185,6 @@ export const fetchCenters = () => (dispatch) => {
   });
 };
 export const fetchVehicleById = (queryParams) => (dispatch) => {
-  //console.log("queryparams is", queryParams)
   dispatch(actions.startCall({ callType: callTypes.list }));
   return requestFromServer.getVehicleById(queryParams).then((response) => {
     const entities = response.data?.data?.rows;
@@ -166,12 +193,12 @@ export const fetchVehicleById = (queryParams) => (dispatch) => {
 };
 export const fetchVehicleByDropdown = (queryParams) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
-  // return requestFromServer
-  //   .getVehicleForDropdown(queryParams)
-  //   .then((response) => {
-  //     const entities = response.data?.data;
-  //     dispatch(actions.fetchVehiclesForDropdown(entities));
-  //   });
+  return requestFromServer
+    .getVehicleForDropdown(queryParams)
+    .then((response) => {
+      const entities = response.data?.data;
+      dispatch(actions.fetchVehiclesForDropdown(entities));
+    });
 };
 export const fetchTripLog = (queryparm) => async (dispatch) => {
   //console.log("Receive QP", queryparm)
@@ -185,5 +212,14 @@ export const fetchTripLog = (queryparm) => async (dispatch) => {
     .catch((error) => {
       error.clientMessage = "Can't find TripLog";
       dispatch(actions.catchError({ error, callType: callTypes.list }));
+      toast.error(error?.response?.data?.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     });
 };

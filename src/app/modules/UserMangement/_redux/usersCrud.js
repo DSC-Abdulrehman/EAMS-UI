@@ -39,3 +39,7 @@ export function getAllRoles() {
 export function getAllCenters() {
   return axios.get(`${USERS_URL}/settings/read-all-centers-master-data`)
 }
+
+export function getAllUserStatusTypes() {
+  return axios.get(`${USERS_URL}/settings/read-all-status-types-master-data`)
+}

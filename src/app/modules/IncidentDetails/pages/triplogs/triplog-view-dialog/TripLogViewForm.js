@@ -117,7 +117,7 @@ export function TripLogViewForm({
                         label="kilo Meters"
                       />
                     </div>
-                    <div className="col-lg-4">
+                    {/* <div className="col-lg-4">
                       <Field
                         name="logBookNo"
                         component={Input}
@@ -138,7 +138,7 @@ export function TripLogViewForm({
                         component={Input}
                         label="Log Book No"
                       />
-                    </div>
+                    </div> */}
                     <div className="col-lg-4">
                       <Select name="status" label="Status">
                         {TripStatus ? (

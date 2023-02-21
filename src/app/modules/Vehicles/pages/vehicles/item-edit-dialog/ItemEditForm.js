@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDrivers } from "../../../_redux/vehiclesActions";
 import * as Yup from "yup";
 import {
   Input,
   Select,
   DatePickerField,
+  CustumSelect,
 } from "../../../../../../_metronic/_partials/controls";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -20,30 +23,36 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // Validation schema
+const requiredErrorMessage = "This field is required";
 const itemEditSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
-    .required(),
+    .required("Name is required"),
   regNo: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
-    .required(),
+    .required("Registration No is required"),
   // center: Yup.string(),
   // category: Yup.string(),
-  engineCapacity: Yup.string().required(),
-  registerCity: Yup.string().required(),
-  chasis: Yup.string().required(),
-  milleage: Yup.string().required(),
-  year: Yup.string().required(),
-  make: Yup.string().required(),
-  model: Yup.string().required(),
-  color: Yup.string().required(),
-  fuelType: Yup.string().required(),
-  transmission: Yup.string().required(),
-  status: Yup.string().required(),
-  centerId: Yup.string().required(),
-  vehicleCategoryId: Yup.string().required(),
+  engineCapacity: Yup.string().required("Engine capacity is required"),
+  registerCity: Yup.string().required("Register city is required"),
+  chasis: Yup.string().required("Chasis is required"),
+  milleage: Yup.string().required("Milleage is required"),
+  year: Yup.string()
+    .required("Register year is required")
+    .matches(/^\d*[1-9]\d*$/, "Year should be number"),
+  make: Yup.string().required("Maker name is required"),
+  model: Yup.string().required("Model No is required"),
+  color: Yup.string().required("Color is required"),
+  fuelType: Yup.string().required("Fuel type is required"),
+  status: Yup.string().required("Status is required"),
+  transmission: Yup.string(),
+  centerId: Yup.string().required("Cneter Id is required"),
+  driverId: Yup.string().required("Driver Id is required"),
+  oldDriverId: Yup.string(),
+  vehicleCategoryId: Yup.string().required("Vehicle category is required"),
+  engineNo: Yup.string().required(" Engine No is required"),
 });
 
 export function ItemEditForm({
@@ -55,16 +64,44 @@ export function ItemEditForm({
   itemForRead,
   category,
 }) {
-  //console.log("itemfor edit", item)
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
+  const [cetnerId, setCenterId] = useState(0);
+  const [driverId, setDriverId] = useState(item.driverId);
+  const oldDriverId = item.driverId;
 
+  useEffect(() => {
+    dispatch(fetchDrivers(cetnerId));
+  }, [cetnerId]);
+
+  useEffect(() => {
+    dispatch(fetchDrivers(item.centerId));
+  }, [item.centerId]);
+  
+  const drivers = useSelector((state) => {
+    return state?.vehicles?.drivers;
+  });
+
+  console.log("itemfor edit", item);
+
+  const fuelTypeOptions = [
+    {
+      value: "Pertol",
+      name: "Pertol",
+    },
+    {
+      value: "Gas",
+      name: "Gas",
+    },
+  ];
   const enableLoading = () => {
     setLoading(true);
   };
   const disableLoading = () => {
     setLoading(false);
   };
+
   return (
     <>
       {actionsLoading && (
@@ -83,7 +120,14 @@ export function ItemEditForm({
           // disableLoading();
         }}
       >
-        {({ handleSubmit }) => (
+        {({
+          handleSubmit,
+          touched,
+          errors,
+          handleChange,
+          handleBlur,
+          values,
+        }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               {actionsLoading && (
@@ -124,7 +168,7 @@ export function ItemEditForm({
                         name="name"
                         component={Input}
                         placeholder=""
-                        label="vehicle Name"
+                        label="vehicle Name*"
                         customFeedbackLabel="hello"
                       />
                     </div>
@@ -133,7 +177,7 @@ export function ItemEditForm({
                         name="regNo"
                         component={Input}
                         placeholder=""
-                        label="Registration No"
+                        label="Registration No*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -141,7 +185,7 @@ export function ItemEditForm({
                         name="engineCapacity"
                         component={Input}
                         placeholder=""
-                        label="Engine Capacity"
+                        label="Engine Capacity*"
                       />
                     </div>
                   </div>
@@ -151,7 +195,7 @@ export function ItemEditForm({
                         name="registerCity"
                         component={Input}
                         placeholder=""
-                        label="Register City"
+                        label="Register City*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -159,7 +203,7 @@ export function ItemEditForm({
                         name="chasis"
                         component={Input}
                         placeholder=""
-                        label="Chasis"
+                        label="Chasis*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -167,7 +211,7 @@ export function ItemEditForm({
                         name="milleage"
                         component={Input}
                         placeholder=""
-                        label="Milleage"
+                        label="Milleage*"
                       />
                     </div>
                   </div>
@@ -177,7 +221,7 @@ export function ItemEditForm({
                         name="year"
                         component={Input}
                         placeholder=""
-                        label="Year"
+                        label="Year*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -185,7 +229,7 @@ export function ItemEditForm({
                         name="make"
                         component={Input}
                         placeholder=""
-                        label="Make"
+                        label="Make*"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -193,7 +237,7 @@ export function ItemEditForm({
                         name="model"
                         component={Input}
                         placeholder=""
-                        label="Model"
+                        label="Model*"
                       />
                     </div>
                   </div>
@@ -203,64 +247,97 @@ export function ItemEditForm({
                         name="color"
                         component={Input}
                         placeholder=""
-                        label="Color"
+                        label="Color*"
                       />
                     </div>
                     <div className="col-lg-4">
-                      <Select name="fuelType" label="Fuel Type">
-                        <option value="petrol">Petrol</option>
-                        <option value="gas">Gas</option>
-                      </Select>
-                      {/* <Field
-                        name="fuelType"
+                      <Field
+                        name="engineNo"
                         component={Input}
                         placeholder=""
-                        label="Fuel Type"
-                      /> */}
+                        label="Engine No.*"
+                      />
                     </div>
                     <div className="col-lg-4">
-                      <Select name="status" label="Status">
-                        <option value="petrol">Available</option>
-                        <option value="gas">Unavailable</option>
+                      <Select
+                        label="Fuel Type*"
+                        name="fuelType"
+                        value={values.fuelType}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        <option value="Pertol" label="Petrol" />
+                        <option value="Gas" label="Gas" />
                       </Select>
-                      {/* <Field
-                        name="status"
-                        component={Input}
-                        placeholder=""
-                        label="Status"
-                      /> */}
+                      {errors.fuelType && touched.fuelType && (
+                        <div className="invalid-text">{errors.fuelType}</div>
+                      )}
                     </div>
                   </div>
                   <div className="form-group row">
                     <div className="col-lg-4">
-                      <Select name="transmission" label="Transmission">
-                        <option value="auto">Auto</option>
-                        <option value="manual">manual</option>
+                      <Select
+                        label="Status*"
+                        name="status"
+                        value={values.status}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        <option value="Available" label="Available" />
+                        <option value="Unavailable" label="Unavailable" />
                       </Select>
-                      {/* <Field
-                        name="transmission"
-                        component={Input}
-                        placeholder=""
-                        label="Transmission"
-                      /> */}
+                      {errors.status && touched.status && (
+                        <div className="invalid-text">{errors.status}</div>
+                      )}
                     </div>
                     <div className="col-lg-4">
-                      <Select name="centerId" label="Center">
-                        {centerName &&
-                          centerName.map((response) => {
+                      <Select
+                        label="Transmission"
+                        name="transmission"
+                        value={values.transmission}
+                      >
+                        <option value="" label="Select Type" />
+                        <option value="auto" label="Auto" />
+                        <option value="manual" label="Manual" />
+                      </Select>
+                      {errors.transmission && touched.transmission && (
+                        <div className="invalid-text">
+                          {errors.transmission}
+                        </div>
+                      )}
+                    </div>
+                    <div className="col-lg-4">
+                      <Select
+                        label="Vehicle Category*"
+                        name="vehicleCategoryId"
+                        value={values.vehicleCategoryId}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {category &&
+                          category.map((response) => {
                             return (
                               <option
                                 key={response.value}
                                 value={response.value}
-                              >
-                                {response.label}
-                              </option>
+                                label={response.label}
+                              />
                             );
                           })}
                       </Select>
-                    </div>
-                    <div className="col-lg-4">
-                      <Select name="vehicleCategoryId" label="Vehicle Category">
+                      {errors.vehicleCategoryId &&
+                        touched.vehicleCategoryId && (
+                          <div className="invalid-text">
+                            {errors.vehicleCategoryId}
+                          </div>
+                        )}
+                      {/* <Select name="vehicleCategoryId" label="Vehicle Category">
                         {category &&
                           category.map((response) => {
                             return (
@@ -272,7 +349,97 @@ export function ItemEditForm({
                               </option>
                             );
                           })}
+                      </Select> */}
+                    </div>
+                  </div>
+                  {item?.driver && (
+                    <>
+                      <div className="form-group row mt-5">
+                        <div className="col-lg-12">
+                          <small>Assigned driver</small>
+                          <ul>
+                            <li>{item?.driver.firstName}</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  <div className="from-group row">
+                    <div className="col-lg-4">
+                      <Select
+                        label="Center*"
+                        name="centerId"
+                        value={values.centerId}
+                        onChange={(e) => {
+                          handleChange(e);
+                          setCenterId(e.target.value);
+                        }}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {centerName &&
+                          centerName.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                                label={response.label}
+                              />
+                            );
+                          })}
                       </Select>
+                      {errors.centerId && touched.centerId && (
+                        <div className="invalid-text">{errors.centerId}</div>
+                      )}
+                      {/* <Select name="centerId" label="Center">
+                        {centerName &&
+                          centerName.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                              >
+                                {response.label}
+                              </option>
+                            );
+                          })}
+                      </Select> */}
+                    </div>
+                    <div className="col-lg-4">
+                      <Select
+                        label="Driver*"
+                        name="driverId"
+                        onChange={(e) => {
+                          handleChange(e);
+                          setDriverId(e.target.value);
+                          console.log('Set driver id', driverId)
+                        }}
+                        value={values.driverId}
+                        onBlur={handleBlur}
+                        style={{ display: "block" }}
+                      >
+                        <option value="" label="Select Type" />
+                        {drivers &&
+                          drivers.map((response) => {
+                            return (
+                              <option
+                                key={response.value}
+                                value={response.value}
+                                label={response.label}
+                              />
+                            );
+                          })}
+                      </Select>
+                      {errors.driverId && touched.driverId && (
+                        <div className="invalid-text">{errors.driverId}</div>
+                      )}
+                      <Field
+                        type="text"
+                        name="oldDriverId"
+                        component={Input}
+                        style={{ display: "none" }}
+                      />
                     </div>
                   </div>
                 </fieldset>

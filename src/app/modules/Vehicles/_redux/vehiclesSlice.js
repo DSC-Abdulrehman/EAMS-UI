@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { ActionsColumnFormatter } from "../../ECommerce/pages/customers/customers-table/column-formatters"
+import { createSlice } from "@reduxjs/toolkit";
+import { ActionsColumnFormatter } from "../../ECommerce/pages/customers/customers-table/column-formatters";
 
 const initialVehiclesState = {
   listLoading: false,
@@ -11,85 +11,91 @@ const initialVehiclesState = {
   itemForRead: false,
   centers: null,
   categories: null,
-}
+  drivers: null,
+};
 
 export const callTypes = {
   list: "list",
   action: "action",
-}
+};
 
 export const vehiclesSlice = createSlice({
   name: "vehicles",
   initialState: initialVehiclesState,
   reducers: {
     catchError: (state, action) => {
-      state.error = `${action.type}: ${action.payload.error}`
+      state.error = `${action.type}: ${action.payload.error}`;
       if (action.payload.callType === callTypes.list) {
-        state.listLoading = false
+        state.listLoading = false;
       } else {
-        state.actionsLoading = false
+        state.actionsLoading = false;
       }
     },
     startCall: (state, action) => {
-      state.error = null
+      state.error = null;
       if (action.payload.callType === callTypes.list) {
-        state.listLoading = true
+        state.listLoading = true;
       } else {
-        state.actionsLoading = true
+        state.actionsLoading = true;
       }
     },
     vehiclesFetched: (state, action) => {
-      const entities = action.payload.rows
-      const totalResults = action.payload.totalResults
-      state.listLoading = false
-      state.error = null
-      state.entities = entities
-      state.totalCount = totalResults
+      const entities = action.payload.rows;
+      const totalResults = action.payload.totalResults;
+      state.listLoading = false;
+      state.error = null;
+      state.entities = entities;
+      state.totalCount = totalResults;
     },
     //get User By ID
     vehicleFetched: (state, action) => {
       // console.log("Action Payload vehicleFetched", action.payload.itemForEdit)
-      const readVehicle = action.payload.itemForEdit
-      state.actionsLoading = false
-      state.itemForEdit = readVehicle
-      state.error = null
+      const readVehicle = action.payload.itemForEdit;
+      state.actionsLoading = false;
+      state.itemForEdit = readVehicle;
+      state.error = null;
     },
     vehicleDeleted: (state, action) => {
       //console.log("slicepayload", action.payload)
-      state.error = null
-      state.actionsLoading = false
+      state.error = null;
+      state.actionsLoading = false;
       state.entities = state.entities.filter(
         (el) => el.id !== action.payload.id
-      )
+      );
     },
     vehicleCreated: (state, action) => {
       //console.log("action.payload", action.payload)
-      state.actionsLoading = false
-      state.error = null
-      state.entities.push(action.payload.vehicle)
+      state.actionsLoading = false;
+      state.error = null;
+      state.entities.push(action.payload.vehicle);
     },
     vehicleUpdated: (state, action) => {
       //debugger
       //console.log("updatedVehicle slice", action.payload.updatedVehicle.id)
-      state.error = null
-      state.actionsLoading = false
+      state.error = null;
+      state.actionsLoading = false;
       state.entities = state.entities.map((entity) => {
         if (entity.id === action.payload.updatedVehicle.id) {
-          return action.payload.updatedVehicle
+          return action.payload.updatedVehicle;
         }
 
-        return entity
-      })
+        return entity;
+      });
     },
     CenterFetched: (state, action) => {
-      state.actionsLoading = false
-      state.centers = action.payload
-      state.error = null
+      state.actionsLoading = false;
+      state.centers = action.payload;
+      state.error = null;
     },
     vehicleCategoryFetched: (state, action) => {
-      state.actionsLoading = false
-      state.categories = action.payload
-      state.error = null
+      state.actionsLoading = false;
+      state.categories = action.payload;
+      state.error = null;
+    },
+    driversByCetner: (state, action) => {
+      state.actionsLoading = false;
+      state.drivers = action.payload;
+      state.error = null;
     },
   },
-})
+});

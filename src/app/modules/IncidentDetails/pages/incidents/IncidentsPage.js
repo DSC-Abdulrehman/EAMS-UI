@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import {
   fetchIncident,
   fetchTripLog,
+  reInitialIncident,
 } from "../../_redux/incidents/incidentActions";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -33,6 +34,7 @@ export function IncidentsPage({ history }) {
   // const ForRead = false
   const incidentsUIEvents = {
     newUserButtonClick: () => {
+      dispatch(reInitialIncident());
       history.push("/incident-details/read-all-incident-details/new");
     },
     openEditUserDialog: (id) => {
@@ -67,7 +69,7 @@ export function IncidentsPage({ history }) {
       <Route exact path="/incident-details/read-all-incident-details/new">
         {({ history, match }) => (
           <IncidentsEditDialog
-            show={true}
+            show={match != null}
             newIncident={true}
             onHide={() => {
               history.push("/incident-details/read-all-incident-details");

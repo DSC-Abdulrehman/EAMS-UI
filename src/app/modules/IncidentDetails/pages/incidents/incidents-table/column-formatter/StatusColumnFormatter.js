@@ -1,18 +1,18 @@
-import React from "react"
+import React from "react";
 import {
   IncidentStatusCssClasses,
   IncidentStatusTitles,
-} from "../../IncidentsUIHelpers"
+} from "../../IncidentsUIHelpers";
+import { getDate } from '../../../../../../utils/common'
 
 export const StatusColumnFormatter = (cellContent, row) => (
   <span
     className={`label label-lg label-light-${
-      row.isActive === true ? "success" : "danger"
+      row.status === "Open" ? "success" : "danger"
     } label-inline`}
   >
-    {row.isActive === true ? "Open" : "Close"}
+    {row.status}
   </span>
-
   //   <span
   //     className={`label label-lg label-light-${
   //       IncidentStatusCssClasses[row.isActive]
@@ -20,4 +20,12 @@ export const StatusColumnFormatter = (cellContent, row) => (
   //   >
   //     {IncidentStatusTitles[row.isActive]}
   //   </span>
-)
+);
+
+export const DatetimeColumnFormatter = (cellContent, row) => (
+  <span
+    className={`badge badge-light-success  ${getDate(cellContent)}`}
+  >
+    {getDate(cellContent)}
+  </span>
+);

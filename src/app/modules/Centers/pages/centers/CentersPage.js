@@ -1,15 +1,17 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import { Route } from "react-router-dom"
-import { CentersUIProvider } from "./CentersUIContext"
-import { CenterEditDialog } from "./center-edit-dialog/CenterEditDialog"
-import { CenterDeleteDialog } from "./center-delete-dialog/CenterDeleteDialog"
-import { CentersCard } from "./centers-card/CentersCard"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import * as actions from "../../_redux/centersActions"
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Route } from "react-router-dom";
+import { CentersUIProvider } from "./CentersUIContext";
+import { CenterEditDialog } from "./center-edit-dialog/CenterEditDialog";
+import { CenterDeleteDialog } from "./center-delete-dialog/CenterDeleteDialog";
+import { CentersCard } from "./centers-card/CentersCard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import * as actions from "../../_redux/centersActions";
+import { fetchCenter } from "../../_redux/centersActions";
 
 export function CentersPage({ history }) {
+  const dispatch = useDispatch();
   // const { auth } = useSelector((auth) => auth)
   // console.log("UserManagement, Auth: ", auth)
   // const { userAccess } = auth
@@ -28,18 +30,19 @@ export function CentersPage({ history }) {
   // const ForRead = false
   const centersUIEvents = {
     newCenterButtonClick: () => {
-      history.push("/centers/read-all-centers/new")
+      dispatch(fetchCenter(0));
+      history.push("/centers/read-all-centers/new");
     },
     openEditCenterDialog: async (id) => {
-      history.push(`/centers/read-all-centers/${id}/edit`)
+      history.push(`/centers/read-all-centers/${id}/edit`);
     },
     openDeleteCenterDialog: (id) => {
-      history.push(`/centers/read-all-centers/${id}/delete`)
+      history.push(`/centers/read-all-centers/${id}/delete`);
     },
     openReadCenterDialog: (id, isUserRead) => {
-      history.push(`/centers/read-all-centers/${id}/read`)
+      history.push(`/centers/read-all-centers/${id}/read`);
     },
-  }
+  };
   return (
     <CentersUIProvider centersUIEvents={centersUIEvents}>
       <Route exact path="/centers/read-all-centers/new">
@@ -47,7 +50,7 @@ export function CentersPage({ history }) {
           <CenterEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/centers/read-all-centers")
+              history.push("/centers/read-all-centers");
             }}
           />
         )}
@@ -58,7 +61,7 @@ export function CentersPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/centers/read-all-centers")
+              history.push("/centers/read-all-centers");
             }}
           />
         )}
@@ -70,7 +73,7 @@ export function CentersPage({ history }) {
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/centers/read-all-centers")
+              history.push("/centers/read-all-centers");
             }}
           />
         )}
@@ -81,7 +84,7 @@ export function CentersPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/centers/read-all-centers")
+              history.push("/centers/read-all-centers");
             }}
           />
         )}
@@ -134,5 +137,5 @@ export function CentersPage({ history }) {
         pauseOnHover
       /> */}
     </CentersUIProvider>
-  )
+  );
 }

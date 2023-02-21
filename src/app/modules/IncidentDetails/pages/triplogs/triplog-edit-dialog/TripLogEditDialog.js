@@ -21,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
 
 export function TripLogEditDialog({ id, show, onHide, userForRead }) {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const [centerId, setCenter] = useState(0);
   const triplogsUIContext = useTripLogsUIContext();
   const triplogsUIProps = useMemo(() => {
@@ -30,7 +32,6 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
     };
   }, [triplogsUIContext]);
 
-  const dispatch = useDispatch();
   const { actionsLoading, driverTripForEdit, isuserForRead } = useSelector(
     (state) => ({
       actionsLoading: state.triplogs.actionsLoading,
@@ -44,6 +45,12 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
     }),
     shallowEqual
   );
+  const enableLoading = () => {
+    setLoading(true);
+  };
+  const disabledLoading = () => {
+    setLoading(false);
+  };
   //console.log("driverTripForEdit", driverTripForEdit)
   useEffect(() => {
     // dispatch(actions.fetchIncidentTypes())
@@ -75,6 +82,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
   const updateTripLog = (incident) => {
     if (!id) {
       const incidentUpdate = { ...incident };
+      enableLoading();
       dispatch(actions.createIncident(incident)).then((res) => {
         onHide();
       });
@@ -111,8 +119,12 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
       //   roleId: saveIncident.roleId,
       // }
 
-      dispatch(actions.updateTrip({ ...rest, id }));
-      onHide();
+      enableLoading();
+      delete rest.driverId;
+      dispatch(actions.updateTrip({ ...rest, id })).then((res) => {
+        disabledLoading();
+        onHide();
+      });
     }
   };
 
@@ -138,6 +150,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
             onHide={onHide}
             isUserForRead={userForRead}
             setCenter={setCenter}
+            loading={loading}
           />
         </>
       )}
