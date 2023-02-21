@@ -166,12 +166,12 @@ export const fetchVehicleById = (queryParams) => (dispatch) => {
 };
 export const fetchVehicleByDropdown = (queryParams) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer
-    .getVehicleForDropdown(queryParams)
-    .then((response) => {
-      const entities = response.data?.data;
-      dispatch(actions.fetchVehiclesForDropdown(entities));
-    });
+  // return requestFromServer
+  //   .getVehicleForDropdown(queryParams)
+  //   .then((response) => {
+  //     const entities = response.data?.data;
+  //     dispatch(actions.fetchVehiclesForDropdown(entities));
+  //   });
 };
 export const fetchTripLog = (queryparm) => async (dispatch) => {
   //console.log("Receive QP", queryparm)
