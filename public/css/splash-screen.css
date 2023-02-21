@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 #splash-screen {
   position: absolute;
   z-index: 1000;
@@ -37,6 +38,14 @@ body {
   animation: dash 1.5s ease-in-out infinite;
 }
 
+.form-feedBack {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #F64E60;
+}
+
 @keyframes rotate {
   100% {
     transform: rotate(360deg);
@@ -48,12 +57,24 @@ body {
     stroke-dasharray: 1, 150;
     stroke-dashoffset: 0;
   }
+
   50% {
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -35;
   }
+
   100% {
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -124;
   }
 }
+<<<<<<< Updated upstream
+=======
+
+.inv-feedback {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #F64E60;
+}
+>>>>>>> Stashed changes

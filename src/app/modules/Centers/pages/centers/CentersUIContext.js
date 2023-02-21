@@ -4,55 +4,55 @@ import React, {
   useState,
   useCallback,
   Children,
-} from "react"
-import { isEqual, isFunction } from "lodash"
-import { initialFilter, initialvehicleFilter } from "./CentersUIHelpers"
+} from "react";
+import { isEqual, isFunction } from "lodash";
+import { initialFilter, initialvehicleFilter } from "./CentersUIHelpers";
 
-const CentersUIContext = createContext()
+const CentersUIContext = createContext();
 
 export function useCentersUIContext() {
-  return useContext(CentersUIContext)
+  return useContext(CentersUIContext);
 }
 
-export const CentersUIConsumer = CentersUIContext.Consumer
+export const CentersUIConsumer = CentersUIContext.Consumer;
 // const initialFilter = {
 //   sortBy: "name",
 //   limit: 10,
 //   page: 1,
 // }
 export function CentersUIProvider({ centersUIEvents, children }) {
-  const [queryParams, setQueryParamsBase] = useState(initialFilter)
-  const [ids, setIds] = useState([])
+  const [queryParams, setQueryParamsBase] = useState(initialFilter);
+  const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
-        nextQueryParams = nextQueryParams(prevQueryParams)
+        nextQueryParams = nextQueryParams(prevQueryParams);
       }
 
       if (isEqual(prevQueryParams, nextQueryParams)) {
-        return prevQueryParams
+        return prevQueryParams;
       }
 
-      return nextQueryParams
-    })
-  }, [])
+      return nextQueryParams;
+    });
+  }, []);
 
   const [secondQueryParams, setSecondQueryParamsBase] = useState(
     initialvehicleFilter
-  )
+  );
   const setSecondQueryParams = useCallback((nextQueryParams) => {
     setSecondQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
-        nextQueryParams = nextQueryParams(prevQueryParams)
+        nextQueryParams = nextQueryParams(prevQueryParams);
       }
 
       if (isEqual(prevQueryParams, nextQueryParams)) {
-        return prevQueryParams
+        return prevQueryParams;
       }
 
-      return nextQueryParams
-    })
-  }, [])
+      return nextQueryParams;
+    });
+  }, []);
 
   const initCenter = {
     name: "",
@@ -60,7 +60,9 @@ export function CentersUIProvider({ centersUIEvents, children }) {
     location: "",
     longitude: "",
     latitude: "",
-  }
+    countryId: "",
+    cityId: "",
+  };
 
   const value = {
     queryParams,
@@ -76,10 +78,10 @@ export function CentersUIProvider({ centersUIEvents, children }) {
     openEditCenterDialog: centersUIEvents.openEditCenterDialog,
     openDeleteCenterDialog: centersUIEvents.openDeleteCenterDialog,
     openReadCenterDialog: centersUIEvents.openReadCenterDialog,
-  }
+  };
   return (
     <CentersUIContext.Provider value={value}>
       {children}
     </CentersUIContext.Provider>
-  )
+  );
 }

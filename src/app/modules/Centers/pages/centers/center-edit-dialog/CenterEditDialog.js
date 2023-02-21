@@ -1,24 +1,24 @@
-import React, { useEffect, useMemo } from "react"
-import { Modal } from "react-bootstrap"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { CenterEditForm } from "./CenterEditForm"
-import { CenterEditDialogHeader } from "./CenterEditDialogHeader"
-import { useCentersUIContext } from "../CentersUIContext"
-import * as actions from "../../../_redux/centersActions"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import React, { useEffect, useMemo } from "react";
+import { Modal } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { CenterEditForm } from "./CenterEditForm";
+import { CenterEditDialogHeader } from "./CenterEditDialogHeader";
+import { useCentersUIContext } from "../CentersUIContext";
+import * as actions from "../../../_redux/centersActions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { fetchAllCity } from "../../../../../../_metronic/redux/dashboardActions";
 
 export function CenterEditDialog({ id, show, onHide, userForRead }) {
-  const title = "CenterEditDialog"
-  const centersUIContext = useCentersUIContext()
+  const title = "CenterEditDialog";
+  const centersUIContext = useCentersUIContext();
   const centersUIProps = useMemo(() => {
     return {
       initCenter: centersUIContext.initCenter,
       queryParams: centersUIContext.queryParams,
       secondQueryParams: centersUIContext.secondQueryParams,
-    }
-  }, [centersUIContext])
-  
+    };
+  }, [centersUIContext]);
 
   // const newQueryParams = {
   //   ...centersUIProps.queryParams,
@@ -26,7 +26,7 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
   // }
 
   //console.log("newQueryParams", newQueryParams)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {
     actionsLoading,
     centerForEdit,
@@ -46,27 +46,25 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
       totalCount: state.centers.vehiclesForCenter?.totalResults,
     }),
     shallowEqual
-  )
-
-  console.log("centerForEdit", centerForEdit)
-
+  );
+  console.log("centerForEdit", centerForEdit);
   useEffect(() => {
     if (id) {
-      dispatch(actions.fetchCenter(id))
+      dispatch(actions.fetchCenter(id));
       dispatch(
         actions.fetchVehicles({
           ...centersUIProps.secondQueryParams,
           centerId: id,
         })
-      )
+      );
     }
-  }, [id, dispatch, centersUIProps.secondQueryParams])
+  }, [id, dispatch, centersUIProps.secondQueryParams]);
 
   const saveCenter = (center) => {
     if (!id) {
       dispatch(actions.createCenter(center)).then((res) => {
-        onHide()
-      })
+        onHide();
+      });
     } else {
       const centerUpdatedFields = {
         id: center.id,
@@ -75,11 +73,13 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
         location: center.location,
         longitude: center.longitude,
         latitude: center.latitude,
-      }
-      dispatch(actions.updateCenter(centerUpdatedFields))
-      onHide()
+        conuntryId: center.conuntryId,
+        cityId: center.cityId,
+      };
+      dispatch(actions.updateCenter(centerUpdatedFields));
+      onHide();
     }
-  }
+  };
 
   return (
     <Modal
@@ -112,5 +112,5 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
         pauseOnHover
       />
     </Modal>
-  )
+  );
 }

@@ -63,7 +63,12 @@ export function IncidentsPage({ history }) {
       <Route exact path="/incident-details/read-all-incident-details/new">
         {({ history, match }) => (
           <IncidentsEditDialog
+<<<<<<< Updated upstream
             show={match != null}
+=======
+            show={true}
+            newIncident={true}
+>>>>>>> Stashed changes
             onHide={() => {
               history.push("/incident-details/read-all-incident-details")
             }}

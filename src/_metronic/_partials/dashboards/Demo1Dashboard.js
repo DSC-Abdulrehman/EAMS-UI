@@ -15,10 +15,21 @@ import {
 export function Demo1Dashboard() {
   return (
     <>
+<<<<<<< Updated upstream
     <div>
       <img src="/media/logos/wEytfp.png" alt="Edhi Foundation Logo is Here!"  width={"1225px"} height={"400px"} />
     </div>
       {/* <div className="row">
+=======
+      {/* <div>
+        <img
+          className="w-100"
+          src="/media/logos/slide03.jpg"
+          alt="Edhi Foundation Logo is Here!"
+        />
+      </div> */}
+      <div className="row">
+>>>>>>> Stashed changes
         <div className="col-lg-6 col-xxl-4">
           <MixedWidget1 className="card-stretch gutter-b" />
         </div>
@@ -58,7 +69,7 @@ export function Demo1Dashboard() {
         <div className="col-lg-8">
           <AdvanceTablesWidget4 className="card-stretch gutter-b" />
         </div>
-      </div> */}
+      </div>
     </>
   );
 }

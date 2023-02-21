@@ -26,7 +26,11 @@ export function CentersCard() {
       userAccess: state.auth.userAccess.Users,
     }),
     shallowEqual
+<<<<<<< Updated upstream
   )
+=======
+  );
+>>>>>>> Stashed changes
 
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateUser"

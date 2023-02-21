@@ -1,5 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 import SVG from "react-inlinesvg";
 import { Dropdown } from "react-bootstrap";
 import objectPath from "object-path";
@@ -7,8 +9,30 @@ import ApexCharts from "apexcharts";
 import { toAbsoluteUrl } from "../../../_helpers";
 import { DropdownCustomToggler, DropdownMenu4 } from "../../dropdowns";
 import { useHtmlClassService } from "../../../layout";
+import Button from "@material-ui/core/Button";
+import { IncidentsEditDialog } from "../../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
+import Modal from "react-bootstrap/Modal";
 
-export function TilesWidget1({ className, chartColor = "danger" }) {
+export function TilesWidget1({
+  className,
+  chartColor = "danger",
+  heading,
+  buttonHeading,
+  NoofVehicle,
+}) {
+  var selectedVehiclesArr = [];
+  const [vehicle, setVehicle] = useState(selectedVehiclesArr);
+  const [diable, setDisable] = useState(true);
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => {
+    // console.log("Seleted vehicle is", vehicle);
+    setShow(true);
+  };
+  // setDisable(vehicle.length < 0 ? false : true);
+  useEffect(() => {
+    // setDisable((item) => console.log("item of disbale", item));
+  }, [vehicle]);
   const uiService = useHtmlClassService();
   const layoutProps = useMemo(() => {
     return {
@@ -32,35 +56,151 @@ export function TilesWidget1({ className, chartColor = "danger" }) {
     };
   }, [uiService, chartColor]);
 
-  useEffect(() => {
-    const element = document.getElementById("kt_tiles_widget_1_chart");
+  const statusFormater = (cell, row) => (
+    <span className={row.status === true ? "text-success" : "text-warning"}>
+      {row.name}
+    </span>
+  );
 
-    if (!element) {
-      return;
-    }
+  const actionFormater = (cell, row) => (
+    <>
+      <Dropdown className="dropdown-inline" alignRight>
+        <Dropdown.Toggle
+          className="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+          variant="transparent"
+          id="dropdown-toggle-top"
+          as={DropdownCustomToggler}
+        >
+          <i className="ki ki-bold-more-hor" />
+        </Dropdown.Toggle>
+        <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+          <DropdownMenu4 />
+        </Dropdown.Menu>
+      </Dropdown>
+    </>
+  );
+  const products = [
+    {
+      id: 3,
+      vehicleId: "LEH 4617",
+      name: "Maruti Suzuki Omni",
+      center: "Gullberg",
+      status: true,
+    },
+    {
+      id: 2,
+      vehicleId: "LEH 4717",
+      name: "Maruti Suzuki Eeco",
+      center: "Johar town",
+      status: false,
+      align: "center",
+    },
+    {
+      id: 4,
+      vehicleId: "LEH 5817",
+      name: "Tata Winger",
+      center: "Johar town",
+      status: true,
+    },
+    {
+      id: 5,
+      vehicleId: "LEH 5617",
+      name: "Mahindra Bolero",
+      center: "Town Ship",
+      status: true,
+    },
+    {
+      id: 6,
+      vehicleId: "LEH 8976",
+      name: "Force Trax",
+      center: "Johar town",
+      status: true,
+    },
+  ];
+  const columns = [
+    {
+      dataField: "vehicleId",
+      text: "Vehicle ID",
+      align: "center",
+      headerAlign: "center",
+      headerAttrs: {
+        hidden: true,
+      },
+    },
+    {
+      dataField: "name",
+      text: "Vehicle Name",
+      align: "center",
+      //formatter: (cell, row) => types[cell],
+      //headerTitle: false,
+      headerAttrs: {
+        hidden: true,
+      },
+      formatter: statusFormater,
+    },
+    {
+      dataField: "center",
+      text: "Center",
+      align: "center",
+      headerAttrs: {
+        hidden: true,
+      },
 
-    const options = getChartOption(layoutProps);
-    const chart = new ApexCharts(element, options);
-    chart.render();
-    return function cleanUp() {
-      chart.destroy();
-    };
-  }, [layoutProps]);
+      // filter: textFilter(), // apply text filter
+    },
+    // {
+    //   text: "Action",
+    //   headerAlign: "center",
+    //   // formatter: actionFormater,
+    // },
+  ];
+
+  const selectRow = {
+    mode: "checkbox",
+    style: { backgroundColor: "#c8e6c9" },
+    selectColumnStyle: {
+      textAlign: "center",
+    },
+    classes: "custom-class",
+    align: "center",
+    hideSelectAll: true,
+    //clickToSelect: true,
+    onSelect: (row, isSelect, rowIndex, e) => {
+      if (isSelect) {
+        const vehicleId = row.id;
+        setVehicle((item) => [...item, vehicleId]);
+      } else if (!isSelect) {
+        const index = vehicle.indexOf(row.id);
+        if (index > -1) {
+          vehicle.splice(index, 1);
+          setVehicle(vehicle);
+          // console.log("unselect arr", vehicle);
+        }
+      }
+    },
+  };
 
   return (
     <>
       {/* begin::Tiles Widget 1 */}
       <div className={`card card-custom ${className}`}>
         {/* begin::Header */}
-        <div className="card-header border-0 pt-5">
+        <div className="card-header border-0">
           <div className="card-title">
             <div className="card-label">
-              <div className="font-weight-bolder">Weekly Sales Stats</div>
-              <div className="font-size-sm text-muted mt-2">890,344 Sales</div>
+              <div className="font-weight-bolder">{heading}</div>
+              <div className="font-size-sm text-muted mt-2">{NoofVehicle}</div>
             </div>
           </div>
           <div className="card-toolbar">
-            <Dropdown className="dropdown-inline" alignRight>
+            <button
+              className="btn btn-dark"
+              disabled={diable}
+              onClick={handleShow}
+            >
+              {buttonHeading}
+            </button>
+            {/* <Dropdown className="dropdown-inline" alignRight>
               <Dropdown.Toggle
                 className="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
                 variant="transparent"
@@ -72,121 +212,50 @@ export function TilesWidget1({ className, chartColor = "danger" }) {
               <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                 <DropdownMenu4 />
               </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown> */}
           </div>
         </div>
         {/* end::Header */}
 
         {/* begin::Body */}
-        <div className="card-body d-flex flex-column px-0">
-          {/* begin::Chart */}
-          <div
-            id="kt_tiles_widget_1_chart"
-            data-color={chartColor}
-            style={{ height: "150px" }}
+        <div className="card-body d-flex flex-column px-0 pt-0 pb-0">
+          <BootstrapTable
+            keyField="id"
+            data={products}
+            columns={columns}
+            selectRow={selectRow}
+            condensed
+            bordered={false}
           />
-          {/* end::Chart */}
-
-          {/* begin::Items */}
-          <div className="flex-grow-1 card-spacer-x">
-            {/* begin::Item */}
-            <div className="d-flex align-items-center justify-content-between mb-10">
-              <div className="d-flex align-items-center mr-2">
-                <div className="symbol symbol-50 symbol-light mr-3 flex-shrink-0">
-                  <div className="symbol-label">
-                    <span className="svg-icon">
-                      <SVG
-                        className=" h-50"
-                        src={toAbsoluteUrl("/media/svg/misc/006-plurk.svg")}
-                      ></SVG>
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder"
-                  >
-                    Top Authors
-                  </a>
-                  <div className="font-size-sm text-muted font-weight-bold mt-1">
-                    Ricky Hunt, Sandra Trepp
-                  </div>
-                </div>
-              </div>
-              <div className="label label-light label-inline font-weight-bold text-dark-50 py-4 px-3 font-size-base">
-                +105$
-              </div>
-            </div>
-            {/* end::Item */}
-
-            {/* begin::Item */}
-            <div className="d-flex align-items-center justify-content-between mb-10">
-              <div className="d-flex align-items-center mr-2">
-                <div className="symbol symbol-50 symbol-light mr-3 flex-shrink-0">
-                  <div className="symbol-label">
-                    <span className="svg-icon">
-                      <SVG
-                        className=" h-50"
-                        src={toAbsoluteUrl("/media/svg/misc/015-telegram.svg")}
-                      ></SVG>
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder"
-                  >
-                    Bestsellers
-                  </a>
-                  <div className="font-size-sm text-muted font-weight-bold mt-1">
-                    Pitstop Email Marketing
-                  </div>
-                </div>
-              </div>
-              <div className="label label-light label-inline font-weight-bold text-dark-50 py-4 px-3 font-size-base">
-                +60$
-              </div>
-            </div>
-            {/* end::Item */}
-
-            {/* begin::Item */}
-            <div className="d-flex align-items-center justify-content-between">
-              <div className="d-flex align-items-center mr-2">
-                <div className="symbol symbol-50 symbol-light mr-3 flex-shrink-0">
-                  <div className="symbol-label">
-                    <span className="svg-icon">
-                      <SVG
-                        className=" h-50"
-                        src={toAbsoluteUrl("/media/svg/misc/003-puzzle.svg")}
-                      ></SVG>
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <a
-                    href="#"
-                    className="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder"
-                  >
-                    Top Engagement
-                  </a>
-                  <div className="font-size-sm text-muted font-weight-bold mt-1">
-                    KT.com solution provider
-                  </div>
-                </div>
-              </div>
-              <div className="label label-light label-inline font-weight-bold text-dark-50 py-4 px-3 font-size-base">
-                +75$
-              </div>
-            </div>
-            {/* end::Item */}
-          </div>
-          {/* end::Items */}
         </div>
         {/* end::Body */}
       </div>
       {/* end::Tiles Widget 1 */}
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ul>
+            {vehicle.map((item) => {
+              return (
+                <>
+                  <li Key={item}> selected vehicle id is {item}</li>
+                </>
+              );
+            })}
+          </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="outlined" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="outlined" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
