@@ -178,7 +178,7 @@ export function ItemEditForm({
                     <div className="col-12 col-md-4">
                       <SearchSelect
                         name="centerId"
-                        label="Mian Center*"
+                        label="Main Center*"
                         onBlur={() => {
                           handleBlur({ target: { name: "centerId" } });
                         }}
