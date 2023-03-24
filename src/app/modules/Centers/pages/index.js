@@ -1,8 +1,9 @@
-import React, { Suspense } from "react"
-import { useSelector } from "react-redux"
-import { Redirect, Route, Switch } from "react-router-dom"
-import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout"
-import { CentersPage } from "./centers/CentersPage"
+import React, { Suspense } from "react";
+import { useSelector } from "react-redux";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
+import { CentersPage } from "./centers/CentersPage";
+import { SubCentersPage } from "./subcenters/CentersPage";
 
 export default function UserManagment() {
   // const { auth } = useSelector((auth) => auth)
@@ -35,7 +36,11 @@ export default function UserManagment() {
           path="/centers/read-all-centers"
           component={CentersPage}
         />
+        <ContentRoute
+          path="/centers/read-all-subcenters"
+          component={SubCentersPage}
+        />
       </Switch>
     </Suspense>
-  )
+  );
 }

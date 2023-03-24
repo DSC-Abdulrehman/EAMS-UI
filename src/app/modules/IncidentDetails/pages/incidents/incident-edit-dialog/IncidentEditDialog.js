@@ -172,9 +172,8 @@ export function IncidentsEditDialog({ id, show, onHide, userForRead }) {
         vehicleidsConversionToNumber = vehicleId.map(function(x) {
           return parseInt(x, 10);
         });
-
       }
-      console.log('vehicleidsConversionToNumber', vehicleidsConversionToNumber)
+      console.log("vehicleidsConversionToNumber", vehicleidsConversionToNumber);
       dispatch(
         actions.updateIncident({
           ...rest,

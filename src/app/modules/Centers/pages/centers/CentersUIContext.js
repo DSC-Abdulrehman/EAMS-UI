@@ -55,13 +55,13 @@ export function CentersUIProvider({ centersUIEvents, children }) {
   }, []);
 
   const initCenter = {
+    countryId: "",
+    cityId: "",
     name: "",
     phoneNo: "",
     location: "",
     longitude: "",
     latitude: "",
-    countryId: "",
-    cityId: "",
   };
 
   const value = {

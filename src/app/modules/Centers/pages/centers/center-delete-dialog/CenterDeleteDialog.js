@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
-import * as actions from "../../../_redux/centersActions";
+import * as actions from "../../../_redux/centers/centersActions";
 import { useCentersUIContext } from "../CentersUIContext";
 
 export function CenterDeleteDialog({ id, show, onHide }) {

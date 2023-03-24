@@ -32,7 +32,7 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
 
   const { itemForEdit, centers, category } = useSelector(
     (state) => ({
-      actionsLoading: state.vehicles.actionsLoading,
+      //actionsLoading: state.vehicles.actionsLoading,
       itemForEdit: state.vehicles.itemForEdit,
       centers: state.vehicles.centers,
       category: state.vehicles.categories,

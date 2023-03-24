@@ -62,7 +62,6 @@ export function IncidentEditForm({
   isUserForRead,
   setCenter,
   loading,
-  
 }) {
   const logTitle = " IncidentEditForm() ";
   const dispatch = useDispatch();
@@ -77,7 +76,7 @@ export function IncidentEditForm({
       // pageNumber: 1,
       centerId: id,
       available: true,
-      inProgress: false
+      inProgress: false,
     };
 
     dispatch(actions.fetchVehicleById({ ...queryParams }));
@@ -86,7 +85,7 @@ export function IncidentEditForm({
     const queryParams = {
       centerId: id,
       available: true,
-      inProgress: false
+      inProgress: false,
     };
 
     dispatch(actions.fetchVehicleByDropdown({ ...queryParams }));
@@ -103,11 +102,11 @@ export function IncidentEditForm({
     // pageNumber: 1,
     centerId: incident?.centerId,
   };
-  console.log('incident', incident)
+  console.log("incident", incident);
 
   useEffect(() => {
     // dispatch(actions.fetchVehicleById({ ...queryParamsOnLoad }));
-    console.log(queryParamsOnLoad)
+    console.log(queryParamsOnLoad);
     dispatch(actions.fetchVehicleByDropdown({ ...queryParamsOnLoad }));
   }, [incident?.centerId]);
   // This code os
@@ -423,7 +422,7 @@ export function IncidentEditForm({
                             >
                               {vehiclesForDropdown.length > 0 ? (
                                 <>
-                                {console.log(vehiclesForDropdown)}
+                                  {console.log(vehiclesForDropdown)}
                                   {vehiclesForDropdown.map((response) => {
                                     return (
                                       <option

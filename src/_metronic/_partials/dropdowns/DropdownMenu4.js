@@ -11,7 +11,7 @@ export function DropdownMenu4() {
             <span className="navi-icon">
               <i className="flaticon2-drop"></i>
             </span>
-            <span className="navi-text">New Group</span>
+            <span className="navi-text">Out</span>
           </a>
         </li>
         <li className="navi-item">
@@ -19,7 +19,7 @@ export function DropdownMenu4() {
             <span className="navi-icon">
               <i className="flaticon2-list-3"></i>
             </span>
-            <span className="navi-text">Contacts</span>
+            <span className="navi-text">Off Duty</span>
           </a>
         </li>
         <li className="navi-item">
@@ -27,28 +27,32 @@ export function DropdownMenu4() {
             <span className="navi-icon">
               <i className="flaticon2-rocket-1"></i>
             </span>
-            <span className="navi-text">Groups</span>
-            <span className="navi-link-badge">
+            <span className="navi-text">Update Location</span>
+            {/* <span className="navi-link-badge">
               <span className="label label-light-primary label-inline font-weight-bold">
                 new
               </span>
+            </span> */}
+          </a>
+        </li>
+        <li className="navi-item">
+          <a href="#" className="navi-link">
+            <span className="navi-icon">
+              <i className="flaticon2-bell-2"></i>
             </span>
+            <span className="navi-text">Last 20 Trips</span>
           </a>
         </li>
         {/* <li className="navi-item">
-                <a href="#" className="navi-link">
-                    <span className="navi-icon"><i className="flaticon2-bell-2"></i></span>
-                    <span className="navi-text">Calls</span>
-                </a>
-            </li>
-            <li className="navi-item">
-                <a href="#" className="navi-link">
-                    <span className="navi-icon"><i className="flaticon2-gear"></i></span>
-                    <span className="navi-text">Settings</span>
-                </a>
-            </li>
+          <a href="#" className="navi-link">
+            <span className="navi-icon">
+              <i className="flaticon2-gear"></i>
+            </span>
+            <span className="navi-text">Settings</span>
+          </a>
+        </li>
 
-            <li className="navi-separator my-3"></li> */}
+        <li className="navi-separator my-3"></li> */}
 
         {/* <li className="navi-item">
                 <a href="#" className="navi-link">

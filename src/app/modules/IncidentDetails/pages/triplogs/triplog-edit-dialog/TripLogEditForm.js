@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -9,13 +9,24 @@ import {
   TextArea,
 } from "../../../../../../_metronic/_partials/controls";
 import MaskedInput from "react-text-mask";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchAllCity,
+  fetchAllCityCenters,
+  fetchAllSubCenter,
+} from "../../../../../../_metronic/redux/dashboardActions";
+import { useNavigate } from "react-router-dom";
 
 //Regex for Positive numbers
 
 const PositiveRegex = /^[1-9]+[0-9]*$/;
 // Validation schema
 const triplogEditSchema = Yup.object().shape({
-  finalReading: Yup.string().required(" Final reading is required"),
+  cityId: Yup.string(),
+  destinationCenterId: Yup.string(),
+  destinationSubCenterId: Yup.string(),
+  finalReading: Yup.string(),
   logBookNo: Yup.string()
     .nullable()
     .matches(PositiveRegex, "Value should be number")
@@ -24,7 +35,7 @@ const triplogEditSchema = Yup.object().shape({
     .nullable()
     .matches(PositiveRegex, "Value should be number")
     .required("Price is required"),
-  status: Yup.string().required("Status is required"),
+  status: Yup.string(),
 });
 
 // function validateCenterId(value) {
@@ -40,10 +51,7 @@ const triplogEditSchema = Yup.object().shape({
 export function TripLogEditForm({
   updateTripLog,
   driverTrip,
-  actionsLoading,
   onHide,
-  isUserForRead,
-  setCenter,
   loading,
 }) {
   const TripStatus = [
@@ -57,33 +65,91 @@ export function TripLogEditForm({
       label: "Close",
     },
   ];
-  // const DriverTripLog = { ...driverTrip, status }
-  // const getStatus = driverTrip
 
-  //check if null value
-  // if (driverTrip.logBookNo === null) {
-  //   var newdriverTripLog = { ...driverTrip, logBookNo: "" }
-  // }
+  const [seletCity, setSelectCity] = useState({});
+  const [seletCenter, setSelectCenter] = useState({});
+  const [seletSubcenter, setSelectsubCenter] = useState({});
+
+  const dispatch = useDispatch();
+  const { dashboard, auth } = useSelector((state) => state);
+  const { user } = auth;
+
+  useEffect(() => {
+    dispatch(fetchAllCity(user.countryId));
+  }, [user]);
+
+  useEffect(() => {
+    dispatch(fetchAllCityCenters(user.cityId));
+  }, [user]);
+
+  useEffect(() => {
+    dispatch(fetchAllSubCenter(driverTrip.sourceCenterId));
+  }, [user]);
+
+  useEffect(() => {
+    setSelectsubCenter(
+      dashboard.allSubCenter &&
+        dashboard.allSubCenter.filter(
+          (item) => item.value === driverTrip.sourceSubCenterId
+        )
+    );
+  }, [dashboard.allSubCenter, driverTrip.sourceSubCenterId]);
+
+  useEffect(() => {
+    setSelectCity(
+      dashboard.allCity &&
+        dashboard.allCity.filter((item) => item.value === user.cityId)
+    );
+  }, [dashboard.allCity]);
+
+  useEffect(() => {
+    setSelectCenter(
+      dashboard.cityCenters &&
+        dashboard.cityCenters.filter(
+          (item) => item.value === driverTrip.sourceCenterId
+        )
+    );
+  }, [dashboard.cityCenters]);
+
+  const {
+    sourceCenterId,
+    sourceSubCenterId,
+    finalReading,
+    logBookNo,
+    price,
+    status,
+  } = driverTrip;
+
+  const iniValue = {
+    sourceCenterId: sourceCenterId || seletCenter.value,
+    sourceSubCenterId: sourceSubCenterId,
+    finalReading: finalReading,
+    logBookNo: logBookNo || 0,
+    price: price || 0,
+    status: status,
+  };
+  // console.log("auth", auth);
+  // console.log("driverTrip initial value", iniValue);
 
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={driverTrip}
-        validationSchema={triplogEditSchema}
+        //validationSchema={triplogEditSchema}
         onSubmit={(values) => {
           updateTripLog(values);
         }}
       >
-        {({ handleSubmit }) => (
+        {({ handleSubmit, setFieldValue, handleBlur }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
-              <Form className="form form-label-right">
-                <fieldset disabled={isUserForRead}>
+              <Form className="from form-label-right">
+                <fieldset>
                   <div className="form-group row">
                     <div className="col-lg-4">
                       <Field
-                        name="vehicle.driver.firstName"
+                        name="driver.firstName"
                         component={Input}
                         label="Driver Name"
                         disabled
@@ -106,6 +172,52 @@ export function TripLogEditForm({
                       />
                     </div>
                   </div>
+                  <div className="form-group row">
+                    <div className="col-12 col-md-4">
+                      <SearchSelect
+                        name="cityId"
+                        options={dashboard.allCity}
+                        label="Select City"
+                        onChange={(e) => {
+                          dispatch(fetchAllCityCenters(e.value));
+                          setSelectCity(e);
+                        }}
+                        value={seletCity}
+                      />
+                    </div>
+                    <div className="col-12 col-md-4">
+                      <SearchSelect
+                        name="destinationCenterId"
+                        options={dashboard.cityCenters}
+                        label="Select Center"
+                        onBlur={() => {
+                          handleBlur({
+                            target: { name: "destinationCenterId" },
+                          });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("destinationCenterId", e.value);
+                          dispatch(fetchAllSubCenter(e.value));
+                          setSelectCenter(e);
+                        }}
+                        value={seletCenter}
+                      />
+                    </div>
+                    <div className="col-12 col-md-4">
+                      <SearchSelect
+                        name="destinationSubCenterId"
+                        options={dashboard.allSubCenter}
+                        label="Select Sub-Center"
+                        onChange={(e) => {
+                          setFieldValue("destinationSubCenterId", e.value);
+                          // dispatch(fetchAllSubCenter(e.value));
+                          setSelectsubCenter(e);
+                        }}
+                        value={seletSubcenter}
+                      />
+                    </div>
+                  </div>
+
                   <div className="form-group row">
                     <div className="col-lg-4">
                       <Field
@@ -194,53 +306,23 @@ export function TripLogEditForm({
               </Form>
             </Modal.Body>
             <Modal.Footer>
-              {/* <button
-                type="submit"
+              <button
+                type="button"
                 onClick={() => handleSubmit()}
                 className="btn btn-primary btn-elevate"
               >
                 Save
-              </button> */}
-              {!isUserForRead ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => handleSubmit()}
-                    className="btn btn-primary btn-elevate"
-                  >
-                    Save
-                    {loading && (
-                      <span className="ml-3 mr-3 spinner spinner-white"></span>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onHide}
-                    className="btn btn-light btn-elevate"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <button
-                  type="button"
-                  onClick={onHide}
-                  className="btn btn-primary btn-elevate"
-                >
-                  Ok
-                </button>
-              )}
-
-              <> </>
-              {/* {!isUserForRead && (
-                <button
-                  type="submit"
-                  onClick={() => handleSubmit()}
-                  className="btn btn-primary btn-elevate"
-                >
-                  Save
-                </button>
-              )} */}
+                {loading && (
+                  <span className="ml-3 mr-3 spinner spinner-white"></span>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={onHide}
+                className="btn btn-light btn-elevate"
+              >
+                Cancel
+              </button>
             </Modal.Footer>
           </>
         )}

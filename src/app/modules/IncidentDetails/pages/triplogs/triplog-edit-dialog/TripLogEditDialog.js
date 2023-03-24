@@ -27,8 +27,8 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
   const triplogsUIContext = useTripLogsUIContext();
   const triplogsUIProps = useMemo(() => {
     return {
-      initTripLog: triplogsUIContext.initTripLog,
-      queryParams: triplogsUIContext.queryParams,
+      //initTripLog: triplogsUIContext.initTripLog,
+      // queryParams: triplogsUIContext.queryParams,
     };
   }, [triplogsUIContext]);
 
@@ -80,52 +80,64 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
   //   return
   // }
   const updateTripLog = (incident) => {
-    if (!id) {
-      const incidentUpdate = { ...incident };
-      enableLoading();
-      dispatch(actions.createIncident(incident)).then((res) => {
-        onHide();
-      });
-    } else {
-      //console.log("i'm in update")
-      const {
-        isActive,
-        slug,
-        createdBy,
-        updatedBy,
-        createdAt,
-        updatedAt,
-        endDateTime,
-        initialReading,
-        kiloMeters,
-        centerId,
-        vehicleId,
-        incidentId,
-        center,
-        vehicle,
+    console.log("i'm in update", incident);
+    const {
+      sourceCenterId,
+      price,
+      sourceSubCenterId,
+      finalReading,
+      logBookNo,
+      status,
+      endDateTime,
+    } = incident;
+    const newObject = {
+      subCenterId: sourceSubCenterId,
+      price: price.toString(),
+      finalReading: finalReading,
+      logBookNo: logBookNo,
+      status: status,
+      id: +id,
+      //endDateTime: endDateTime,
+    };
+    enableLoading();
+    dispatch(actions.updateTrip(newObject)).then((res) => {
+      disabledLoading();
+      onHide();
+    });
 
-        ...rest
-      } = incident;
+    // if (!id) {
+    //   const incidentUpdate = { ...incident };
+    //   enableLoading();
+    //   dispatch(actions.createIncident(incident)).then((res) => {
+    //     onHide();
+    //   });
+    // } else {
+    //   // const {
+    //   //   isActive,
+    //   //   slug,
+    //   //   createdBy,
+    //   //   updatedBy,
+    //   //   createdAt,
+    //   //   updatedAt,
+    //   //   endDateTime,
+    //   //   initialReading,
+    //   //   kiloMeters,
+    //   //   centerId,
+    //   //   vehicleId,
+    //   //   incidentId,
+    //   //   center,
+    //   //   vehicle,
 
-      //console.log("...rest::", rest)
-      // const userUpdatedFields = {
-      //   id: saveIncident.id,
-      //   email: saveIncident.email,
-      //   phNo: saveIncident.phNo,
-      //   cnic: saveIncident.cnic,
-      //   password: saveIncident.password,
-      //   firstName: saveIncident.firstName,
-      //   lastName: saveIncident.lastName,
-      //   roleId: saveIncident.roleId,
-      // }
+    //   //   ...rest
+    //   // } = incident;
 
-      enableLoading();
-      delete rest.driverId;
-      dispatch(actions.updateTrip({ ...rest, id })).then((res) => {
-        disabledLoading();
-        onHide();
-      });
-    }
+    //   // enableLoading();
+    //   // delete rest.driverId;
+    //   // dispatch(actions.updateTrip({ ...rest, id })).then((res) => {
+    //   //   disabledLoading();
+    //   //   onHide();
+    //   // });
+    // }
   };
 
   return (
@@ -146,7 +158,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
           <IncidentEditDialogHeader id={id} isUserForRead={userForRead} />
           <TripLogEditForm
             updateTripLog={updateTripLog}
-            driverTrip={driverTripForEdit || triplogsUIProps.initTripLog}
+            driverTrip={driverTripForEdit}
             onHide={onHide}
             isUserForRead={userForRead}
             setCenter={setCenter}
@@ -155,7 +167,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
         </>
       )}
 
-      {/* <ToastContainer
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -165,7 +177,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      /> */}
+      />
     </Modal>
   );
 }

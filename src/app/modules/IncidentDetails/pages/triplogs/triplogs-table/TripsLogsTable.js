@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from "react"
-import BootstrapTable from "react-bootstrap-table-next"
+import React, { useEffect, useMemo } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
   PaginationProvider,
-} from "react-bootstrap-table2-paginator"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import * as actions from "../../../_redux/triplogs/triplogActions"
+} from "react-bootstrap-table2-paginator";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../_redux/triplogs/triplogActions";
 import {
   getSelectRow,
   getHandlerTableChange,
@@ -12,18 +12,23 @@ import {
   PleaseWaitMessage,
   sortCaret,
   headerSortingClasses,
-} from "../../../../../../_metronic/_helpers"
-import * as uiHelpers from "../TripLogsUIHelpers"
+} from "../../../../../../_metronic/_helpers";
+import * as uiHelpers from "../TripLogsUIHelpers";
 // import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter"
-import { Pagination } from "../../../../../../_metronic/_partials/controls"
-import { useTripLogsUIContext } from "../TripLogsUIContext"
-import * as columnFormatters from "./column-formatter"
-import { FormClasses, Http, OperationStatus, RedirectURLs } from '../../../../../utils/constants'
-import { getDate, listingRedirection } from '../../../../../utils/common'
+import { Pagination } from "../../../../../../_metronic/_partials/controls";
+import { useTripLogsUIContext } from "../TripLogsUIContext";
+import * as columnFormatters from "./column-formatter";
+import {
+  FormClasses,
+  Http,
+  OperationStatus,
+  RedirectURLs,
+} from "../../../../../utils/constants";
+import { getDate, listingRedirection } from "../../../../../utils/common";
 
 export function TripLogsTable() {
   //Users UI Context
-  const triplogsUIContext = useTripLogsUIContext()
+  const triplogsUIContext = useTripLogsUIContext();
 
   const triplogsUIProps = useMemo(() => {
     return {
@@ -34,8 +39,8 @@ export function TripLogsTable() {
       openEditUserDialog: triplogsUIContext.openEditUserDialog,
       openDeleteUserDialog: triplogsUIContext.openDeleteUserDialog,
       openReadUserDialog: triplogsUIContext.openReadUserDialog,
-    }
-  }, [triplogsUIContext])
+    };
+  }, [triplogsUIContext]);
 
   // console.log("triplogsUIProps", triplogsUIProps)
   const { currentState, userAccess } = useSelector(
@@ -44,33 +49,33 @@ export function TripLogsTable() {
       userAccess: state.auth.userAccess,
     }),
     shallowEqual
-  )
+  );
 
   //console.log("userAccess", currentState)
 
-  const { totalCount, entities, listLoading } = currentState
-  const dispatch = useDispatch()
+  const { totalCount, entities, listLoading } = currentState;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // triplogsUIProps.setIds([])
-    dispatch(actions.fetchTripLogs(triplogsUIProps.queryParams))
-  }, [triplogsUIProps.queryParams, dispatch])
+    dispatch(actions.fetchTripLogs(triplogsUIProps.queryParams));
+  }, [triplogsUIProps.queryParams, dispatch]);
 
   const AccessForEdit = () => {
     const forEdit = userAccess["Incident Details"].find(
       (item) => item.componentName === "UpdateIncidentDetail"
-    )
-    return forEdit?.isAccess
-  }
+    );
+    return forEdit?.isAccess;
+  };
 
   const AccessForDelete = () => {
     const forDelete = userAccess["Incident Details"].find(
       (item) => item.componentName === "DeleteIncidentDetail"
-    )
-    return forDelete?.isAccess
-  }
+    );
+    return forDelete?.isAccess;
+  };
 
-  //console.log("isAccessForEdit", userAccess)
+  console.log("entities", entities);
   // Table columns
   const columns = [
     {
@@ -81,7 +86,7 @@ export function TripLogsTable() {
       headerSortingClasses,
     },
     {
-      dataField: "center.name",
+      dataField: "sourcecenter.name",
       text: "Center Name",
       sort: false,
       sortCaret: sortCaret,
@@ -128,7 +133,6 @@ export function TripLogsTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
       formatter: columnFormatters.DatetimeColumnFormatter,
-
     },
     {
       dataField: "finalReading",
@@ -165,19 +169,19 @@ export function TripLogsTable() {
     //   sortCaret: sortCaret,
     //   headerSortingClasses,
     //   formatter: columnFormatters.DatetimeColumnFormatter,
-        // (cell) => { 
-          // return `${getDate(cell)}`
-          // return <span className={`label label-sm label-light `}>{getDate(cell)}</span>
-          // let dateObj = cell
-          // if (typeof cell !== "object") {
-          //   dateObj = new Date(cell)
-          // }
-          // return `${getDate(cell)}`
-          // return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-          //   "0" +
-          //   (dateObj.getUTCMonth() + 1)
-          // ).slice(-2)}/${dateObj.getUTCFullYear()}`
-        // },
+    // (cell) => {
+    // return `${getDate(cell)}`
+    // return <span className={`label label-sm label-light `}>{getDate(cell)}</span>
+    // let dateObj = cell
+    // if (typeof cell !== "object") {
+    //   dateObj = new Date(cell)
+    // }
+    // return `${getDate(cell)}`
+    // return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
+    //   "0" +
+    //   (dateObj.getUTCMonth() + 1)
+    // ).slice(-2)}/${dateObj.getUTCFullYear()}`
+    // },
     // },
     {
       dataField: "action",
@@ -197,7 +201,7 @@ export function TripLogsTable() {
       //   minWidth: "100px",
       // },
     },
-  ]
+  ];
 
   //Table pagination properties
   const paginationOptions = {
@@ -206,7 +210,7 @@ export function TripLogsTable() {
     sizePerPageList: uiHelpers.sizePerPageList,
     sizePerPage: triplogsUIProps.queryParams.pageSize,
     page: triplogsUIProps.queryParams.pageNumber,
-  }
+  };
 
   return (
     <>
@@ -240,9 +244,9 @@ export function TripLogsTable() {
                 <NoRecordsFoundMessage entities={entities} />
               </BootstrapTable>
             </Pagination>
-          )
+          );
         }}
       </PaginationProvider>
     </>
-  )
+  );
 }

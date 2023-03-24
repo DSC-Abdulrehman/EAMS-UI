@@ -1,47 +1,99 @@
-import React from "react";
-import axios from "axios";
-import { fetchAllCity } from "../../redux/dashboardActions";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
+import { useHistory } from "react-router-dom";
 import {
-  ListsWidget10,
-  ListsWidget11,
-  AdvanceTablesWidget1,
-  MixedWidget6,
-  MixedWidget10,
-  MixedWidget11,
-  MixedWidget12,
-  TilesWidget1,
-  TilesWidget3,
-  TilesWidget10,
-  TilesWidget11,
-  TilesWidget12,
-  TilesWidget13,
-  TilesWidget14,
-} from "../widgets";
+  fetchDashboardVehicles,
+  fetchAllCityCenters,
+} from "../../redux/dashboardActions";
+import { TilesWidget1, TilesWidget10 } from "../widgets";
+import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
+//import { IncidentsEditDialog } from "../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
+import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";
+import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
 
-// async function getCities() {
-//   try {
-//     const response = await axios.get(
-//       "http://app-8e308de5-0daf-4f85-ac89-7ce29bdad705.cleverapps.io/apis/settings/read-all-cities-master-data",
-//       { countryID: 1 }
-//     );
-//     console.log(response);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-// getCities();
 export function Demo2Dashboard() {
-  // console.log("state", cities);
+  const dispatch = useDispatch();
+  const [city, setCity] = useState([]);
+  const [center, setCenter] = useState([]);
+  const [subCenter, setSubcenter] = useState([]);
+  const [standByvehicles, setStandbyVehicels] = useState([]);
+  const [onDutyVehicles, setOnDutyVehicels] = useState([]);
+  const [offDutyVehicles, setOffDutyVehicels] = useState([]);
+
+  const [vehicle, setVehicle] = useState([]);
+
+  const [open, setOpen] = useState(false);
+  const [openCloseTripDialogue, setCloseTripDialogue] = useState(false);
+
+  const { dashboard, auth } = useSelector((state) => state);
+  const { user } = auth;
+
+  let history = useHistory();
+
+  useEffect(() => {
+    // const interval = setInterval(() => {
+    //   // console.log("Set interval called");
+    //   dispatch(fetchDashboardVehicles({ cityId: user.cityId }));
+    //   dispatch(fetchAllCityCenters(user.cityId));
+    // }, 2500);
+
+    // return () => clearInterval(interval);
+
+    dispatch(fetchDashboardVehicles({ cityId: user.cityId }));
+    dispatch(fetchAllCityCenters(user.cityId));
+  }, [user.cityId]);
+
+  useEffect(() => {
+    const getSeletedCity = dashboard.allCity.filter(
+      (item) => item.value === user.cityId
+    );
+    setCity(getSeletedCity[0]);
+  }, [dashboard.allCity]);
+
+  useEffect(() => {
+    setStandbyVehicels(dashboard.standBy);
+  }, [dashboard.standBy, dispatch]);
+
+  useEffect(() => {
+    setOnDutyVehicels(dashboard.onDuty);
+  }, [dashboard.onDuty]);
+
+  useEffect(() => {
+    setOffDutyVehicels(dashboard.offDuty);
+  }, [dashboard.offDuty]);
+
+  // Function for create incident Dialogue
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  // Function for close Trip dialogue
+  const openTripcloseDialogue = () => {
+    setCloseTripDialogue(true);
+  };
+
+  const handleCloseDialoge = () => {
+    setCloseTripDialogue(false);
+  };
+
+  //console.log("openCloseTripDialogue", openCloseTripDialogue);
+
   return (
     <>
-      {/* begin::Dashboard */}
-
-      {/* begin::Row */}
       <div className="row">
         <div className="col-xl-12">
-          <TilesWidget10 className="gutter-b" widgetHeight="125px" />
+          <TilesWidget10
+            className="gutter-b"
+            widgetHeight="125px"
+            seletCity={city}
+            setCity={setCity}
+            setCenter={setCenter}
+            setSubcenter={setSubcenter}
+            center={center}
+          />
         </div>
         <div className="col-xl-4">
           <TilesWidget1
@@ -49,7 +101,21 @@ export function Demo2Dashboard() {
             chartColor="danger"
             heading="Stand By"
             buttonHeading="Create Incident"
-            NoofVehicle="20"
+            NoofVehicle={standByvehicles.length}
+            vehiclesData={standByvehicles}
+            handleClickOpen={handleClickOpen}
+            setVehicle={setVehicle}
+            vehicle={vehicle}
+          />
+          <IncidentCreateDialog
+            show={open}
+            onHide={handleClose}
+            handleClose={handleClose}
+            selectedVehicles={vehicle}
+            setStandbyVehicels={setStandbyVehicels}
+            city={city && city.value}
+            center={center && center.value}
+            subCenter={subCenter && subCenter.value}
           />
         </div>
         <div className="col-xl-4">
@@ -58,7 +124,16 @@ export function Demo2Dashboard() {
             chartColor="danger"
             heading="On Duty"
             buttonHeading="In Vehicle"
-            NoofVehicle="5"
+            NoofVehicle={onDutyVehicles.length}
+            vehiclesData={onDutyVehicles}
+            handleClickOpen={openTripcloseDialogue}
+            setVehicle={setVehicle}
+            vehicle={vehicle}
+          />
+          <TripLogEditDialog
+            show={openCloseTripDialogue}
+            onHide={() => setCloseTripDialogue(false)}
+            id={25}
           />
         </div>
         <div className="col-xl-4">
@@ -67,91 +142,11 @@ export function Demo2Dashboard() {
             chartColor="danger"
             heading="Off Duty"
             buttonHeading="Active vehicle"
-            NoofVehicle="10"
+            NoofVehicle={offDutyVehicles.length}
+            vehiclesData={offDutyVehicles}
           />
         </div>
-        {/* <div className="col-xl-4">
-          <TilesWidget1 className="gutter-b card-stretch" chartColor="danger" />
-        </div>
-        <div className="col-xl-8">
-          <div className="row">
-            <div className="col-xl-3">
-              <TilesWidget3 className="gutter-b" widgetHeight="150px" />
-            </div>
-            <div className="col-xl-9">
-              <TilesWidget10 className="gutter-b" widgetHeight="150px" />
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-xl-6">
-              <TilesWidget13 className="gutter-b" widgetHeight="175px" />
-              <div className="row">
-                <div className="col-xl-6">
-                  <TilesWidget11
-                    className="gutter-b"
-                    baseColor="primary"
-                    widgetHeight="150px"
-                  />
-                </div>
-                <div className="col-xl-6">
-                  <TilesWidget12
-                    className="gutter-b"
-                    iconColor="success"
-                    widgetHeight="150px"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="col-xl-6">
-              <TilesWidget14 className="gutter-b card-stretch" />
-            </div>
-          </div>
-        </div> */}
       </div>
-      {/* end::Row */}
-
-      {/* begin::Row */}
-      {/* <div className="row">
-        <div className="col-lg-6 col-xxl-4">
-          <MixedWidget6 className="gutter-b card-stretch" chartColor="danger" />
-        </div>
-
-        <div className="col-lg-6 col-xxl-8">
-          <AdvanceTablesWidget1 className="card-stretch gutter-b" />
-        </div>
-      </div> */}
-      {/* end::Row */}
-
-      {/* begin::Row */}
-      {/* <div className="row">
-        <div className="col-xl-4">
-          <MixedWidget10 className="card-stretch gutter-b" />
-        </div>
-
-        <div className="col-xl-4">
-          <MixedWidget11 className="card-stretch gutter-b" />
-        </div>
-
-        <div className="col-xl-4">
-          <MixedWidget12 className="card-stretch gutter-b" />
-        </div>
-      </div> */}
-      {/* end::Row */}
-
-      {/* begin::Row */}
-      {/* <div className="row">
-        <div className="col-lg-6">
-          <ListsWidget10 className="card-stretch gutter-b" />
-        </div>
-        <div className="col-lg-6">
-          <ListsWidget11 className="card-stretch gutter-b" />
-        </div>
-      </div> */}
-      {/* end::Row */}
-
-      {/* end::Dashboard */}
     </>
   );
 }

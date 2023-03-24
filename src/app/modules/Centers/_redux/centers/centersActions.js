@@ -1,13 +1,14 @@
 import * as requestFromServer from "./centersCrud";
 import { centersSlice, callTypes } from "./centersSlice";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const { actions } = centersSlice;
 // const { roleActions } = getAllrolesSlice
 
 export const fetchCenters = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer
+  return await requestFromServer
     .getAllRequest(queryparm)
     .then((response) => {
       // console.log("Fetch center Response is: ", response)
@@ -18,22 +19,23 @@ export const fetchCenters = (queryparm) => async (dispatch) => {
     .catch((error) => {
       //console.log("Can't find user", error)
       error.clientMessage = "Can't find customers";
+      toast.error("Some thing went wrong");
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
-export const fetchCenter = (id) => (dispatch) => {
+export const fetchCenter = (id) => async (dispatch) => {
   if (!id) {
-    return dispatch(actions.centerFetched({ userForEdit: undefined }));
+    return await dispatch(actions.centerFetched(""));
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
-  return requestFromServer
+  return await requestFromServer
     .getById({ id: id })
     .then((response) => {
-      //console.log("get center by Id response", response)
+      // console.log("get center by Id response", response);
       const entities = response.data?.data;
-      dispatch(actions.centerFetched({ centerForEdit: entities }));
+      dispatch(actions.centerFetched(entities));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -46,7 +48,7 @@ export const deleteCenter = (id) => (dispatch) => {
   return requestFromServer
     .deleteRequest({ id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
+      console.log("response from delete user ", response.data.message);
       dispatch(actions.centerDeleted({ id: id }));
       toast.success(response.data.message + " Deleted", {
         position: "top-right",
@@ -135,6 +137,34 @@ export const fetchVehicles = (queryparm) => (dispatch) => {
     })
     .catch((error) => {
       error.clientMessage = "Can't get Vehicles";
+    });
+};
+
+export const fetchAllCountry = () => async (dispatch) => {
+  return await requestFromServer
+    .getAllCountry()
+    .then((response) => {
+      const entities = response.data?.data;
+      dispatch(actions.AllCountryFetched(entities));
+    })
+    .catch((error) => {
+      toast("Something went wrong");
+    });
+};
+
+export const fetchAllCity = (body) => async (dispatch) => {
+  if (!body) {
+    return actions.statusFalse({});
+  }
+  return await requestFromServer
+    .getAllCity(body)
+    .then((response) => {
+      const entities = response.data?.data;
+      dispatch(actions.allCitiesFetched(entities));
+    })
+    .catch((error) => {
+      console.error(error);
+      toast("error");
     });
 };
 

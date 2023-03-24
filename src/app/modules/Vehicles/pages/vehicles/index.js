@@ -12,6 +12,7 @@ import {
   fetchCenters,
   fetchCategory,
 } from "../../_redux/vehiclesActions";
+import { fetchAllCenters } from "../../../../../_metronic/redux/dashboardActions";
 
 export function ItemPage({ history }) {
   const dispatch = useDispatch();
@@ -40,17 +41,20 @@ export function ItemPage({ history }) {
   const itemUIEvents = {
     newCenterButtonClick: () => {
       dispatch(fetchVehicle(0));
-
+      dispatch(fetchAllCenters());
+      dispatch(fetchCategory());
       history.push("/vehicles/read-all-vehicles/new");
     },
     openEditCenterDialog: (id) => {
       dispatch(fetchVehicle(id));
+      dispatch(fetchAllCenters());
       history.push(`/vehicles/read-all-vehicles/${id}/edit`);
     },
     openDeleteCenterDialog: (id) => {
       history.push(`/vehicles/read-all-vehicles/${id}/delete`);
     },
     openReadCenterDialog: (id, isUserRead) => {
+      dispatch(fetchAllCenters());
       dispatch(fetchVehicle(id));
       history.push(`/vehicles/read-all-vehicles/${id}/read`);
     },

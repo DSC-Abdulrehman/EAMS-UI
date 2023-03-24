@@ -40,7 +40,7 @@ export function ItemsTable() {
     shallowEqual
   );
 
-  //console.log("currentState", currentState);
+  console.log("currentState", currentState);
   // Centers Redux state
   const dispatch = useDispatch();
 
@@ -51,10 +51,10 @@ export function ItemsTable() {
     fetchData();
   }, [itemUIProps.queryParms]);
 
-  useEffect(() => {
-    dispatch(actions.fetchCenters());
-    dispatch(actions.fetchCategory());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(actions.fetchCenters());
+  //   dispatch(actions.fetchCategory());
+  // }, []);
 
   const isAccessForEdit = userAccess.find(
     (item) => item.componentName === "UpdateVehicle"
@@ -147,7 +147,7 @@ export function ItemsTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: DatetimeColumnFormatter
+      formatter: DatetimeColumnFormatter,
       // (cell) => {
       //   let dateObj = cell;
       //   if (typeof cell !== "object") {

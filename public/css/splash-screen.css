@@ -76,3 +76,7 @@ body {
   font-size: 0.9rem;
   color: #F64E60;
 }
+
+.react-bootstrap-table {
+  overflow-x: visible !important;
+}

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { async } from "q";
 
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
@@ -11,10 +12,10 @@ export function getAllRequest(body) {
   return axios.post(`${USERS_URL}/centers/read-all-centers`, body);
 }
 
-export function getById(id) {
+export const getById = async (id) => {
   // console.log("getUserById id", id)
-  return axios.post(`${USERS_URL}/centers/read-center`, id);
-}
+  return await axios.post(`${USERS_URL}/centers/read-center`, id);
+};
 
 //Update
 export function updateRequest(user) {
@@ -35,13 +36,16 @@ export function getVehiclesById(body) {
     body
   );
 }
-// //get All Roles
-// export function getAllRoles() {
-//   return axios.get(`${USERS_URL}/settings/read-all-roles-master-data`)
-// }
 
-// //get All Centers
+export function getAllCountry() {
+  return axios.get(
+    "https://app-8e308de5-0daf-4f85-ac89-7ce29bdad705.cleverapps.io/apis/settings/read-all-countries-master-data"
+  );
+}
 
-// export function getAllCenters() {
-//   return axios.get(`${USERS_URL}/settings/read-all-centers-master-data`)
-// }
+export const getAllCity = async (body) => {
+  return await axios.post(
+    `https://app-8e308de5-0daf-4f85-ac89-7ce29bdad705.cleverapps.io/apis/settings/read-all-cities-master-data`,
+    { countryId: body }
+  );
+};

@@ -4,7 +4,7 @@ const initialIncidentState = {
   listLoading: false,
   actionsLoading: false,
   totalCount: 0,
-  entities: null,
+  entities: [],
   incidentTypes: null,
   incidentSeverity: null,
   centers: null,
@@ -12,7 +12,7 @@ const initialIncidentState = {
   incidentForEdit: undefined,
   lastError: null,
   TripLog: null,
-  vehiclesForDropdown: null
+  vehiclesForDropdown: null,
 };
 
 export const callTypes = {
@@ -62,10 +62,12 @@ export const incidentSlice = createSlice({
       );
     },
     incidentCreated: (state, action) => {
-      const entities = action.payload;
+      const data = action.payload;
+      console.log("state.entities", state.entities);
+      console.log("action.payload", action.payload);
       state.actionsLoading = false;
       state.error = null;
-      state.entities.push(entities);
+      state.entities.push(action.payload);
     },
     incidentUpdated: (state, action) => {
       state.error = null;

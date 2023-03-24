@@ -2,30 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import { useParams } from "react-router-dom";
 import { Input } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, useDispatch } from "react-redux";
 import { CentersVehiclesTable } from "../centers-vehicles-table/CentersVehiclesTable";
 import { SearchAbleSelect } from "./SearchAbleSelect";
-import { fetchAllCity } from "../../../../../../_metronic/redux/dashboardActions";
+import { CityDropdown } from "./CityDropdown";
+import { fetchAllCity } from "../../../_redux/centers/centersActions";
 
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-const colourOptions = [
-  { value: "ocean", label: "Ocean", color: "#00B8D9", isFixed: true },
-  { value: "blue", label: "Blue", color: "#0052CC", isDisabled: true },
-  { value: "purple", label: "Purple", color: "#5243AA" },
-  { value: "red", label: "Red", color: "#FF5630", isFixed: true },
-  { value: "orange", label: "Orange", color: "#FF8B00" },
-  { value: "yellow", label: "Yellow", color: "#FFC400" },
-  { value: "green", label: "Green", color: "#36B37E" },
-  { value: "forest", label: "Forest", color: "#00875A" },
-  { value: "slate", label: "Slate", color: "#253858" },
-  { value: "silver", label: "Silver", color: "#666666" },
-];
 // Validation schema
 const userEditSchema = Yup.object().shape({
+  countryId: Yup.string().required("Country is required"),
+  cityId: Yup.string().required("City is required"),
   name: Yup.string()
-    .min(3, "Minimum 3 symbols")
-    .max(50, "Maximum 50 symbols")
+    .min(3, "Minimum 3 letters")
+    .max(50, "Maximum 50 letters")
     .required("Center Name is required"),
   phoneNo: Yup.string()
     .matches(phoneRegExp, "Invalid format it should be 03049018107")
@@ -33,8 +25,6 @@ const userEditSchema = Yup.object().shape({
   location: Yup.string().required("Location is Required"),
   longitude: Yup.string().required("Lognitude is required"),
   latitude: Yup.string().required("Latitude is required"),
-  countryId: Yup.string().required("Country is required"),
-  cityId: Yup.string().required("City is required"),
 });
 
 export function CenterEditForm({
@@ -48,11 +38,14 @@ export function CenterEditForm({
   vehiclesForCenter,
   totalCount,
 }) {
+  // const [country, setCountry] = useState();
+  // const [city, setCity] = useState();
   const dispatch = useDispatch();
-  const [country, setCountry] = useState();
-  const countryDropdown = useSelector((item) => item.dashboard.AllCountry);
-  const citiesDropdown = useSelector((item) => item.dashboard.AllCity);
+  const countryDropdown = useSelector((item) => item.centers.AllCountry);
+  const citiesDropdown = useSelector((item) => item.centers.AllCity);
   const [loading, setLoading] = useState(false);
+  const { id } = useParams();
+  // console.log("Use Param id", id);
   const enableLoading = () => {
     setLoading(true);
   };
@@ -60,19 +53,14 @@ export function CenterEditForm({
   const renderCities = (option) => {
     dispatch(fetchAllCity(option.value));
   };
-  console.log("country", country);
-  useEffect(() => {
-    if (center?.countryId) {
-      dispatch(fetchAllCity(center.countryId));
-      setCountry(center?.countryId);
-    }
-  }, [center.countryId]);
-  // console.log("citiesDropdown", citiesDropdown);
-  // console.log("center", center);
+  // console.log("country", country);
+  // setCountry(center?.countryId);
+  // setCity(center?.cityId);
+
   return (
     <>
       <Formik
-        enableReinitialize={true}
+        //enableReinitialize={true}
         initialValues={center}
         validationSchema={userEditSchema}
         onSubmit={(values) => {
@@ -90,61 +78,51 @@ export function CenterEditForm({
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
-              {actionsLoading && (
-                <div className="overlay-layer bg-transparent">
-                  <div className="spinner spinner-lg spinner-success" />
-                </div>
-              )}
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="form-group row">
-                    <div className="col-12 col-md-6">
+                    <div className="col-12 col-md-4 mb-5">
                       <SearchAbleSelect
                         name="countryId"
-                        label="Country"
-                        id="countryId"
+                        label="Country*"
                         onBlur={() => {
                           handleBlur({ target: { name: "countryId" } });
                         }}
                         onChange={(option) => {
                           renderCities(option);
-                          //setFieldValue("countryId", option.value || null);
+                          setFieldValue("countryId", option.value || null);
                         }}
-                        value={center.cityId}
+                        value={center.countryId}
                         error={errors.countryId}
                         touched={touched.countryId}
                         options={countryDropdown}
                       />
                     </div>
 
-                    <div className="col-12 col-md-6">
-                      <SearchAbleSelect
-                        name="cityId"
-                        label="City"
-                        onBlur={() => {
-                          handleBlur({ target: { name: "cityId" } });
-                        }}
-                        onChange={(option) =>
-                          setFieldValue("cityId", option.value || null)
-                        }
-                        value={center?.cityId}
-                        error={errors.cityId}
-                        touched={touched.cityId}
-                        options={citiesDropdown}
-                      />
-                    </div>
-                  </div>
-                  <div className="form-group row">
-                    <div className="col-lg-6">
+                    <CityDropdown
+                      name="cityId"
+                      label="City*"
+                      onBlur={() => {
+                        handleBlur({ target: { name: "cityId" } });
+                      }}
+                      onChange={(option) =>
+                        setFieldValue("cityId", option.value || null)
+                      }
+                      value={center.cityId}
+                      error={errors.cityId}
+                      touched={touched.cityId}
+                      options={citiesDropdown}
+                    />
+
+                    <div className="col-12 col-md-4 mb-5">
                       <Field
-                        type="text"
                         name="name"
                         component={Input}
                         placeholder="Center Name"
                         label="Center Name*"
                       />
                     </div>
-                    <div className="col-lg-6">
+                    <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="phoneNo"
                         component={Input}
@@ -152,9 +130,7 @@ export function CenterEditForm({
                         label="Phone No*"
                       />
                     </div>
-                  </div>
-                  <div className="form-group row">
-                    <div className="col-lg-6">
+                    <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="location"
                         component={Input}
@@ -162,7 +138,8 @@ export function CenterEditForm({
                         label="Location*"
                       />
                     </div>
-                    <div className="col-lg-6">
+
+                    <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="longitude"
                         component={Input}
@@ -170,9 +147,7 @@ export function CenterEditForm({
                         label="Longitude*"
                       />
                     </div>
-                  </div>
-                  <div className="form-group row">
-                    <div className="col-lg-6">
+                    <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="latitude"
                         component={Input}

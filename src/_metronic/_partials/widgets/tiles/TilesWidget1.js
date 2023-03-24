@@ -1,12 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
-import SVG from "react-inlinesvg";
 import { Dropdown } from "react-bootstrap";
 import objectPath from "object-path";
-import ApexCharts from "apexcharts";
-import { toAbsoluteUrl } from "../../../_helpers";
 import { DropdownCustomToggler, DropdownMenu4 } from "../../dropdowns";
 import { useHtmlClassService } from "../../../layout";
 import Button from "@material-ui/core/Button";
@@ -19,20 +15,15 @@ export function TilesWidget1({
   heading,
   buttonHeading,
   NoofVehicle,
+  vehiclesData,
+  handleClickOpen,
+  setVehicle,
+  vehicle,
 }) {
-  var selectedVehiclesArr = [];
-  const [vehicle, setVehicle] = useState(selectedVehiclesArr);
+  const [selectedVehile, setSelectedVehicle] = useState([]);
+
   const [diable, setDisable] = useState(true);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
-    // console.log("Seleted vehicle is", vehicle);
-    setShow(true);
-  };
-  // setDisable(vehicle.length < 0 ? false : true);
-  useEffect(() => {
-    // setDisable((item) => console.log("item of disbale", item));
-  }, [vehicle]);
+
   const uiService = useHtmlClassService();
   const layoutProps = useMemo(() => {
     return {
@@ -79,79 +70,46 @@ export function TilesWidget1({
       </Dropdown>
     </>
   );
-  const products = [
-    {
-      id: 3,
-      vehicleId: "LEH 4617",
-      name: "Maruti Suzuki Omni",
-      center: "Gullberg",
-      status: true,
-    },
-    {
-      id: 2,
-      vehicleId: "LEH 4717",
-      name: "Maruti Suzuki Eeco",
-      center: "Johar town",
-      status: false,
-      align: "center",
-    },
-    {
-      id: 4,
-      vehicleId: "LEH 5817",
-      name: "Tata Winger",
-      center: "Johar town",
-      status: true,
-    },
-    {
-      id: 5,
-      vehicleId: "LEH 5617",
-      name: "Mahindra Bolero",
-      center: "Town Ship",
-      status: true,
-    },
-    {
-      id: 6,
-      vehicleId: "LEH 8976",
-      name: "Force Trax",
-      center: "Johar town",
-      status: true,
-    },
-  ];
+
   const columns = [
     {
-      dataField: "vehicleId",
-      text: "Vehicle ID",
+      dataField: "name",
+      text: "Vehicle Name",
       align: "center",
       headerAlign: "center",
       headerAttrs: {
         hidden: true,
       },
     },
+
     {
-      dataField: "name",
-      text: "Vehicle Name",
+      dataField: "regNo",
+      text: "Registration No",
       align: "center",
       //formatter: (cell, row) => types[cell],
       //headerTitle: false,
       headerAttrs: {
         hidden: true,
       },
-      formatter: statusFormater,
+      // formatter: statusFormater,
     },
-    {
-      dataField: "center",
-      text: "Center",
-      align: "center",
-      headerAttrs: {
-        hidden: true,
-      },
+    // {
+    //   dataField: "center",
+    //   text: "Center",
+    //   align: "center",
+    //   headerAttrs: {
+    //     hidden: true,
+    //   },
 
-      // filter: textFilter(), // apply text filter
-    },
+    //   // filter: textFilter(), // apply text filter
+    // },
     // {
     //   text: "Action",
     //   headerAlign: "center",
-    //   // formatter: actionFormater,
+    //   headerAttrs: {
+    //     hidden: true,
+    //   },
+    //   formatter: actionFormater,
     // },
   ];
 
@@ -170,7 +128,7 @@ export function TilesWidget1({
         const vehicleId = row.id;
         setVehicle((item) => [...item, vehicleId]);
       } else if (!isSelect) {
-        const index = vehicle.indexOf(row.id);
+        const index = vehicle && vehicle.indexOf(row.id);
         if (index > -1) {
           vehicle.splice(index, 1);
           setVehicle(vehicle);
@@ -178,6 +136,10 @@ export function TilesWidget1({
         }
       }
     },
+  };
+
+  const emptyDataMessage = () => {
+    return <h6 className="text-center mt-2">No Data to Display</h6>;
   };
 
   return (
@@ -195,8 +157,9 @@ export function TilesWidget1({
           <div className="card-toolbar">
             <button
               className="btn btn-dark"
-              disabled={diable}
-              onClick={handleShow}
+              //disabled={diable}
+              onClick={handleClickOpen}
+              //onClick={handleShow}
             >
               {buttonHeading}
             </button>
@@ -218,21 +181,20 @@ export function TilesWidget1({
         {/* end::Header */}
 
         {/* begin::Body */}
-        <div className="card-body d-flex flex-column px-0 pt-0 pb-0">
+        <div className="">
           <BootstrapTable
             keyField="id"
-            data={products}
+            data={vehiclesData || []}
             columns={columns}
             selectRow={selectRow}
             condensed
             bordered={false}
+            noDataIndication={emptyDataMessage}
           />
         </div>
-        {/* end::Body */}
       </div>
-      {/* end::Tiles Widget 1 */}
 
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
@@ -255,161 +217,7 @@ export function TilesWidget1({
             Save Changes
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   );
-}
-
-function getChartOption(layoutProps) {
-  const options = {
-    series: [
-      {
-        name: "Net Profit",
-        data: [20, 22, 30, 28, 25, 26, 30, 28, 22, 24, 25, 35],
-      },
-    ],
-    chart: {
-      type: "area",
-      height: 150,
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
-      sparkline: {
-        enabled: true,
-      },
-    },
-    plotOptions: {},
-    legend: {
-      show: false,
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    fill: {
-      type: "gradient",
-      opacity: 1,
-      gradient: {
-        type: "vertical",
-        shadeIntensity: 0.55,
-        gradientToColors: undefined,
-        inverseColors: true,
-        opacityFrom: 1,
-        opacityTo: 0.2,
-        stops: [25, 50, 100],
-        colorStops: [],
-      },
-    },
-    stroke: {
-      curve: "smooth",
-      show: true,
-      width: 3,
-      colors: [layoutProps.colorsThemeBaseColor],
-    },
-    xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        show: false,
-        style: {
-          colors: layoutProps.colorsGrayGray500,
-          fontSize: "12px",
-          fontFamily: layoutProps.fontFamily,
-        },
-      },
-      crosshairs: {
-        show: false,
-        position: "front",
-        stroke: {
-          color: layoutProps.colorsGrayGray300,
-          width: 1,
-          dashArray: 3,
-        },
-      },
-      tooltip: {
-        enabled: true,
-        formatter: undefined,
-        offsetY: 0,
-        style: {
-          fontSize: "12px",
-          fontFamily: layoutProps.fontFamily,
-        },
-      },
-    },
-    yaxis: {
-      min: 0,
-      max: 37,
-      labels: {
-        show: false,
-        style: {
-          colors: layoutProps.colorsGrayGray500,
-          fontSize: "12px",
-          fontFamily: layoutProps.fontFamily,
-        },
-      },
-    },
-    states: {
-      normal: {
-        filter: {
-          type: "none",
-          value: 0,
-        },
-      },
-      hover: {
-        filter: {
-          type: "none",
-          value: 0,
-        },
-      },
-      active: {
-        allowMultipleDataPointsSelection: false,
-        filter: {
-          type: "none",
-          value: 0,
-        },
-      },
-    },
-    tooltip: {
-      style: {
-        fontSize: "12px",
-        fontFamily: layoutProps.fontFamily,
-      },
-      y: {
-        formatter: function(val) {
-          return "$" + val + " thousands";
-        },
-      },
-    },
-    colors: [layoutProps.colorsThemeLightColor],
-    markers: {
-      colors: [layoutProps.colorsThemeLightColor],
-      strokeColor: [layoutProps.colorsThemeBaseColor],
-      strokeWidth: 3,
-    },
-    padding: {
-      top: 0,
-      bottom: 0,
-    },
-  };
-  return options;
 }

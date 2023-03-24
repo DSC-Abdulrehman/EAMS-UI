@@ -1,16 +1,29 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { CenterEditForm } from "./CenterEditForm";
 import { CenterEditDialogHeader } from "./CenterEditDialogHeader";
 import { useCentersUIContext } from "../CentersUIContext";
-import * as actions from "../../../_redux/centersActions";
+import * as actions from "../../../_redux/centers/centersActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchAllCity } from "../../../../../../_metronic/redux/dashboardActions";
+import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-export function CenterEditDialog({ id, show, onHide, userForRead }) {
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: "2rem",
+    marginBottom: "2rem",
+  },
+}));
+
+export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
   const title = "CenterEditDialog";
+  const classes = useStyles();
+  const [isForEdit, setIsForEdit] = useState();
   const centersUIContext = useCentersUIContext();
   const centersUIProps = useMemo(() => {
     return {
@@ -20,15 +33,11 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
     };
   }, [centersUIContext]);
 
-  // const newQueryParams = {
-  //   ...centersUIProps.queryParams,
-  //   centerId: parseInt(id),
-  // }
-
-  //console.log("newQueryParams", newQueryParams)
   const dispatch = useDispatch();
   const {
-    actionsLoading,
+    centerState,
+    actionLoading,
+    isCenterForEdit,
     centerForEdit,
     roles,
     centers,
@@ -37,7 +46,9 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
     totalCount,
   } = useSelector(
     (state) => ({
-      actionsLoading: state.users.actionsLoading,
+      centerState: state.centers,
+      actionLoading: state.centers.actionsLoading,
+      isCenterForEdit: state.centers.centerForEdit,
       centerForEdit: state.centers.centerForEdit,
       roles: state.users.roles,
       centers: state.users.centers,
@@ -48,18 +59,29 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
     shallowEqual
   );
 
+  // console.log("centerState", centerState);
+
+  // useEffect(() => {
+  //   if (id) {
+  //     // dispatch(actions.fetchCenter(id));
+  //     // dispatch(
+  //     //   actions.fetchVehicles({
+  //     //     ...centersUIProps.secondQueryParams,
+  //     //     centerId: id,
+  //     //   })
+  //     // );
+  //   }
+  // }, [id, dispatch, centersUIProps.secondQueryParams]);
+
   useEffect(() => {
     if (id) {
-      dispatch(actions.fetchCenter(id));
-      dispatch(
-        actions.fetchVehicles({
-          ...centersUIProps.secondQueryParams,
-          centerId: id,
-        })
-      );
+      if (centerForEdit || userForRead) {
+        // console.log("centerForEdit", centerForEdit);
+        dispatch(actions.fetchAllCity(centerForEdit.countryId));
+      }
     }
-  }, [id, dispatch, centersUIProps.secondQueryParams]);
-
+  }, [id, centerForEdit]);
+  // console.log("listLoading", listLoading);
   const saveCenter = (center) => {
     if (!id) {
       dispatch(actions.createCenter(center)).then((res) => {
@@ -90,16 +112,28 @@ export function CenterEditDialog({ id, show, onHide, userForRead }) {
       aria-labelledby="example-modal-sizes-title-lg"
     >
       <CenterEditDialogHeader id={id} isUserForRead={userForRead} />
-      <CenterEditForm
-        saveCenter={saveCenter}
-        center={centerForEdit || centersUIProps.initCenter}
-        onHide={onHide}
-        roles={roles}
-        centers={centers}
-        isUserForRead={userForRead}
-        vehiclesForCenter={vehiclesForCenter}
-        totalCount={totalCount}
-      />
+
+      {actionLoading ? (
+        <>
+          <div className={classes.root}>
+            <CircularProgress />
+          </div>
+        </>
+      ) : (
+        <>
+          <CenterEditForm
+            saveCenter={saveCenter}
+            center={centerForEdit || centersUIProps.initCenter}
+            onHide={onHide}
+            roles={roles}
+            centers={centers}
+            isUserForRead={userForRead}
+            vehiclesForCenter={vehiclesForCenter}
+            totalCount={totalCount}
+          />
+        </>
+      )}
+
       <ToastContainer
         position="top-right"
         autoClose={5000}

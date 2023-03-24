@@ -1,14 +1,14 @@
-import React, { useEffect } from "react"
-import { Modal } from "react-bootstrap"
-import { Formik, Form, Field } from "formik"
-import * as Yup from "yup"
+import React, { useEffect } from "react";
+import { Modal } from "react-bootstrap";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 import {
   Input,
   Select,
   DatePickerField,
-} from "../../../../../../_metronic/_partials/controls"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import * as actions from "../../../_redux/centersActions"
+} from "../../../../../../_metronic/_partials/controls";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import * as actions from "../../../_redux/centers/centersActions";
 
 // Validation schema
 const userEditSchema = Yup.object().shape({
@@ -30,7 +30,7 @@ const userEditSchema = Yup.object().shape({
   //   .nullable(false)
   //   .required("Date of Birth is required"),
   // ipAddress: Yup.string().required("IP Address is required"),
-})
+});
 
 export function UserReadForm({
   saveUser,
@@ -40,8 +40,8 @@ export function UserReadForm({
   roles,
   centers,
 }) {
-  const dispatch = useDispatch()
-  const title = "UserEditForm"
+  const dispatch = useDispatch();
+  const title = "UserEditForm";
   //console.log(title, roles)
   return (
     <>
@@ -51,7 +51,7 @@ export function UserReadForm({
         validationSchema={userEditSchema}
         onSubmit={(values) => {
           //console.log("User form Values", values)
-          saveUser(values)
+          saveUser(values);
         }}
       >
         {({ handleSubmit }) => (
@@ -71,7 +71,7 @@ export function UserReadForm({
                           <option key={item.value} value={item.value}>
                             {item.label}
                           </option>
-                        )
+                        );
                       })}
                     </Select>
                   </div>
@@ -83,7 +83,7 @@ export function UserReadForm({
                           <option key={item.value} value={item.value}>
                             {item.label}
                           </option>
-                        )
+                        );
                       })}
                     </Select>
                   </div>
@@ -167,5 +167,5 @@ export function UserReadForm({
         )}
       </Formik>
     </>
-  )
+  );
 }

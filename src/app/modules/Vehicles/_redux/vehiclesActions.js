@@ -97,7 +97,7 @@ export const createVehicle = (item) => (dispatch) => {
 };
 
 export const updateVehicle = (user) => (dispatch) => {
-  console.log("Update Vehicle data", user)
+  console.log("Update Vehicle data", user);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(user)
@@ -161,13 +161,17 @@ export const fetchCategory = () => (dispatch) => {
   );
 };
 
-export const fetchDrivers = (id) => (dispatch) => {
+export const fetchDrivers = (id) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
 
-  return requestFromServer
+  return await requestFromServer
     .getAllDrivers(id)
     .then((response) => {
-      dispatch(actions.driversByCetner(response?.data?.data));
+      const entities = response?.data?.data;
+      dispatch(actions.driversByCetner(entities));
+      if (entities.length == 0) {
+        toast.error("Driver not found");
+      }
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.list }));

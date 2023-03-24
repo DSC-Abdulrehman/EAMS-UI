@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { UserEditForm } from "./UsersEditForm";
@@ -9,6 +9,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export function UsersEditDialog({ id, show, onHide, userForRead }) {
+  const [action, setaction] = useState(false);
+  const [loading, setLoading] = useState(false);
   const title = "UserEditDialog";
   const usersUIContext = useUsersUIContext();
   const usersUIProps = useMemo(() => {
@@ -18,27 +20,39 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
     };
   }, [usersUIContext]);
 
+  const enableLoading = () => {
+    setLoading(true);
+  };
+  const disbaleLoading = () => {
+    setLoading(false);
+  };
+
   const dispatch = useDispatch();
   const {
     actionsLoading,
+    user,
     userForEdit,
     roles,
     centers,
     userStatusTypes,
     isuserForRead,
-  } = useSelector(
-    (state) => ({
-      actionsLoading: state.users.actionsLoading,
-      userForEdit: state.users.userForEdit,
-      roles: state.users.roles,
-      centers: state.users.centers,
-      userStatusTypes: state.users.userStatusTypes,
-      isuserForRead: state.users.userForRead,
-    }),
-    shallowEqual
-  );
+  } = useSelector((state) => ({
+    actionsLoading: state.users.actionsLoading,
+    user: state.users,
+    userForEdit: state.users.userForEdit,
+    roles: state.users.roles,
+    centers: state.users.centers,
+    userStatusTypes: state.users.userStatusTypes,
+    isuserForRead: state.users.userForRead,
+  }));
 
-  //console.log(title, userForEdit)
+  // useEffect(() => {
+  //   if (actionsLoading) {
+  //     onHide();
+  //   }
+  // }, [actionsLoading === true]);
+
+  //console.log("action", action);
 
   useEffect(() => {
     dispatch(actions.fetchUser(id));
@@ -47,16 +61,29 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
     dispatch(actions.fetchUserStatusTypes());
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
   }, [id, dispatch]);
-  console.log("userForEdit", userForEdit);
+
+  // useEffect(() => {
+  //   console.log("UseEffect call");
+  //   if (actionsLoading === false) {
+  //     console.log("UseEffect call inside function");
+  //     disbaleLoading();
+  //   }
+  // }, [actionsLoading]);
+  //console.log("userForEdit", userForEdit);
+
   const saveUser = (user) => {
-    //console.log("CreateUserResponse", user)
     if (!id) {
-      dispatch(actions.createUser(user)).then((res) => {
-        //console.log("createUser response", res)
-        onHide();
-        //dispatch(actions.fetchUser(queryParams))
+      const getUserStatus = userStatusTypes.filter((item) => {
+        return item.value === +user.status;
       });
+      const { status = getUserStatus[0].label, ...rest } = user;
+      const finalObject = {
+        status: getUserStatus[0].label,
+        ...rest,
+      };
+      dispatch(actions.createUser(user, disbaleLoading, onHide));
     } else {
+      // console.log("i'm in else");
       const userUpdatedFields = {
         id: user.id,
         email: user.email,
@@ -67,10 +94,14 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
         lastName: user.lastName,
         roleId: user.roleId,
         centerId: user.centerId,
-        status: user.status,
+        //status: getUserStatus[0].label,
+        countryId: user.countryId,
+        cityId: user.cityId,
+        subCenterId: user.subCenterId,
       };
-      dispatch(actions.updateUser(userUpdatedFields));
-      onHide();
+
+      // console.log("userUpdatedFields", userUpdatedFields);
+      dispatch(actions.updateUser(userUpdatedFields, disbaleLoading, onHide));
     }
   };
 
@@ -90,6 +121,8 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
         centers={centers}
         userStatusTypes={userStatusTypes}
         isUserForRead={userForRead}
+        enableLoading={enableLoading}
+        loading={loading}
       />
       <ToastContainer
         position="top-right"

@@ -67,7 +67,7 @@ export const vehiclesSlice = createSlice({
       //console.log("action.payload", action.payload)
       state.actionsLoading = false;
       state.error = null;
-      state.entities.push(action.payload.vehicle);
+      state.entities.unshift(action.payload.vehicle);
     },
     vehicleUpdated: (state, action) => {
       //debugger
@@ -93,7 +93,7 @@ export const vehiclesSlice = createSlice({
       state.error = null;
     },
     driversByCetner: (state, action) => {
-      state.actionsLoading = false;
+      state.listLoading = false;
       state.drivers = action.payload;
       state.error = null;
     },

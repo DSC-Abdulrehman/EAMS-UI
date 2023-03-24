@@ -66,17 +66,20 @@ export const deleteUser = (id) => (dispatch) => {
     });
 };
 
-export const createUser = (userForCreation) => (dispatch) => {
-  dispatch(actions.startCall({ callType: callTypes.action }));
+export const createUser = (userForCreation, disbaleLoading, onHide) => (
+  dispatch
+) => {
   userForCreation.phNo = userForCreation.phNo.toString();
   userForCreation.cnic = userForCreation.cnic.toString();
-  console.log(userForCreation);
+  // console.log("userForCreation", userForCreation);
   return requestFromServer
     .createUser(userForCreation)
     .then((res) => {
+      dispatch(actions.startCall({ callType: callTypes.action }));
       const user = res.data?.data;
-      dispatch(actions.userCreated({ user }));
-      toast.success(res.data.message, {
+      dispatch(actions.userCreated(user));
+      disbaleLoading();
+      toast.success("Succesfully Created.", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -85,10 +88,12 @@ export const createUser = (userForCreation) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      onHide();
     })
     .catch((error) => {
       error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
+      disbaleLoading();
       toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
@@ -101,15 +106,18 @@ export const createUser = (userForCreation) => (dispatch) => {
     });
 };
 
-export const updateUser = (user) => (dispatch) => {
+export const updateUser = (user, disbaleLoading, onHide) => (dispatch) => {
   //console.log("updatedUser data", user)
-  dispatch(actions.startCall({ callType: callTypes.action }));
+
   return requestFromServer
     .updateUser(user)
     .then((response) => {
       const updatedUser = response.data?.data;
       // console.log("userAction Res", response)
       dispatch(actions.userUpdated({ updatedUser }));
+      dispatch(actions.startCall({ callType: callTypes.action }));
+      disbaleLoading();
+      onHide();
       toast.success(response.data.message + " Updated", {
         position: "top-right",
         autoClose: 5000,
@@ -123,7 +131,9 @@ export const updateUser = (user) => (dispatch) => {
     .catch((error) => {
       // console.log("error User update", error)
       //error.clientMessage = "Can't update User"
-      toast.error(error, {
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      disbaleLoading();
+      toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -132,7 +142,6 @@ export const updateUser = (user) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
-      dispatch(actions.catchError({ error, callType: callTypes.action }));
     });
 };
 

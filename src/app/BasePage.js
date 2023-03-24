@@ -4,12 +4,8 @@ import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
 import { BuilderPage } from "./pages/BuilderPage";
 import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
-<<<<<<< HEAD
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
-import { fetchAllCountry } from "../_metronic/redux/dashboardActions";
-=======
-import { shallowEqual, useSelector } from "react-redux";
->>>>>>> e28d3c31abdd1fb8d0dde9d9dda4f4789d44ebb6
+import { fetchAllCountry } from "./modules/Centers/_redux/centers/centersActions";
 //import SettingsPage from "./modules/Settings/pages/SettingsPage"
 
 const GoogleMaterialPage = lazy(() =>
@@ -27,9 +23,6 @@ const SettingsPage = lazy(() =>
 
 const VehicleManagment = lazy(() => import("./modules/Vehicles/pages"));
 
-const test = () => {
-  return <h1>Hello</h1>;
-};
 const IncidentDetailsManagment = lazy(() =>
   import("./modules/IncidentDetails/pages")
 );
@@ -47,13 +40,12 @@ const ROUTES = {
 };
 
 export default function BasePage() {
-<<<<<<< HEAD
   const dispatch = useDispatch();
   dispatch(fetchAllCountry());
-=======
->>>>>>> e28d3c31abdd1fb8d0dde9d9dda4f4789d44ebb6
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
+
+  // console.log("Auth", auth);
   //console.log("UserAccess on basepage, Route: ", UserAccess)
   // useEffect(() => {
   //   console.log('Base page');

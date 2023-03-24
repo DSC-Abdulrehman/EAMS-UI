@@ -1,22 +1,22 @@
-import React, { useEffect, useMemo } from "react"
-import { Modal } from "react-bootstrap"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { UserReadForm } from "./UserReadForm"
-import { UserReadDialogHeader } from "./UserReadDialogHeader"
-import { useUsersUIContext } from "../UsersUIContext"
-import * as actions from "../../../_redux/centersActions"
+import React, { useEffect, useMemo } from "react";
+import { Modal } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { UserReadForm } from "./UserReadForm";
+import { UserReadDialogHeader } from "./UserReadDialogHeader";
+import { useUsersUIContext } from "../UsersUIContext";
+import * as actions from "../../../_redux/centers/centersActions";
 
 export function UsersEditDialog({ id, show, onHide }) {
-  const title = "UserEditDialog"
-  const usersUIContext = useUsersUIContext()
+  const title = "UserEditDialog";
+  const usersUIContext = useUsersUIContext();
   const usersUIProps = useMemo(() => {
     return {
       initUser: usersUIContext.initUser,
       queryParams: usersUIContext.queryParams,
-    }
-  }, [usersUIContext])
+    };
+  }, [usersUIContext]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { actionsLoading, userForEdit, roles, centers } = useSelector(
     (state) => ({
       actionsLoading: state.users.actionsLoading,
@@ -25,24 +25,24 @@ export function UsersEditDialog({ id, show, onHide }) {
       centers: state.users.centers,
     }),
     shallowEqual
-  )
+  );
 
   //console.log(title, roles)
 
   useEffect(() => {
-    dispatch(actions.fetchCenter(id))
+    dispatch(actions.fetchCenter(id));
     // dispatch(actions.fetchRoles())
     // dispatch(actions.fetchCenters())
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
-  }, [id, dispatch])
+  }, [id, dispatch]);
   //console.log("userForEdit", userForEdit)
   const saveUser = (user) => {
     // console.log("CreateUserResponse", user)
     if (!id) {
       dispatch(actions.createUser(user)).then((res) => {
-        onHide()
+        onHide();
         //dispatch(actions.fetchUser(queryParams))
-      })
+      });
     } else {
       const userUpdatedFields = {
         id: user.id,
@@ -54,10 +54,10 @@ export function UsersEditDialog({ id, show, onHide }) {
         lastName: user.lastName,
         roleId: user.roleId,
         centerId: user.centerId,
-      }
-      dispatch(actions.updateUser(userUpdatedFields)).then(() => onHide())
+      };
+      dispatch(actions.updateUser(userUpdatedFields)).then(() => onHide());
     }
-  }
+  };
 
   return (
     <Modal
@@ -75,5 +75,5 @@ export function UsersEditDialog({ id, show, onHide }) {
         centers={centers}
       />
     </Modal>
-  )
+  );
 }

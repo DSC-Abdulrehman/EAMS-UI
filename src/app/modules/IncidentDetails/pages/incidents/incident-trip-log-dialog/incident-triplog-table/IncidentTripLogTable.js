@@ -1,30 +1,30 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import BootstrapTable from "react-bootstrap-table-next"
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory, {
   PaginationProvider,
-} from "react-bootstrap-table2-paginator"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
+} from "react-bootstrap-table2-paginator";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import {
   getHandlerTableChange,
   NoRecordsFoundMessage,
   PleaseWaitMessage,
   sortCaret,
   headerSortingClasses,
-} from "../../../../../../_metronic/_helpers"
-import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter"
-import { CreatedColumnFormatter } from "./column-formatter/CreatedColumnFormatter"
-import * as uiHelpers from "../CentersUIHelpers"
-import * as actions from "../../../_redux/centersActions"
-import { useCentersUIContext } from "../CentersUIContext"
-import { Pagination } from "../../../../../../_metronic/_partials/controls"
-import { Spinner, Button, ButtonToolbar } from "react-bootstrap"
-import { CenterVehiclesFilter } from "./center-vehicle-filter/CenterVehiclesFilter"
+} from "../../../../../../_metronic/_helpers";
+import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatter";
+import { CreatedColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
+import * as uiHelpers from "../CentersUIHelpers";
+import * as actions from "../../../_redux/centers/centersActions";
+import { useCentersUIContext } from "../CentersUIContext";
+import { Pagination } from "../../../../../../_metronic/_partials/controls";
+import { Spinner, Button, ButtonToolbar } from "react-bootstrap";
+import { CenterVehiclesFilter } from "./center-vehicle-filter/CenterVehiclesFilter";
 
 export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
-  const [isFetching, setIsFetching] = useState(true)
+  const [isFetching, setIsFetching] = useState(true);
   //console.log("Center vEHICLES", props.vehiclesForCenter.ro)
   //Users UI Context
-  const centersUIContext = useCentersUIContext()
+  const centersUIContext = useCentersUIContext();
 
   const centersUIProps = useMemo(() => {
     return {
@@ -33,8 +33,8 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
       openReadCenterDialog: centersUIContext.openReadCenterDialog,
       queryParms: centersUIContext.secondQueryParams,
       setQueryParams: centersUIContext.setSecondQueryParams,
-    }
-  }, [centersUIContext])
+    };
+  }, [centersUIContext]);
 
   // console.log(
   //   "currentStatecenters",
@@ -161,14 +161,14 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
       sortCaret: sortCaret,
       headerSortingClasses,
       formatter: (cell) => {
-        let dateObj = cell
+        let dateObj = cell;
         if (typeof cell !== "object") {
-          dateObj = new Date(cell)
+          dateObj = new Date(cell);
         }
         return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
           "0" +
           (dateObj.getUTCMonth() + 1)
-        ).slice(-2)}/${dateObj.getUTCFullYear()}`
+        ).slice(-2)}/${dateObj.getUTCFullYear()}`;
       },
     },
 
@@ -192,7 +192,7 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
     //     minWidth: "100px",
     //   },
     // },
-  ]
+  ];
 
   //Table pagination properties
   const paginationOptions = {
@@ -201,7 +201,7 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
     sizePerPageList: uiHelpers.sizePerPage,
     sizePerPage: centersUIProps.queryParms.pageSize,
     page: centersUIProps.queryParms.pageNumber,
-  }
+  };
 
   return (
     <>
@@ -237,5 +237,5 @@ export function IncidentTripLogTable({ vehiclesForCenter, totalCount }) {
         }}
       </PaginationProvider> */}
     </>
-  )
+  );
 }

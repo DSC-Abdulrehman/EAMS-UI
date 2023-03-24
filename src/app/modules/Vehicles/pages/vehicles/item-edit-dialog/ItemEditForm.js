@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
-import { Formik, Form, Field } from "formik";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchDrivers } from "../../../_redux/vehiclesActions";
 import * as Yup from "yup";
-import {
-  Input,
-  Select,
-  DatePickerField,
-  CustumSelect,
-} from "../../../../../../_metronic/_partials/controls";
+import { useSelector, useDispatch } from "react-redux";
+import { Formik, Form, Field } from "formik";
+import { Modal } from "react-bootstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { Input, Select } from "../../../../../../_metronic/_partials/controls";
+import { fetchDrivers } from "../../../_redux/vehiclesActions";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
+import { fetchAllSubCenter } from "../../../../../../_metronic/redux/dashboardActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,39 +18,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "3rem",
   },
 }));
-
-// Validation schema
-const requiredErrorMessage = "This field is required";
-const itemEditSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, "Minimum 3 symbols")
-    .max(50, "Maximum 50 symbols")
-    .required("Name is required"),
-  regNo: Yup.string()
-    .min(3, "Minimum 3 symbols")
-    .max(50, "Maximum 50 symbols")
-    .required("Registration No is required"),
-  // center: Yup.string(),
-  // category: Yup.string(),
-  engineCapacity: Yup.string().required("Engine capacity is required"),
-  registerCity: Yup.string().required("Register city is required"),
-  chasis: Yup.string().required("Chasis is required"),
-  milleage: Yup.string().required("Milleage is required"),
-  year: Yup.string()
-    .required("Register year is required")
-    .matches(/^\d*[1-9]\d*$/, "Year should be number"),
-  make: Yup.string().required("Maker name is required"),
-  model: Yup.string().required("Model No is required"),
-  color: Yup.string().required("Color is required"),
-  fuelType: Yup.string().required("Fuel type is required"),
-  status: Yup.string().required("Status is required"),
-  transmission: Yup.string(),
-  centerId: Yup.string().required("Cneter Id is required"),
-  driverId: Yup.string().required("Driver Id is required"),
-  oldDriverId: Yup.string(),
-  vehicleCategoryId: Yup.string().required("Vehicle category is required"),
-  engineNo: Yup.string().required(" Engine No is required"),
-});
 
 export function ItemEditForm({
   saveItem,
@@ -71,36 +35,81 @@ export function ItemEditForm({
   const [driverId, setDriverId] = useState(item.driverId);
   const oldDriverId = item.driverId;
 
-  useEffect(() => {
-    dispatch(fetchDrivers(cetnerId));
-  }, [cetnerId]);
+  const [defCenter, setDefaultCenter] = useState([]);
+  const [defSubcenter, setDefaultSubCenter] = useState([]);
+  const [defDriver, setDefaultDriver] = useState([]);
 
-  useEffect(() => {
-    dispatch(fetchDrivers(item.centerId));
-  }, [item.centerId]);
-  
-  const drivers = useSelector((state) => {
-    return state?.vehicles?.drivers;
-  });
+  // useEffect(() => {
+  //   dispatch(fetchDrivers(cetnerId));
+  // }, [cetnerId]);
 
-  console.log("itemfor edit", item);
+  // useEffect(() => {
+  //   dispatch(fetchDrivers(item.centerId));
+  // }, [item.centerId]);
 
-  const fuelTypeOptions = [
-    {
-      value: "Pertol",
-      name: "Pertol",
-    },
-    {
-      value: "Gas",
-      name: "Gas",
-    },
-  ];
+  const onChangeSelectedOption = (e) => {
+    dispatch(fetchAllSubCenter(e.value));
+    setCenterId(e.value);
+    // selectedVal({ selectedVal: e.value });
+    //this.setState({ selectedVal: e.value });
+  };
+  const onChangeSubcenterdOption = (e) => {
+    //setCenterId(e.value);
+    // console.log("E value", e);
+    // //dispatch(fetchAllSubCenter())
+  };
+
   const enableLoading = () => {
     setLoading(true);
   };
+
   const disableLoading = () => {
     setLoading(false);
   };
+
+  const drivers = useSelector((state) => state?.vehicles?.drivers);
+  const { dashboard } = useSelector((state) => state);
+
+  //console.log("dashboard", dashboard);
+  useEffect(
+    (e) => {
+      item.centerId && dispatch(fetchAllSubCenter(item.centerId));
+    },
+    [item]
+  );
+
+  useEffect(
+    (e) => {
+      item.subCenterId && dispatch(fetchDrivers(item.centerId));
+    },
+    [item]
+  );
+
+  useEffect(() => {
+    const getDefaultValue = dashboard?.allCenters.filter(
+      (e) => e.value == item.centerId
+    );
+    setDefaultCenter(getDefaultValue);
+  }, [item?.centerId, dashboard?.allCenters]);
+
+  useEffect(() => {
+    const getDefaultValue = dashboard?.allSubCenter.filter(
+      (e) => e.value == item.subCenterId
+    );
+    setDefaultSubCenter(getDefaultValue);
+  }, [dashboard?.allSubCenter]);
+
+  useEffect(() => {
+    // const getDefaultValueForDriver = drivers?.filter(
+    //   (e) => e.value == item.driverId
+    // );
+
+    const selectedDriver = {
+      label: item.driver?.firstName,
+      value: item.driverId,
+    };
+    setDefaultDriver(selectedDriver);
+  }, [item?.centerId, dashboard?.allCenters]);
 
   return (
     <>
@@ -116,8 +125,11 @@ export function ItemEditForm({
         validationSchema={itemEditSchema}
         onSubmit={(values) => {
           enableLoading();
-          saveItem(values);
-          // disableLoading();
+          console.log("values", values);
+          saveItem(values)
+            .then(() => disableLoading())
+            .catch((error) => alert("something went wrong"));
+          //disableLoading();
         }}
       >
         {({
@@ -127,6 +139,7 @@ export function ItemEditForm({
           handleChange,
           handleBlur,
           values,
+          setFieldValue,
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
@@ -162,13 +175,69 @@ export function ItemEditForm({
                     </div> */}
                   </div>
                   <div className="form-group row">
+                    <div className="col-12 col-md-4">
+                      <SearchSelect
+                        name="centerId"
+                        label="Mian Center*"
+                        onBlur={() => {
+                          handleBlur({ target: { name: "centerId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("centerId", e.value || null);
+                          setDefaultCenter(e);
+                          dispatch(fetchAllSubCenter(e.value));
+                        }}
+                        value={defCenter && defCenter[0]}
+                        error={errors.centerId}
+                        touched={touched.centerId}
+                        options={dashboard.allCenters}
+                      />
+                    </div>
+                    <div className="col-12 col-md-4">
+                      <SearchSelect
+                        name="subCenterId"
+                        label="Sub-Center*"
+                        onBlur={() => {
+                          handleBlur({ target: { name: "subCenterId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("subCenterId", e.value || null);
+                          setDefaultSubCenter(e);
+                          dispatch(fetchDrivers(e.value));
+                        }}
+                        value={defSubcenter && defSubcenter[0]}
+                        error={errors.subCenterId}
+                        touched={touched.subCenterId}
+                        options={dashboard.allSubCenter}
+                      />
+                    </div>
+                    <div className="col-12 col-md-4">
+                      <SearchSelect
+                        name="driverId"
+                        label="Driver*"
+                        onBlur={() => {
+                          handleBlur({ target: { name: "driverId" } });
+                        }}
+                        onChange={(e) => {
+                          setFieldValue("driverId", e.value || null);
+                          setDefaultDriver(e);
+                        }}
+                        value={defDriver}
+                        error={errors.driverId}
+                        touched={touched.driverId}
+                        // options={drivers}
+                        options={drivers}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
                     <div className="col-lg-4">
                       <Field
                         type="text"
                         name="name"
                         component={Input}
                         placeholder=""
-                        label="vehicle Name*"
+                        label="Vehicle Name*"
                         customFeedbackLabel="hello"
                       />
                     </div>
@@ -352,7 +421,7 @@ export function ItemEditForm({
                       </Select> */}
                     </div>
                   </div>
-                  {item?.driver && (
+                  {/* [{item?.driver && (
                     <>
                       <div className="form-group row mt-5">
                         <div className="col-lg-12">
@@ -363,10 +432,10 @@ export function ItemEditForm({
                         </div>
                       </div>
                     </>
-                  )}
+                  )}] */}
                   <div className="from-group row">
                     <div className="col-lg-4">
-                      <Select
+                      {/* <Select
                         label="Center*"
                         name="centerId"
                         value={values.centerId}
@@ -391,7 +460,7 @@ export function ItemEditForm({
                       </Select>
                       {errors.centerId && touched.centerId && (
                         <div className="invalid-text">{errors.centerId}</div>
-                      )}
+                      )} */}
                       {/* <Select name="centerId" label="Center">
                         {centerName &&
                           centerName.map((response) => {
@@ -406,14 +475,14 @@ export function ItemEditForm({
                           })}
                       </Select> */}
                     </div>
-                    <div className="col-lg-4">
+                    {/* <div className="col-lg-4">
                       <Select
                         label="Driver*"
                         name="driverId"
                         onChange={(e) => {
                           handleChange(e);
                           setDriverId(e.target.value);
-                          console.log('Set driver id', driverId)
+                          console.log("Set driver id", driverId);
                         }}
                         value={values.driverId}
                         onBlur={handleBlur}
@@ -440,7 +509,7 @@ export function ItemEditForm({
                         component={Input}
                         style={{ display: "none" }}
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </fieldset>
               </Form>
@@ -484,3 +553,34 @@ export function ItemEditForm({
     </>
   );
 }
+
+// Validation schema
+const itemEditSchema = Yup.object().shape({
+  centerId: Yup.string().required("Center is required"),
+  subCenterId: Yup.string().required("Subcenter is required"),
+  driverId: Yup.string().required("Driver Id is required"),
+  name: Yup.string()
+    .min(3, "Minimum 3 symbols")
+    .max(50, "Maximum 50 symbols")
+    .required("Name is required"),
+  regNo: Yup.string()
+    .min(3, "Minimum 3 symbols")
+    .max(50, "Maximum 50 symbols")
+    .required("Registration No is required"),
+  engineCapacity: Yup.string().required("Engine capacity is required"),
+  registerCity: Yup.string().required("Register city is required"),
+  chasis: Yup.string().required("Chasis is required"),
+  milleage: Yup.string().required("Milleage is required"),
+  year: Yup.string()
+    .required("Register year is required")
+    .matches(/^\d*[1-9]\d*$/, "Year should be number"),
+  make: Yup.string().required("Maker name is required"),
+  model: Yup.string().required("Model No is required"),
+  color: Yup.string().required("Color is required"),
+  fuelType: Yup.string().required("Fuel type is required"),
+  status: Yup.string().required("Status is required"),
+  transmission: Yup.string(),
+  oldDriverId: Yup.string(),
+  vehicleCategoryId: Yup.string().required("Vehicle category is required"),
+  engineNo: Yup.string().required(" Engine No is required"),
+});

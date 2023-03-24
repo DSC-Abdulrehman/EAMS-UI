@@ -13,13 +13,10 @@ import { QuickPanel } from "./extras/offcanvas/QuickPanel";
 import { QuickUser } from "./extras/offcanvas/QuickUser";
 import { ScrollTop } from "./extras/ScrollTop";
 import { StickyToolbar } from "./extras/StickyToolbar";
-import { fetchAllCountry } from "../../redux/dashboardActions";
-import { useDispatch } from "react-redux";
 
 export function Layout({ children }) {
   const uiService = useHtmlClassService();
-  const dispatch = useDispatch();
-  dispatch(fetchAllCountry);
+
   // Layout settings (cssClasses/cssAttributes)
   const layoutProps = useMemo(() => {
     return {

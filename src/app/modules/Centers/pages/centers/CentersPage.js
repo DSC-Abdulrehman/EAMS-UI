@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { CentersUIProvider } from "./CentersUIContext";
@@ -7,11 +7,19 @@ import { CenterDeleteDialog } from "./center-delete-dialog/CenterDeleteDialog";
 import { CentersCard } from "./centers-card/CentersCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as actions from "../../_redux/centersActions";
-import { fetchCenter } from "../../_redux/centersActions";
+import * as actions from "../../_redux/centers/centersActions";
+// import { fetchCenter, fetchAllCity } from "../../_redux/centers/centersActions";
 
 export function CentersPage({ history }) {
   const dispatch = useDispatch();
+
+  const centerForEdit = useSelector((state) => state?.centers?.centerForEdit);
+  //console.log("centerForEdit", centerForEdit.countryId);
+  // useEffect(() => {
+  //   const fetchData = () => {
+
+  //   };
+  // }, [centerForEdit.countryId]);
   // const { auth } = useSelector((auth) => auth)
   // console.log("UserManagement, Auth: ", auth)
   // const { userAccess } = auth
@@ -30,16 +38,18 @@ export function CentersPage({ history }) {
   // const ForRead = false
   const centersUIEvents = {
     newCenterButtonClick: () => {
-      dispatch(fetchCenter(0));
+      dispatch(actions.fetchCenter());
       history.push("/centers/read-all-centers/new");
     },
     openEditCenterDialog: async (id) => {
+      dispatch(actions.fetchCenter(id));
       history.push(`/centers/read-all-centers/${id}/edit`);
     },
     openDeleteCenterDialog: (id) => {
       history.push(`/centers/read-all-centers/${id}/delete`);
     },
     openReadCenterDialog: (id, isUserRead) => {
+      dispatch(actions.fetchCenter(id));
       history.push(`/centers/read-all-centers/${id}/read`);
     },
   };
@@ -52,6 +62,7 @@ export function CentersPage({ history }) {
             onHide={() => {
               history.push("/centers/read-all-centers");
             }}
+            isNew={true}
           />
         )}
       </Route>
@@ -60,7 +71,10 @@ export function CentersPage({ history }) {
           <CenterEditDialog
             show={match != null}
             id={match && match.params.id}
+            isEdit={true}
             onHide={() => {
+              // dispatch(actions.fetchCenter());
+              // // dispatch(fetchAllCity());
               history.push("/centers/read-all-centers");
             }}
           />

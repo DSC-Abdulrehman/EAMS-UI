@@ -1,36 +1,40 @@
-import React, { createContext, useContext, useState, useCallback } from "react"
-import { isEqual, isFunction } from "lodash"
-import { initialFilter } from "./UsersUIHelpers"
+import React, { createContext, useContext, useState, useCallback } from "react";
+import { isEqual, isFunction } from "lodash";
+import { initialFilter } from "./UsersUIHelpers";
 
-const UsersUIContext = createContext()
+const UsersUIContext = createContext();
 
 export function useUsersUIContext() {
-  return useContext(UsersUIContext)
+  return useContext(UsersUIContext);
 }
 
-export const UsersUIConsumer = UsersUIContext.Consumer
+export const UsersUIConsumer = UsersUIContext.Consumer;
 // const initialFilter = {
 //   sortBy: "name",
 //   limit: 10,
 //   page: 1,
 // }
 export function UsersUIProvider({ usersUIEvents, children }) {
-  const [queryParams, setQueryParamsBase] = useState(initialFilter)
-  const [ids, setIds] = useState([])
+  const [queryParams, setQueryParamsBase] = useState(initialFilter);
+  const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
     setQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
-        nextQueryParams = nextQueryParams(prevQueryParams)
+        nextQueryParams = nextQueryParams(prevQueryParams);
       }
 
       if (isEqual(prevQueryParams, nextQueryParams)) {
-        return prevQueryParams
+        return prevQueryParams;
       }
 
-      return nextQueryParams
-    })
-  }, [])
+      return nextQueryParams;
+    });
+  }, []);
   const initUser = {
+    countryId: "",
+    cityId: "",
+    centerId: "",
+    subCenterId: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -39,8 +43,7 @@ export function UsersUIProvider({ usersUIEvents, children }) {
     status: "",
     password: "",
     roleId: undefined,
-    centerId: undefined,
-  }
+  };
 
   const value = {
     queryParams,
@@ -53,8 +56,8 @@ export function UsersUIProvider({ usersUIEvents, children }) {
     openEditUserDialog: usersUIEvents.openEditUserDialog,
     openDeleteUserDialog: usersUIEvents.openDeleteUserDialog,
     openReadUserDialog: usersUIEvents.openReadUserDialog,
-  }
+  };
   return (
     <UsersUIContext.Provider value={value}>{children}</UsersUIContext.Provider>
-  )
+  );
 }

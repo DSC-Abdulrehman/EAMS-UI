@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AsyncSelect from "react-select/async";
 
 export function SearchAbleSelect({
@@ -20,12 +20,14 @@ export function SearchAbleSelect({
 
   const promiseOptions = (inputValue) => {
     // return filterColors(inputValue);
+
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(filterColors(inputValue));
       }, 500);
     });
   };
+
   return (
     <>
       {label && <label>Enter {label}</label>}
@@ -35,13 +37,13 @@ export function SearchAbleSelect({
         id={id}
         onBlure={onBlure}
         onChange={onChange}
-        //defaultValue={options[value - 1]}
+        defaultValue={options[value - 1]}
         defaultOptions={options}
         loadOptions={promiseOptions}
       />
 
       {error && touched ? <div className="form-feedBack">{error}</div> : null}
-      {JSON.stringify(options)}
+      {/* {JSON.stringify(options)} */}
     </>
   );
 }

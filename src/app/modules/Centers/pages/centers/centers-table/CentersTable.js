@@ -15,7 +15,7 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { CreatedColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
 import { DatetimeColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
 import * as uiHelpers from "../CentersUIHelpers";
-import * as actions from "../../../_redux/centersActions";
+import * as actions from "../../../_redux/centers/centersActions";
 import { useCentersUIContext } from "../CentersUIContext";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 
@@ -45,9 +45,11 @@ export function CentersTable() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //console.log("Fetch Centers")
-    dispatch(actions.fetchCenters(centersUIProps.queryParms));
-  }, [centersUIProps.queryParms, dispatch]);
+    async function fetchData() {
+      await dispatch(actions.fetchCenters(centersUIProps.queryParms));
+    }
+    fetchData();
+  }, [centersUIProps.queryParms]);
 
   const isAccessForEdit = userAccess.find(
     (item) => item.componentName === "UpdateCenter"
@@ -56,7 +58,7 @@ export function CentersTable() {
   const isAccessForDelete = userAccess.find(
     (item) => item.componentName === "DeleteCenter"
   );
-
+  console.log("currentStatecenters", currentStatecenters);
   const { totalCount, entities, listLoading } = currentStatecenters;
   // console.log("currentStatecenters", currentStatecenters)
 
@@ -105,39 +107,12 @@ export function CentersTable() {
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
-      formatter: DatetimeColumnFormatter
-      // (cell) => {
-      //   let dateObj = cell;
-      //   if (typeof cell !== "object") {
-      //     dateObj = new Date(cell);
-      //   }
-      //   return `${("0" + dateObj.getUTCDate()).slice(-2)}/${(
-      //     "0" +
-      //     (dateObj.getUTCMonth() + 1)
-      //   ).slice(-2)}/${dateObj.getUTCFullYear()}`;
-      // },
-      // style: {
-      //   minWidth: "130px",
-      // },
+      formatter: DatetimeColumnFormatter,
+      style: {
+        minWidth: "130px",
+      },
     },
-    // {
-    //   dataField: "phNo",
-    //   text: "Phone",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    // },
-    // {
-    //   dataField: "role.name",
-    //   text: "Role",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    // },
-    // {
-    //   dataField: "center.name",
-    //   text: "Center",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    // },
+
     {
       dataField: "action",
       text: "Actions",
@@ -187,7 +162,7 @@ export function CentersTable() {
                 keyField="id"
                 data={entities === null ? [] : entities}
                 columns={columns}
-                // defaultSorted={uiHelpers.defaultSorted}
+                defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
                   centersUIProps.setQueryParams
                 )}

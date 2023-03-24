@@ -42,8 +42,9 @@ export function UsersTable() {
     }),
     shallowEqual
   );
+  //console.log("currentState", currentState);
   const { totalCount, entities, listLoading } = currentState;
-  //console.log("currentState", currentState)
+  //console.log("listLoading", listLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {

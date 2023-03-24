@@ -34,7 +34,7 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">Read Center</Tooltip>}
       >
         <a
-          title="Read User"
+          // title="Read User"
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
           onClick={() => openReadCenterDialog(row.id, isUserRead)}
         >
@@ -50,7 +50,7 @@ export function ActionsColumnFormatter(
           overlay={<Tooltip id="products-edit-tooltip">Edit Center</Tooltip>}
         >
           <a
-            title="Edit customer"
+            // title="Edit Center"
             className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
             onClick={() => openEditCenterDialog(row.id)}
           >
@@ -69,12 +69,14 @@ export function ActionsColumnFormatter(
           overlay={<Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>}
         >
           <a
-            title="Delete customer"
+            // title="Delete customer"
             className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
             onClick={() => openDeleteCenterDialog(row.id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-danger">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")} />
+              <SVG
+                src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
+              />
             </span>
           </a>
         </OverlayTrigger>

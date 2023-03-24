@@ -5,9 +5,9 @@ const inputLabel = ({ label, touched, error, customFeedbackLabel }) => {
     return <div className="invalid-feedback">{error}</div>;
   }
 
-  if (touched && !error && label) {
-    return <div className="valid-feedback">{label} was entered correct</div>;
-  }
+  // if (touched && !error && label) {
+  //   return <div className="valid-feedback">{label} was entered correct</div>;
+  // }
 
   return (
     <div className="feedback">

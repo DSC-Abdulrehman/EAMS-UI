@@ -21,9 +21,9 @@ const body = {
 
 export function Dashboard() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchAllCity(body));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(fetchAllCity(body));
+  // }, []);
   const uiService = useHtmlClassService();
   const layoutProps = useMemo(() => {
     return {

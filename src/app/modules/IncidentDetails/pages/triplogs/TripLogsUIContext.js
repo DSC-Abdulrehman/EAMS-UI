@@ -33,6 +33,9 @@ export function TripLogsUIProvider({ TripLogsUIEvents, children }) {
     logBookNo: "",
     price: "",
     status: "",
+    cityId: "",
+    cendestinationCenterId: "",
+    destinationSubCenterId: "",
   };
 
   const value = {

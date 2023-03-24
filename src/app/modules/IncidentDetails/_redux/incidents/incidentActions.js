@@ -84,13 +84,15 @@ export const deleteIncident = (id) => (dispatch) => {
     });
 };
 export const createIncident = (incidentForCreation) => (dispatch) => {
+  console.log("incidentForCreation", incidentForCreation);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createIncident(incidentForCreation)
     .then((res) => {
       const incident = res.data?.data;
+      console.log("incident", incident);
       dispatch(actions.incidentCreated(incident));
-      toast.success(res.data.message, {
+      toast.success("Incident Create Successfully.", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -101,9 +103,8 @@ export const createIncident = (incidentForCreation) => (dispatch) => {
       });
     })
     .catch((error) => {
-      error.clientMessage = "Can't create incident";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error("Something Went Wrong", {
+      toast.error(error, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

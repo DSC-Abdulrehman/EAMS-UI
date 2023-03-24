@@ -1,8 +1,8 @@
-import React from "react"
-import SVG from "react-inlinesvg"
-import { shallowEqual, useDispatch, useSelector } from "react-redux"
-import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers"
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
+import React from "react";
+import SVG from "react-inlinesvg";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 export function ActionsColumnFormatter(
   cellContent,
@@ -17,8 +17,8 @@ export function ActionsColumnFormatter(
     isAccessForDelete,
   }
 ) {
-  const isUserRead = false
-  
+  const isUserRead = false;
+
   //console.log("isAccessForEdit, isAccessForDelete", isAccessForEdit, isAccessForDelete)
   // const { userAccess } = useSelector(
   //   (state) => ({
@@ -34,10 +34,10 @@ export function ActionsColumnFormatter(
   return (
     <>
       <OverlayTrigger
-        overlay={<Tooltip id="products-edit-tooltip">Read User</Tooltip>}
+        overlay={<Tooltip id="products-edit-tooltip">Read Vehicle</Tooltip>}
       >
         <a
-          title="Read User"
+          // title="Read User"
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
           onClick={() => openReadCenterDialog(row.id, isUserRead)}
         >
@@ -49,31 +49,39 @@ export function ActionsColumnFormatter(
         </a>
       </OverlayTrigger>
       {isAccessForEdit && (
-        <a
-          title="Edit customer"
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-          onClick={() => openEditCenterDialog(row.id)}
+        <OverlayTrigger
+          overlay={<Tooltip id="products-edit-tooltip">Edit Vehicle</Tooltip>}
         >
-          <span className="svg-icon svg-icon-md svg-icon-primary">
-            <SVG
-              src={toAbsoluteUrl("/media/svg/icons/Communication/Write.svg")}
-            />
-          </span>
-        </a>
+          <a
+            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+            onClick={() => openEditCenterDialog(row.id)}
+          >
+            <span className="svg-icon svg-icon-md svg-icon-primary">
+              <SVG
+                src={toAbsoluteUrl("/media/svg/icons/Communication/Write.svg")}
+              />
+            </span>
+          </a>
+        </OverlayTrigger>
       )}
 
       <> </>
       {isAccessForDelete && (
-        <a
-          title="Mark Inactive"
-          className="btn btn-icon btn-light btn-hover-danger btn-sm"
-          onClick={() => openDeleteCenterDialog(row.id)}
+        <OverlayTrigger
+          overlay={<Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>}
         >
-          <span className="svg-icon svg-icon-md svg-icon-danger">
-            <SVG src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")} />
-          </span>
-        </a>
+          <a
+            className="btn btn-icon btn-light btn-hover-danger btn-sm"
+            onClick={() => openDeleteCenterDialog(row.id)}
+          >
+            <span className="svg-icon svg-icon-md svg-icon-danger">
+              <SVG
+                src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
+              />
+            </span>
+          </a>
+        </OverlayTrigger>
       )}
     </>
-  )
+  );
 }

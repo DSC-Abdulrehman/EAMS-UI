@@ -51,11 +51,12 @@ export function ItemUIProvider({ itemUIEvents, children }) {
     transmission: "",
     status: "",
     centerId: "",
+    subCenterId: "",
     vehicleCategoryId: "",
     driverId: "",
     engineNo: "",
-    category: undefined,
-    center: undefined,
+    // category: undefined,
+    // center: undefined,
   };
 
   const value = {

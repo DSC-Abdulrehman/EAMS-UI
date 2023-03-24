@@ -1,13 +1,15 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import { Route, Switch } from "react-router-dom"
-import { UsersUIProvider } from "./UsersUIContext"
-import { UsersEditDialog } from "./users-edit-dialog/UsersEditDialog"
-import { UserDeleteDialog } from "./user-delete-dialog/UserDeleteDialog"
-import { UsersCard } from "./users-card/UsersCard"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import Welcome from "../users/test"
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Route, Switch } from "react-router-dom";
+import { UsersUIProvider } from "./UsersUIContext";
+import { UsersEditDialog } from "./users-edit-dialog/UsersEditDialog";
+import { UserDeleteDialog } from "./user-delete-dialog/UserDeleteDialog";
+import { UsersCard } from "./users-card/UsersCard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Welcome from "../users/test";
+import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
+import { createUser } from "../../_redux/usersCrud";
 
 export function UsersPage({ history }) {
   // const { auth } = useSelector((auth) => auth)
@@ -26,20 +28,24 @@ export function UsersPage({ history }) {
   //   : false
   // console.log("UserManagement, isAdd: ", isAdd)
   // const ForRead = false
+  const dispatch = useDispatch();
   const usersUIEvents = {
     newUserButtonClick: () => {
-      history.push("/users/read-all-users/new")
+      dispatch(fetchAllCountry());
+      history.push("/users/read-all-users/new");
     },
     openEditUserDialog: (id) => {
-      history.push(`/users/read-all-users/${id}/edit`)
+      dispatch(fetchAllCountry());
+      history.push(`/users/read-all-users/${id}/edit`);
     },
     openDeleteUserDialog: (id) => {
-      history.push(`/users/read-all-users/${id}/delete`)
+      history.push(`/users/read-all-users/${id}/delete`);
     },
     openReadUserDialog: (id, isUserRead) => {
-      history.push(`/users/read-all-users/${id}/read`)
+      dispatch(fetchAllCountry());
+      history.push(`/users/read-all-users/${id}/read`);
     },
-  }
+  };
   return (
     <UsersUIProvider usersUIEvents={usersUIEvents}>
       {/* <Route path="/users/read-all-users/${id}" >
@@ -56,7 +62,7 @@ export function UsersPage({ history }) {
           <UsersEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/users/read-all-users")
+              history.push("/users/read-all-users");
             }}
           />
         )}
@@ -67,7 +73,7 @@ export function UsersPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/users/read-all-users")
+              history.push("/users/read-all-users");
             }}
           />
         )}
@@ -80,7 +86,7 @@ export function UsersPage({ history }) {
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/users/read-all-users")
+              history.push("/users/read-all-users");
             }}
           />
         )}
@@ -91,7 +97,7 @@ export function UsersPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/users/read-all-users")
+              history.push("/users/read-all-users");
             }}
           />
         )}
@@ -133,5 +139,5 @@ export function UsersPage({ history }) {
         pauseOnHover
       />
     </UsersUIProvider>
-  )
+  );
 }

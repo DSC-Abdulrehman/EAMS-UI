@@ -27,7 +27,7 @@ export function CentersCard() {
     }),
     shallowEqual
   );
-  console.log("userAccess", userAccess);
+
   const accessUser = userAccess.find(
     (item) => item.componentName === "CreateCenter"
   );
