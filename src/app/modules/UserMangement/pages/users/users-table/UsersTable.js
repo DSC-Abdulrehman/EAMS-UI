@@ -59,7 +59,6 @@ export function UsersTable() {
   const isAccessForDelete = userAccess.find(
     (item) => item.componentName === "DeleteUser"
   );
-
   // Table columns
   const columns = [
     {

@@ -5,7 +5,7 @@ import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls
 import * as actions from "../../../_redux/usersActions"
 import { useUsersUIContext } from "../UsersUIContext"
 
-export function UserDeleteDialog({ id, show, onHide }) {
+export function UserDeleteDialog({ id, status, show, onHide }) {
   const [loading, setLoading] = useState(false)
   // Customers UI Context
   const usersUIContext = useUsersUIContext()
@@ -54,8 +54,9 @@ export function UserDeleteDialog({ id, show, onHide }) {
       disableLoading()
     })
   }
-
+  console.log("status", status, id);
   return (
+    status ?
     <Modal
       show={show}
       onHide={onHide}
@@ -89,6 +90,45 @@ export function UserDeleteDialog({ id, show, onHide }) {
             className="btn btn-primary btn-elevate"
           >
             Delete
+            {loading && <span className="ml-3 mr-3 spinner spinner-white"></span>}
+          </button>
+        </div>
+      </Modal.Footer>
+    </Modal>
+    :
+    <Modal
+      show={show}
+      onHide={onHide}
+      aria-labelledby="example-modal-sizes-title-lg"
+    >
+      {/*begin::Loading*/}
+      {isLoading && <ModalProgressBar />}
+      {/*end::Loading*/}
+      <Modal.Header closeButton>
+        <Modal.Title id="example-modal-sizes-title-lg">Mark Active</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {!isLoading && (
+          <span>Are you sure want to active this user?</span>
+        )}
+        {isLoading && <span>user is Activating...</span>}
+      </Modal.Body>
+      <Modal.Footer>
+        <div>
+          <button
+            type="button"
+            onClick={onHide}
+            className="btn btn-light btn-elevate"
+          >
+            Cancel
+          </button>
+          <> </>
+          <button
+            type="button"
+            onClick={deleteUser}
+            className="btn btn-primary btn-elevate"
+          >
+            Mark Active
             {loading && <span className="ml-3 mr-3 spinner spinner-white"></span>}
           </button>
         </div>

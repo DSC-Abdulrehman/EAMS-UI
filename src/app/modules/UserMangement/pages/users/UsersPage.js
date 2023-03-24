@@ -38,7 +38,7 @@ export function UsersPage({ history }) {
       dispatch(fetchAllCountry());
       history.push(`/users/read-all-users/${id}/edit`);
     },
-    openDeleteUserDialog: (id) => {
+    openDeleteUserDialog: (id, status) => {
       history.push(`/users/read-all-users/${id}/delete`);
     },
     openReadUserDialog: (id, isUserRead) => {
@@ -96,6 +96,7 @@ export function UsersPage({ history }) {
           <UserDeleteDialog
             show={match != null}
             id={match && match.params.id}
+            status={match && match.params.status}
             onHide={() => {
               history.push("/users/read-all-users");
             }}

@@ -14,7 +14,7 @@ export function ActionsColumnFormatter(
     openDeleteUserDialog,
     openReadUserDialog,
     isAccessForEdit,
-    isAccessForDelete,
+    isAccessForDelete
   }
 ) {
   const isUserRead = false;
@@ -29,6 +29,7 @@ export function ActionsColumnFormatter(
   // //   (item) => item.componentName === "UpdateUser"
   // // )
   // console.log("userAccess", userAccess)
+  // console.log("userStatus", row.isActive)
   return (
     <>
       <OverlayTrigger
@@ -69,21 +70,32 @@ export function ActionsColumnFormatter(
       {isAccessForDelete && (
         <OverlayTrigger
           overlay={
-            <Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>
+            <Tooltip id="products-edit-tooltip">{row.isActive ? "Mark Inactive": "Mark Active"}</Tooltip>
           }
         >
+          {row.isActive 
+          ? 
           <a
             title="Delete User"
             className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
-            onClick={() => openDeleteUserDialog(row.id)}
-          >
+            onClick={() => openDeleteUserDialog(row.id, row.isActive)}
+          > 
             <span className="svg-icon svg-icon-md svg-icon-danger">
               <SVG
                 src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
                 title=""
               />
             </span>
-          </a>
+          </a> 
+          :
+          <a
+            title="Active User"
+            className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
+            onClick={() => openDeleteUserDialog(row.id, row.isActive)}
+          > 
+            <span className="svg-icon svg-icon-md svg-icon-success">A
+            </span>
+          </a>}
         </OverlayTrigger>
       )}
     </>
