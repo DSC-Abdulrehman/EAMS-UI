@@ -40,7 +40,7 @@ export function ItemsTable() {
     shallowEqual
   );
 
-  console.log("currentState", currentState);
+  //console.log("currentState", currentState);
   // Centers Redux state
   const dispatch = useDispatch();
 

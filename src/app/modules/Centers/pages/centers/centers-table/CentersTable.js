@@ -58,7 +58,7 @@ export function CentersTable() {
   const isAccessForDelete = userAccess.find(
     (item) => item.componentName === "DeleteCenter"
   );
-  console.log("currentStatecenters", currentStatecenters);
+  //console.log("currentStatecenters", currentStatecenters);
   const { totalCount, entities, listLoading } = currentStatecenters;
   // console.log("currentStatecenters", currentStatecenters)
 
@@ -74,6 +74,26 @@ export function CentersTable() {
     {
       dataField: "name",
       text: "Center Name",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "country.name",
+      text: "Country",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "city.name",
+      text: "City",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,

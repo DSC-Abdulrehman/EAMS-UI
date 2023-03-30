@@ -8,7 +8,6 @@ export function ActionsColumnFormatter(
   cellContent,
   row,
   rowIndex,
-
   {
     openEditCenterDialog,
     openDeleteCenterDialog,
@@ -30,7 +29,7 @@ export function ActionsColumnFormatter(
   // // const isAccessForEdit = userAccess.find(
   // //   (item) => item.componentName === "UpdateUser"
   // // )
-  // console.log("userAccess", userAccess)
+  //console.log("row", row);
   return (
     <>
       <OverlayTrigger
@@ -64,24 +63,43 @@ export function ActionsColumnFormatter(
           </a>
         </OverlayTrigger>
       )}
-
       <> </>
-      {isAccessForDelete && (
-        <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>}
-        >
-          <a
-            className="btn btn-icon btn-light btn-hover-danger btn-sm"
-            onClick={() => openDeleteCenterDialog(row.id)}
+
+      {isAccessForDelete &&
+        (row?.isActive ? (
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>
+            }
           >
-            <span className="svg-icon svg-icon-md svg-icon-danger">
-              <SVG
+            <a
+              className="btn btn-icon btn-light btn-hover-danger btn-sm"
+              onClick={() => openDeleteCenterDialog(row.id)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-danger">
+                <SVG
+                  src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
+                />
+              </span>
+            </a>
+          </OverlayTrigger>
+        ) : (
+          <OverlayTrigger
+            overlay={<Tooltip id="products-edit-tooltip">Active</Tooltip>}
+          >
+            <a
+              className="btn btn-icon btn-light btn-hover-danger btn-sm"
+              onClick={() => openDeleteCenterDialog(row.id)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-danger">
+                A
+                {/* <SVG
                 src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
-              />
-            </span>
-          </a>
-        </OverlayTrigger>
-      )}
+              /> */}
+              </span>
+            </a>
+          </OverlayTrigger>
+        ))}
     </>
   );
 }

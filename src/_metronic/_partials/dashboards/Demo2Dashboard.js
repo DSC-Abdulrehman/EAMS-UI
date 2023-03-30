@@ -10,6 +10,7 @@ import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
 //import { IncidentsEditDialog } from "../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
 import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";
 import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
+import { DropdownMenu4 } from "../dropdowns";
 
 export function Demo2Dashboard() {
   const dispatch = useDispatch();
@@ -24,22 +25,25 @@ export function Demo2Dashboard() {
 
   const [open, setOpen] = useState(false);
   const [openCloseTripDialogue, setCloseTripDialogue] = useState(false);
+  const [closeTripId, setCloseTripId] = useState();
 
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
 
   let history = useHistory();
 
+  //console.log("vehicle", vehicle);
+
   useEffect(() => {
     // const interval = setInterval(() => {
     //   // console.log("Set interval called");
     //   dispatch(fetchDashboardVehicles({ cityId: user.cityId }));
     //   dispatch(fetchAllCityCenters(user.cityId));
-    // }, 2500);
+    // }, 3000);
 
     // return () => clearInterval(interval);
 
-    dispatch(fetchDashboardVehicles({ cityId: user.cityId }));
+    dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
     dispatch(fetchAllCityCenters(user.cityId));
   }, [user.cityId]);
 
@@ -73,11 +77,14 @@ export function Demo2Dashboard() {
   // Function for close Trip dialogue
   const openTripcloseDialogue = () => {
     setCloseTripDialogue(true);
+    setCloseTripId(vehicle[0]);
   };
 
   const handleCloseDialoge = () => {
     setCloseTripDialogue(false);
   };
+
+  console.log("city", city);
 
   //console.log("openCloseTripDialogue", openCloseTripDialogue);
 
@@ -106,6 +113,8 @@ export function Demo2Dashboard() {
             handleClickOpen={handleClickOpen}
             setVehicle={setVehicle}
             vehicle={vehicle}
+            // menu={<DropdownMenu4 cityId={city} />}
+            //cityId={city?.value && city.value}
           />
           <IncidentCreateDialog
             show={open}
@@ -116,6 +125,7 @@ export function Demo2Dashboard() {
             city={city && city.value}
             center={center && center.value}
             subCenter={subCenter && subCenter.value}
+            setVehicle={setVehicle}
           />
         </div>
         <div className="col-xl-4">
@@ -133,7 +143,8 @@ export function Demo2Dashboard() {
           <TripLogEditDialog
             show={openCloseTripDialogue}
             onHide={() => setCloseTripDialogue(false)}
-            id={25}
+            id={closeTripId}
+            cityId={user.cityId}
           />
         </div>
         <div className="col-xl-4">
@@ -144,6 +155,7 @@ export function Demo2Dashboard() {
             buttonHeading="Active vehicle"
             NoofVehicle={offDutyVehicles.length}
             vehiclesData={offDutyVehicles}
+            setVehicle={setVehicle}
           />
         </div>
       </div>

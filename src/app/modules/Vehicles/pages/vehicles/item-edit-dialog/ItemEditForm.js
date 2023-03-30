@@ -125,7 +125,7 @@ export function ItemEditForm({
         validationSchema={itemEditSchema}
         onSubmit={(values) => {
           enableLoading();
-          console.log("values", values);
+          //console.log("values", values);
           saveItem(values)
             .then(() => disableLoading())
             .catch((error) => alert("something went wrong"));
@@ -357,7 +357,7 @@ export function ItemEditForm({
                       >
                         <option value="" label="Select Type" />
                         <option value="Available" label="Available" />
-                        <option value="Unavailable" label="Unavailable" />
+                        <option value="offDuty" label="offDuty" />
                       </Select>
                       {errors.status && touched.status && (
                         <div className="invalid-text">{errors.status}</div>

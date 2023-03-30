@@ -55,6 +55,7 @@ export function UsersUIProvider({ usersUIEvents, children }) {
     newUserButtonClick: usersUIEvents.newUserButtonClick,
     openEditUserDialog: usersUIEvents.openEditUserDialog,
     openDeleteUserDialog: usersUIEvents.openDeleteUserDialog,
+    openActiveUserDialog: usersUIEvents.openActiveUserDialog,
     openReadUserDialog: usersUIEvents.openReadUserDialog,
   };
   return (

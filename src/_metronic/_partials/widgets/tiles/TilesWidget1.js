@@ -1,13 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useMemo, useState } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import { Dropdown } from "react-bootstrap";
 import objectPath from "object-path";
-import { DropdownCustomToggler, DropdownMenu4 } from "../../dropdowns";
+import { Dropdown } from "react-bootstrap";
+import {
+  DropdownCustomToggler,
+  DropdownMenu4,
+  DropdownMenu3,
+} from "../../dropdowns";
 import { useHtmlClassService } from "../../../layout";
 import Button from "@material-ui/core/Button";
 import { IncidentsEditDialog } from "../../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
 import Modal from "react-bootstrap/Modal";
+import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 
 export function TilesWidget1({
   className,
@@ -19,6 +24,8 @@ export function TilesWidget1({
   handleClickOpen,
   setVehicle,
   vehicle,
+  menu,
+  cityId,
 }) {
   const [selectedVehile, setSelectedVehicle] = useState([]);
 
@@ -53,23 +60,46 @@ export function TilesWidget1({
     </span>
   );
 
-  const actionFormater = (cell, row) => (
-    <>
-      <Dropdown className="dropdown-inline" alignRight>
-        <Dropdown.Toggle
-          className="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
-          variant="transparent"
-          id="dropdown-toggle-top"
-          as={DropdownCustomToggler}
-        >
-          <i className="ki ki-bold-more-hor" />
-        </Dropdown.Toggle>
-        <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-          <DropdownMenu4 />
-        </Dropdown.Menu>
-      </Dropdown>
-    </>
-  );
+  // const UserMneu = (menu) => {
+  //   {
+  //     menu === "standBy"
+  //       ? "Condition A"
+  //       : menu === "offDuty"
+  //       ? "Condition B"
+  //       : "Neither";
+  //   }
+  // };
+
+  //console.log("cityId", cityId);
+  const actionFormater = (cell, row) => {
+    // console.log("cirtid", cityId);
+    // console.log("row", row);
+    return (
+      <>
+        <Dropdown className="dropdown-inline" alignRight>
+          <Dropdown.Toggle
+            className="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
+            variant="transparent"
+            id="dropdown-toggle-top"
+            as={DropdownCustomToggler}
+          >
+            <i className="ki ki-bold-more-hor" />
+          </Dropdown.Toggle>
+          <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+            {heading === "Stand By" ? (
+              <>
+                <DropdownMenu4 column={row} />
+              </>
+            ) : (
+              <>
+                <DropdownMenu3 column={row} />
+              </>
+            )}
+          </Dropdown.Menu>
+        </Dropdown>
+      </>
+    );
+  };
 
   const columns = [
     {
@@ -103,14 +133,15 @@ export function TilesWidget1({
 
     //   // filter: textFilter(), // apply text filter
     // },
-    // {
-    //   text: "Action",
-    //   headerAlign: "center",
-    //   headerAttrs: {
-    //     hidden: true,
-    //   },
-    //   formatter: actionFormater,
-    // },
+    {
+      dataField: "",
+      text: "Action",
+      headerAlign: "center",
+      headerAttrs: {
+        hidden: true,
+      },
+      formatter: actionFormater,
+    },
   ];
 
   const selectRow = {
@@ -125,10 +156,16 @@ export function TilesWidget1({
     //clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       if (isSelect) {
-        const vehicleId = row.id;
+        let vehicleId;
+        // console.log("row", row);
+        if (row.status === "Available") {
+          vehicleId = row.vehicleid;
+        } else {
+          vehicleId = row.tripLogId;
+        }
         setVehicle((item) => [...item, vehicleId]);
       } else if (!isSelect) {
-        const index = vehicle && vehicle.indexOf(row.id);
+        const index = vehicle && vehicle.indexOf(row.vehicleid);
         if (index > -1) {
           vehicle.splice(index, 1);
           setVehicle(vehicle);
@@ -183,7 +220,7 @@ export function TilesWidget1({
         {/* begin::Body */}
         <div className="">
           <BootstrapTable
-            keyField="id"
+            keyField="vehicleid"
             data={vehiclesData || []}
             columns={columns}
             selectRow={selectRow}

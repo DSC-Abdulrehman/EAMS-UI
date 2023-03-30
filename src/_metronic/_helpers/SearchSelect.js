@@ -12,6 +12,7 @@ export function SearchSelect({
   options,
   value,
   onInputChange,
+  isDisabled,
 }) {
   const [selectedOption, setSelectedOption] = useState();
 
@@ -35,6 +36,7 @@ export function SearchSelect({
     <>
       {label && <label> {label}</label>}
       <AsyncSelect
+        isDisabled={isDisabled}
         onBlure={onBlure}
         onChange={onChange}
         value={value}

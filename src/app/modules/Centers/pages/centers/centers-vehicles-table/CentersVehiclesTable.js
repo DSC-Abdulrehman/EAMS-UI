@@ -217,10 +217,14 @@ export function CentersVehiclesTable({ vehiclesForCenter, totalCount }) {
     page: centersUIProps.queryParms.pageNumber,
   };
 
+  const emptyDataMessage = () => {
+    return <h6 className="text-center mt-2">No Data to Display</h6>;
+  };
+
   return (
     <>
       <h4>Registered Vehicles</h4>
-      <CenterVehiclesFilter />
+      {/* <CenterVehiclesFilter /> */}
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
@@ -238,13 +242,13 @@ export function CentersVehiclesTable({ vehiclesForCenter, totalCount }) {
                 data={vehiclesForCenter === undefined ? [] : vehiclesForCenter}
                 columns={columns}
                 // defaultSorted={uiHelpers.defaultSorted}
+                noDataIndication={emptyDataMessage}
                 onTableChange={getHandlerTableChange(
                   centersUIProps.setQueryParams
                 )}
                 {...paginationTableProps}
               >
                 <PleaseWaitMessage entities={vehiclesForCenter} />
-                <NoRecordsFoundMessage entities={vehiclesForCenter} />
               </BootstrapTable>
             </Pagination>
           );

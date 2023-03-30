@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import { UsersUIProvider } from "./UsersUIContext";
 import { UsersEditDialog } from "./users-edit-dialog/UsersEditDialog";
 import { UserDeleteDialog } from "./user-delete-dialog/UserDeleteDialog";
+import { UserActiveDialog } from "./user-active-dialog/UserActiveDialog";
 import { UsersCard } from "./users-card/UsersCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,7 +40,10 @@ export function UsersPage({ history }) {
       history.push(`/users/read-all-users/${id}/edit`);
     },
     openDeleteUserDialog: (id, status) => {
-      history.push(`/users/read-all-users/${id}/delete`);
+      history.push(`/users/read-all-users/${id}/${status}/delete`);
+    },
+    openActiveUserDialog: (id) => {
+      history.push(`/users/read-all-users/${id}/active`);
     },
     openReadUserDialog: (id, isUserRead) => {
       dispatch(fetchAllCountry());
@@ -91,7 +95,7 @@ export function UsersPage({ history }) {
           />
         )}
       </Route>
-      <Route path="/users/read-all-users/:id/delete">
+      <Route path="/users/read-all-users/:id/:status/delete">
         {({ history, match }) => (
           <UserDeleteDialog
             show={match != null}
@@ -103,6 +107,19 @@ export function UsersPage({ history }) {
           />
         )}
       </Route>
+      <Route path="/users/read-all-users/:id/active">
+        {({ history, match }) => (
+          <UserActiveDialog
+            show={match != null}
+            id={match && match.params.id}
+            //status={match && match.params.status}
+            onHide={() => {
+              history.push("/users/read-all-users");
+            }}
+          />
+        )}
+      </Route>
+
       {/* {isAdd && (
         <Route exact path="/list/new">
           {({ history, match }) => (

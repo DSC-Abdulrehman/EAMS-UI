@@ -49,7 +49,7 @@ export const deleteUser = (id) => (dispatch) => {
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
-      toast.success(response.data.message + " Deleted", {
+      toast.success(response.data.message + " Updated", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

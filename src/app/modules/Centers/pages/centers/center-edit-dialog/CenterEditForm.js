@@ -8,7 +8,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { CentersVehiclesTable } from "../centers-vehicles-table/CentersVehiclesTable";
 import { SearchAbleSelect } from "./SearchAbleSelect";
 import { CityDropdown } from "./CityDropdown";
-import { fetchAllCity } from "../../../_redux/centers/centersActions";
+//import { fetchAllCity } from "../../../_redux/centers/centersActions";
+import { fetchAllCity } from "../../../../../../_metronic/redux/dashboardActions";
+
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // Validation schema
@@ -38,24 +41,35 @@ export function CenterEditForm({
   vehiclesForCenter,
   totalCount,
 }) {
-  // const [country, setCountry] = useState();
-  // const [city, setCity] = useState();
-  const dispatch = useDispatch();
-  const countryDropdown = useSelector((item) => item.centers.AllCountry);
-  const citiesDropdown = useSelector((item) => item.centers.AllCity);
   const [loading, setLoading] = useState(false);
-  const { id } = useParams();
-  // console.log("Use Param id", id);
+  const [seletCountry, setSeletCountry] = useState([]);
+  const [selectCity, setSelectCity] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { allCountry, allCity } = useSelector((state) => state.dashboard);
+
+  useEffect(() => {
+    center.countryId && dispatch(fetchAllCity(center.countryId));
+  }, [center]);
+
+  useEffect(() => {
+    setSeletCountry(
+      allCountry && allCountry.filter((item) => item.value === center.countryId)
+    );
+  }, [center.countryId]);
+
+  useEffect(() => {
+    setSelectCity(
+      allCity && allCity.filter((item) => item.value === center.cityId)
+    );
+  }, [center.cityId, allCity]);
+
   const enableLoading = () => {
     setLoading(true);
   };
 
-  const renderCities = (option) => {
-    dispatch(fetchAllCity(option.value));
-  };
-  // console.log("country", country);
-  // setCountry(center?.countryId);
-  // setCity(center?.cityId);
+  // console.log("center", center);
 
   return (
     <>
@@ -82,9 +96,28 @@ export function CenterEditForm({
                 <fieldset disabled={isUserForRead}>
                   <div className="form-group row">
                     <div className="col-12 col-md-4 mb-5">
-                      <SearchAbleSelect
+                      <SearchSelect
                         name="countryId"
                         label="Country*"
+                        isDisabled={isUserForRead ? true : false}
+                        onBlur={() => {
+                          handleBlur({ target: { name: "countryId" } });
+                        }}
+                        //options={dashboard.allCity}
+                        onChange={(e) => {
+                          setFieldValue("countryId", e.value);
+                          dispatch(fetchAllCity(e.value));
+                          setSeletCountry(e);
+                        }}
+                        value={seletCountry}
+                        error={errors.countryId}
+                        touched={touched.countryId}
+                        options={allCountry}
+                      />
+                      {/* <SearchAbleSelect
+                        name="countryId"
+                        label="Country*"
+                        isDisabled={isUserForRead ? true : false}
                         onBlur={() => {
                           handleBlur({ target: { name: "countryId" } });
                         }}
@@ -96,12 +129,32 @@ export function CenterEditForm({
                         error={errors.countryId}
                         touched={touched.countryId}
                         options={countryDropdown}
-                      />
+                      /> */}
                     </div>
 
-                    <CityDropdown
+                    <div className="col-12 col-md-4 mb-5">
+                      <SearchSelect
+                        name="cityId"
+                        label="City*"
+                        isDisabled={isUserForRead ? true : false}
+                        onBlur={() => {
+                          handleBlur({ target: { name: "cityId" } });
+                        }}
+                        //options={dashboard.allCity}
+                        onChange={(e) => {
+                          setFieldValue("cityId", e.value);
+                          setSelectCity(e);
+                        }}
+                        value={selectCity}
+                        error={errors.cityId}
+                        touched={touched.cityId}
+                        options={allCity}
+                      />
+                    </div>
+                    {/* <CityDropdown
                       name="cityId"
                       label="City*"
+                      isDisabled={isUserForRead ? true : false}
                       onBlur={() => {
                         handleBlur({ target: { name: "cityId" } });
                       }}
@@ -112,7 +165,7 @@ export function CenterEditForm({
                       error={errors.cityId}
                       touched={touched.cityId}
                       options={citiesDropdown}
-                    />
+                    /> */}
 
                     <div className="col-12 col-md-4 mb-5">
                       <Field
@@ -138,21 +191,22 @@ export function CenterEditForm({
                         label="Location*"
                       />
                     </div>
-
                     <div className="col-12 col-md-4 mb-5">
                       <Field
-                        name="longitude"
+                        type="number"
+                        name="latitude"
                         component={Input}
-                        placeholder="Longitude"
-                        label="Longitude*"
+                        placeholder="33.948615"
+                        label="Latitude*"
                       />
                     </div>
                     <div className="col-12 col-md-4 mb-5">
                       <Field
-                        name="latitude"
+                        type="number"
+                        name="longitude"
                         component={Input}
-                        placeholder="Latitude"
-                        label="Latitude*"
+                        placeholder="-118.401382"
+                        label="Longitude*"
                       />
                     </div>
                   </div>

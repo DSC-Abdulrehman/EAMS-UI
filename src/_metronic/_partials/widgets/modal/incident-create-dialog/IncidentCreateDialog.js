@@ -46,6 +46,7 @@ export function IncidentCreateDialog({
   city,
   center,
   subCenter,
+  setVehicle,
 }) {
   const title = "UserEditDialog";
   const classes = useStyles();
@@ -107,6 +108,7 @@ export function IncidentCreateDialog({
       dispatch(fetchDashboardVehicles({ cityId: city }));
       disabledLoading();
       onHide();
+      setVehicle([]);
     });
   };
 
