@@ -1,6 +1,7 @@
 import * as requestFromServer from "./triplogCrud";
 import { TriplogSlice, callTypes } from "./triplogSlice";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const { actions } = TriplogSlice;
 
@@ -119,7 +120,9 @@ export const createIncident = (incidentForCreation) => (dispatch) => {
     });
 };
 
-export const updateTrip = (updatedData) => (dispatch) => {
+export const updateTrip = (updatedData, disabledLoading, onHide) => (
+  dispatch
+) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateTripLog(updatedData)
@@ -135,8 +138,11 @@ export const updateTrip = (updatedData) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      disabledLoading();
+      onHide();
     })
     .catch((error) => {
+      console.log("error", error);
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       toast.error(error?.response?.data?.message, {
         position: "top-right",
@@ -147,6 +153,7 @@ export const updateTrip = (updatedData) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      disabledLoading();
     });
 };
 // export const fetchIncidentTypes = () => (dispatch) => {

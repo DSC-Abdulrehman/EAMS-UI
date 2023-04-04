@@ -76,12 +76,13 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
       const getUserStatus = userStatusTypes.filter((item) => {
         return item.value === +user.status;
       });
+      //console.log("getUserStatus", getUserStatus);
       const { status = getUserStatus[0].label, ...rest } = user;
       const finalObject = {
         status: getUserStatus[0].label,
         ...rest,
       };
-      dispatch(actions.createUser(user, disbaleLoading, onHide));
+      dispatch(actions.createUser(finalObject, disbaleLoading, onHide));
     } else {
       // console.log("i'm in else");
       const userUpdatedFields = {

@@ -81,7 +81,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
   //   return
   // }
   const updateTripLog = (incident) => {
-    console.log("i'm in update", incident);
+    // console.log("i'm in update", incident);
     const {
       sourceCenterId,
       price,
@@ -101,11 +101,13 @@ export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
       //endDateTime: endDateTime,
     };
     enableLoading();
-    dispatch(actions.updateTrip(newObject)).then((res) => {
-      dispatch(fetchDashboardVehicles({ cityId: cityId }));
-      disabledLoading();
-      onHide();
-    });
+    dispatch(actions.updateTrip(newObject, disabledLoading, onHide)).then(
+      () => {
+        dispatch(fetchDashboardVehicles({ cityId: cityId }));
+        // disabledLoading();
+        // onHide();
+      }
+    );
 
     // if (!id) {
     //   const incidentUpdate = { ...incident };

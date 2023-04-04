@@ -36,7 +36,7 @@ export function getAllCenters() {
 
 export function getAllDrivers(id) {
   return axios.post(`${USERS_URL}/settings/read-all-drivers-master-data`, {
-    centerId: id,
+    subCenterId: id,
     available: true,
     notAvailable: false,
   });

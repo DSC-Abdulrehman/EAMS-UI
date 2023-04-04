@@ -6,8 +6,8 @@ import {
   fetchDashboardVehicles,
 } from "../../redux/dashboardActions";
 
-export function DropdownMenu4(column, cityId) {
-  //console.log("column", column);
+export function DropdownMenu4(column, seletedCity) {
+  console.log("seletedCity", seletedCity);
   //console.log("row.veh", row.row.vehicleid);
   const dispatch = useDispatch();
 
@@ -21,6 +21,7 @@ export function DropdownMenu4(column, cityId) {
     // dispatch(fetchDashboardVehicles({ cityId: +cityId }));
   };
 
+  // console.log("seletedCity", seletedCity);
   return (
     <>
       {/*begin::Navigation*/}

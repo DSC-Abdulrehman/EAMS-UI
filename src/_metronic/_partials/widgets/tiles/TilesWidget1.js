@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import objectPath from "object-path";
 import { Dropdown } from "react-bootstrap";
@@ -13,6 +13,11 @@ import Button from "@material-ui/core/Button";
 import { IncidentsEditDialog } from "../../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
 import Modal from "react-bootstrap/Modal";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+import {
+  updateVehicelStatus,
+  fetchDashboardVehicles,
+} from "../../../redux/dashboardActions";
+import { useDispatch } from "react-redux";
 
 export function TilesWidget1({
   className,
@@ -24,14 +29,15 @@ export function TilesWidget1({
   handleClickOpen,
   setVehicle,
   vehicle,
-  menu,
-  cityId,
+  seletedCity,
+  selectionType,
 }) {
+  //console.log("seletedCity", seletedCity);
+  const dispatch = useDispatch();
   const [selectedVehile, setSelectedVehicle] = useState([]);
-
   const [diable, setDisable] = useState(true);
-
   const uiService = useHtmlClassService();
+
   const layoutProps = useMemo(() => {
     return {
       colorsGrayGray500: objectPath.get(
@@ -60,20 +66,35 @@ export function TilesWidget1({
     </span>
   );
 
-  // const UserMneu = (menu) => {
-  //   {
-  //     menu === "standBy"
-  //       ? "Condition A"
-  //       : menu === "offDuty"
-  //       ? "Condition B"
-  //       : "Neither";
-  //   }
-  // };
-
-  //console.log("cityId", cityId);
   const actionFormater = (cell, row) => {
-    // console.log("cirtid", cityId);
-    // console.log("row", row);
+    const standToOff = () => {
+      //console.log("city", seletedCity);
+      const body = {
+        id: row.vehicleid,
+        available: false,
+        offDuty: true,
+      };
+      dispatch(updateVehicelStatus(body)).then(() => {
+        dispatch(fetchDashboardVehicles({ cityId: seletedCity.value }));
+      });
+    };
+
+    const offToStand = () => {
+      const body = {
+        id: row.vehicleid,
+        available: true,
+        offDuty: false,
+      };
+
+      // dispatch(updateVehicelStatus(body)).then(() => {
+      //   // console.log("seletedCity", seletedCity);
+      //   //dispatch(fetchDashboardVehicles({ cityId: 0 }));
+      // });
+      dispatch(updateVehicelStatus(body)).then(() => {
+        dispatch(fetchDashboardVehicles({ cityId: seletedCity.value }));
+      });
+    };
+
     return (
       <>
         <Dropdown className="dropdown-inline" alignRight>
@@ -86,20 +107,72 @@ export function TilesWidget1({
             <i className="ki ki-bold-more-hor" />
           </Dropdown.Toggle>
           <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-            {heading === "Stand By" ? (
+            <ul className="navi navi-hover py-5">
+              {heading === "Stand By" ? (
+                <>
+                  <li className="navi-item" onClick={() => standToOff()}>
+                    <a href="#" className="navi-link">
+                      <span className="navi-icon">
+                        <i className="flaticon2-list-3"></i>
+                      </span>
+                      <span className="navi-text">Off Duty</span>
+                    </a>
+                  </li>
+                  <li className="navi-item">
+                    <a href="#" className="navi-link">
+                      <span className="navi-icon">
+                        <i className="flaticon2-rocket-1"></i>
+                      </span>
+                      <span className="navi-text">Update</span>
+                    </a>
+                  </li>
+                  <li className="navi-item">
+                    <a href="#" className="navi-link">
+                      <span className="navi-icon">
+                        <i className="flaticon2-bell-2"></i>
+                      </span>
+                      <span className="navi-text">Last 20 Trips</span>
+                    </a>
+                  </li>
+                </>
+              ) : (
+                <li className="navi-item" onClick={() => offToStand()}>
+                  <a href="#" className="navi-link">
+                    <span className="navi-icon">
+                      <i className="flaticon2-list-3"></i>
+                    </span>
+                    <span className="navi-text">Stand By</span>
+                  </a>
+                </li>
+              )}
+
+              {/* <li className="navi-item">
+                <a href="#" className="navi-link">
+                  <span className="navi-icon">
+                    <i className="flaticon2-drop"></i>
+                  </span>
+                  <span className="navi-text">Out</span>
+                </a>
+              </li> */}
+            </ul>
+            {/* {heading === "Stand By" ? (
               <>
-                <DropdownMenu4 column={row} />
+                <DropdownMenu4 column={row} seletedCity={seletedCity} />
               </>
             ) : (
               <>
                 <DropdownMenu3 column={row} />
               </>
-            )}
+            )} */}
           </Dropdown.Menu>
         </Dropdown>
       </>
     );
   };
+
+  // useEffect(() => {
+  //   dispatch(fetchDashboardVehicles({ cityId: seletedCity.value }));
+  // }, [dispatch, seletedCity]);
 
   const columns = [
     {
@@ -110,6 +183,7 @@ export function TilesWidget1({
       headerAttrs: {
         hidden: true,
       },
+      style: { verticalAlign: "middle" },
     },
 
     {
@@ -121,6 +195,7 @@ export function TilesWidget1({
       headerAttrs: {
         hidden: true,
       },
+      style: { verticalAlign: "middle" },
       // formatter: statusFormater,
     },
     // {
@@ -141,18 +216,21 @@ export function TilesWidget1({
         hidden: true,
       },
       formatter: actionFormater,
+      style: { verticalAlign: "middle" },
     },
   ];
 
   const selectRow = {
-    mode: "checkbox",
+    mode: selectionType,
     style: { backgroundColor: "#c8e6c9" },
     selectColumnStyle: {
       textAlign: "center",
+      verticalAlign: "middle",
     },
     classes: "custom-class",
     align: "center",
     hideSelectAll: true,
+    // style: { verticalAlign: "middle" },
     //clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       if (isSelect) {
@@ -160,16 +238,16 @@ export function TilesWidget1({
         // console.log("row", row);
         if (row.status === "Available") {
           vehicleId = row.vehicleid;
+          setVehicle((item) => [...item, vehicleId]);
         } else {
           vehicleId = row.tripLogId;
+          setVehicle(row.tripLogId);
         }
-        setVehicle((item) => [...item, vehicleId]);
       } else if (!isSelect) {
         const index = vehicle && vehicle.indexOf(row.vehicleid);
         if (index > -1) {
           vehicle.splice(index, 1);
           setVehicle(vehicle);
-          // console.log("unselect arr", vehicle);
         }
       }
     },
@@ -181,7 +259,6 @@ export function TilesWidget1({
 
   return (
     <>
-      {/* begin::Tiles Widget 1 */}
       <div className={`card card-custom ${className}`}>
         {/* begin::Header */}
         <div className="card-header border-0">
@@ -192,32 +269,19 @@ export function TilesWidget1({
             </div>
           </div>
           <div className="card-toolbar">
-            <button
-              className="btn btn-dark"
-              //disabled={diable}
-              onClick={handleClickOpen}
-              //onClick={handleShow}
-            >
-              {buttonHeading}
-            </button>
-            {/* <Dropdown className="dropdown-inline" alignRight>
-              <Dropdown.Toggle
-                className="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
-                variant="transparent"
-                id="dropdown-toggle-top"
-                as={DropdownCustomToggler}
+            {buttonHeading && (
+              <button
+                className="btn btn-dark"
+                //disabled={diable}
+                onClick={handleClickOpen}
+                //onClick={handleShow}
               >
-                <i className="ki ki-bold-more-hor" />
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                <DropdownMenu4 />
-              </Dropdown.Menu>
-            </Dropdown> */}
+                {buttonHeading}
+              </button>
+            )}
           </div>
         </div>
-        {/* end::Header */}
 
-        {/* begin::Body */}
         <div className="">
           <BootstrapTable
             keyField="vehicleid"
@@ -230,31 +294,6 @@ export function TilesWidget1({
           />
         </div>
       </div>
-
-      {/* <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ul>
-            {vehicle.map((item) => {
-              return (
-                <>
-                  <li Key={item}> selected vehicle id is {item}</li>
-                </>
-              );
-            })}
-          </ul>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outlined" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="outlined" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </>
   );
 }
