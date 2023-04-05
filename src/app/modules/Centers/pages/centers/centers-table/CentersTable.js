@@ -81,16 +81,36 @@ export function CentersTable() {
         minWidth: "130px",
       },
     },
-    // {
-    //   dataField: "location",
-    //   text: "Location",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "130px",
-    //   },
-    // },
+    {
+      dataField: "country.name",
+      text: "Country",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "city.name",
+      text: "City",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "location",
+      text: "Location",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
     {
       dataField: "phoneNo",
       text: "Phone",

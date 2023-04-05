@@ -31,13 +31,15 @@ export function TilesWidget1({
   vehicle,
   seletedCity,
   selectionType,
+  diable,
 }) {
   //console.log("seletedCity", seletedCity);
   const dispatch = useDispatch();
   const [selectedVehile, setSelectedVehicle] = useState([]);
-  const [diable, setDisable] = useState(true);
+
   const uiService = useHtmlClassService();
 
+  // console.log("diable", diable);
   const layoutProps = useMemo(() => {
     return {
       colorsGrayGray500: objectPath.get(
@@ -221,6 +223,8 @@ export function TilesWidget1({
   ];
 
   const selectRow = {
+    // mode: "radio",
+    // clickToSelect: true,
     mode: selectionType,
     style: { backgroundColor: "#c8e6c9" },
     selectColumnStyle: {
@@ -241,13 +245,16 @@ export function TilesWidget1({
           setVehicle((item) => [...item, vehicleId]);
         } else {
           vehicleId = row.tripLogId;
-          setVehicle(row.tripLogId);
+          setVehicle([row.tripLogId]);
         }
       } else if (!isSelect) {
+        //console.log("seleted vehicel", vehicle);
         const index = vehicle && vehicle.indexOf(row.vehicleid);
+        //  console.log("index", index);
         if (index > -1) {
           vehicle.splice(index, 1);
-          setVehicle(vehicle);
+          setVehicle([...vehicle]);
+          //setVehicle((item) => [...item, vehicle]);
         }
       }
     },
@@ -272,7 +279,7 @@ export function TilesWidget1({
             {buttonHeading && (
               <button
                 className="btn btn-dark"
-                //disabled={diable}
+                disabled={diable}
                 onClick={handleClickOpen}
                 //onClick={handleShow}
               >
@@ -282,7 +289,7 @@ export function TilesWidget1({
           </div>
         </div>
 
-        <div className="">
+        <div className="table-box">
           <BootstrapTable
             keyField="vehicleid"
             data={vehiclesData || []}

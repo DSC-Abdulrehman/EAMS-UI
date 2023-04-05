@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialTripLogState = {
   listLoading: false,
@@ -12,46 +12,46 @@ const initialTripLogState = {
   // vehicleByCenterId: null,
   // incidentForEdit: undefined,
   lastError: null,
-}
+};
 
 export const callTypes = {
   list: "list",
   action: "action",
-}
+};
 
 export const TriplogSlice = createSlice({
   name: "triplogs",
   initialState: initialTripLogState,
   reducers: {
     catchError: (state, action) => {
-      state.error = `${action.type}: ${action.payload.error}`
+      state.error = `${action.type}: ${action.payload.error}`;
       if (action.payload.callType === callTypes.list) {
-        state.listLoading = false
+        state.listLoading = false;
       } else {
-        state.actionsLoading = false
+        state.actionsLoading = false;
       }
     },
     startCall: (state, action) => {
-      state.error = null
+      state.error = null;
       if (action.payload.callType === callTypes.list) {
-        state.listLoading = true
+        state.listLoading = true;
       } else {
-        state.actionsLoading = true
+        state.actionsLoading = true;
       }
     },
     TripLogsFetched: (state, action) => {
-      const entities = action.payload.data?.data.rows
-      const totalResult = action.payload.data?.data.totalResults
-      state.listLoading = false
-      state.error = null
-      state.entities = entities
-      state.totalCount = totalResult
+      const entities = action.payload.data?.data.rows;
+      const totalResult = action.payload.data?.data.totalResults;
+      state.listLoading = false;
+      state.error = null;
+      state.entities = entities;
+      state.totalCount = totalResult;
     },
     //get Incident By ID
     driverTripFetched: (state, action) => {
-      state.actionsLoading = false
-      state.driverTripForEdit = action.payload.driverTripForEdit
-      state.error = null
+      state.actionsLoading = false;
+      state.driverTripForEdit = action.payload.driverTripForEdit;
+      state.error = null;
     },
     // incidentDeleted: (state, action) => {
     //   state.error = null
@@ -67,16 +67,17 @@ export const TriplogSlice = createSlice({
     //   state.entities.push(entities)
     // },
     tripUpdated: (state, action) => {
-      state.error = null
-      state.actionsLoading = false
-      // state.entities.push(action.payload)
-      state.entities = state.entities.map((entity) => {
-        if (entity.id === action.payload.updatedTrip.id) {
-          return action.payload.updatedTrip
-        }
+      // console.log("state", state.driverTripForEdit);
+      state.error = null;
+      state.actionsLoading = false;
+      // state.entities.push(action.payload);
+      // state.entities = state.entities.map((entity) => {
+      //   if (entity.id === action.payload.updatedTrip.id) {
+      //     return action.payload.updatedTrip;
+      //   }
 
-        return entity
-      })
+      //   return entity;
+      // });
     },
     // IncidentTypesFetched: (state, action) => {
     //   const incidentTypes = action.payload
@@ -104,4 +105,4 @@ export const TriplogSlice = createSlice({
     //   state.vehicleByCenterId = entities
     // },
   },
-})
+});

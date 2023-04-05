@@ -190,15 +190,23 @@ export function CenterEditForm({
                         placeholder="Location"
                         label="Location*"
                       />
-                    </div> */}
-
-                    {/* <div className="col-12 col-md-4 mb-5">
+                    </div>
+                    <div className="col-12 col-md-4 mb-5">
                       <Field
                         type="number"
                         name="latitude"
                         component={Input}
                         placeholder="33.948615"
                         label="Latitude*"
+                      />
+                    </div>
+                    <div className="col-12 col-md-4 mb-5">
+                      <Field
+                        type="number"
+                        name="longitude"
+                        component={Input}
+                        placeholder="-118.401382"
+                        label="Longitude*"
                       />
                     </div>
                     <div className="col-12 col-md-4 mb-5">

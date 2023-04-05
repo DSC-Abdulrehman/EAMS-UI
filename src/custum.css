@@ -6,3 +6,34 @@
     font-size: 0.9rem;
     color: #F64E60;
 }
+
+.table-box {
+    height: 350px;
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar-thumb {
+    background: 0 0;
+    background-color: rgba(58, 58, 58, 0.25);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    background-clip: padding-box;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #88888861;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+    background: #555;
+}
