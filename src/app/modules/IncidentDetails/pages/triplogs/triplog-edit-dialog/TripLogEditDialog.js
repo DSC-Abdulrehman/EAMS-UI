@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import { fetchDashboardVehicles } from "../../../../../../_metronic/redux/dashboardActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function TripLogEditDialog({ id, show, onHide, userForRead }) {
+export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -80,7 +81,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
   //   return
   // }
   const updateTripLog = (incident) => {
-    console.log("i'm in update", incident);
+    // console.log("i'm in update", incident);
     const {
       sourceCenterId,
       price,
@@ -100,10 +101,13 @@ export function TripLogEditDialog({ id, show, onHide, userForRead }) {
       //endDateTime: endDateTime,
     };
     enableLoading();
-    dispatch(actions.updateTrip(newObject)).then((res) => {
-      disabledLoading();
-      onHide();
-    });
+    dispatch(actions.updateTrip(newObject, disabledLoading, onHide)).then(
+      () => {
+        dispatch(fetchDashboardVehicles({ cityId: cityId }));
+        // disabledLoading();
+        // onHide();
+      }
+    );
 
     // if (!id) {
     //   const incidentUpdate = { ...incident };

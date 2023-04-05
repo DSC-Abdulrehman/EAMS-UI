@@ -30,6 +30,7 @@ export function UsersTable() {
       setQueryParams: usersUIContext.setQueryParams,
       openEditUserDialog: usersUIContext.openEditUserDialog,
       openDeleteUserDialog: usersUIContext.openDeleteUserDialog,
+      openActiveUserDialog: usersUIContext.openActiveUserDialog,
       openReadUserDialog: usersUIContext.openReadUserDialog,
     };
   }, [usersUIContext]);
@@ -143,6 +144,7 @@ export function UsersTable() {
       formatExtraData: {
         openEditUserDialog: usersUIProps.openEditUserDialog,
         openDeleteUserDialog: usersUIProps.openDeleteUserDialog,
+        openActiveUserDialog: usersUIProps.openActiveUserDialog,
         openReadUserDialog: usersUIProps.openReadUserDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete

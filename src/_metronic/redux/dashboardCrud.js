@@ -45,3 +45,7 @@ export const getDashboardVehicle = async (body) => {
     body
   );
 };
+
+export const updateVehicleStatus = async (body) => {
+  return await axios.put(`${USERS_URL}/vehicles/update-vehicle-status`, body);
+};

@@ -35,10 +35,8 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
 
   const dispatch = useDispatch();
   const {
-    centerState,
-    actionLoading,
-    isCenterForEdit,
     centerForEdit,
+    actionLoading,
     roles,
     centers,
     isuserForRead,
@@ -46,10 +44,8 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
     totalCount,
   } = useSelector(
     (state) => ({
-      centerState: state.centers,
-      actionLoading: state.centers.actionsLoading,
-      isCenterForEdit: state.centers.centerForEdit,
       centerForEdit: state.centers.centerForEdit,
+      actionLoading: state.centers.actionsLoading,
       roles: state.users.roles,
       centers: state.users.centers,
       isuserForRead: state.users.userForRead,
@@ -59,28 +55,28 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
     shallowEqual
   );
 
-  // console.log("centerState", centerState);
-
-  // useEffect(() => {
-  //   if (id) {
-  //     // dispatch(actions.fetchCenter(id));
-  //     // dispatch(
-  //     //   actions.fetchVehicles({
-  //     //     ...centersUIProps.secondQueryParams,
-  //     //     centerId: id,
-  //     //   })
-  //     // );
-  //   }
-  // }, [id, dispatch, centersUIProps.secondQueryParams]);
+  //console.log("centerForEdit", centerForEdit);
 
   useEffect(() => {
     if (id) {
-      if (centerForEdit || userForRead) {
-        // console.log("centerForEdit", centerForEdit);
-        dispatch(actions.fetchAllCity(centerForEdit.countryId));
-      }
+      //dispatch(actions.fetchCenter(id));
+      dispatch(
+        actions.fetchVehicles({
+          ...centersUIProps.secondQueryParams,
+          centerId: id,
+        })
+      );
     }
-  }, [id, centerForEdit]);
+  }, [id]);
+
+  // useEffect(() => {
+  //   if (id) {
+  //     if (centerForEdit || userForRead) {
+  //       // console.log("centerForEdit", centerForEdit);
+  //       dispatch(actions.fetchAllCity(centerForEdit.countryId));
+  //     }
+  //   }
+  // }, [id, centerForEdit]);
   // console.log("listLoading", listLoading);
   const saveCenter = (center) => {
     if (!id) {
@@ -98,6 +94,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         conuntryId: center.conuntryId,
         cityId: center.cityId,
       };
+
       dispatch(actions.updateCenter(centerUpdatedFields));
       onHide();
     }

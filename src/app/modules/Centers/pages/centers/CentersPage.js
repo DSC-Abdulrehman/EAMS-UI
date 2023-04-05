@@ -8,6 +8,7 @@ import { CentersCard } from "./centers-card/CentersCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as actions from "../../_redux/centers/centersActions";
+import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 // import { fetchCenter, fetchAllCity } from "../../_redux/centers/centersActions";
 
 export function CentersPage({ history }) {
@@ -39,9 +40,11 @@ export function CentersPage({ history }) {
   const centersUIEvents = {
     newCenterButtonClick: () => {
       dispatch(actions.fetchCenter());
+      dispatch(fetchAllCountry());
       history.push("/centers/read-all-centers/new");
     },
-    openEditCenterDialog: async (id) => {
+    openEditCenterDialog: (id) => {
+      dispatch(fetchAllCountry());
       dispatch(actions.fetchCenter(id));
       history.push(`/centers/read-all-centers/${id}/edit`);
     },
@@ -50,6 +53,9 @@ export function CentersPage({ history }) {
     },
     openReadCenterDialog: (id, isUserRead) => {
       dispatch(actions.fetchCenter(id));
+      dispatch(fetchAllCountry());
+      //dispatch(actions.fetchVehicles(id));
+
       history.push(`/centers/read-all-centers/${id}/read`);
     },
   };

@@ -48,7 +48,8 @@ export const centersSlice = createSlice({
     },
     //get User By ID
     centerFetched: (state, action) => {
-      state.actionsLoading = false;
+      // console.log("action", action);
+      state.listLoading = false;
       state.centerForEdit = action.payload;
       state.error = null;
     },
@@ -68,10 +69,11 @@ export const centersSlice = createSlice({
     centerUpdated: (state, action) => {
       state.error = null;
       state.actionsLoading = false;
+      console.log("action.payload", action.payload);
       // state.entities.push(action.payload)
       state.entities = state.entities.map((entity) => {
-        if (entity.id === action.payload.updatedUser.id) {
-          return action.payload.updatedUser;
+        if (entity.id === action.payload.updatedUser[0].id) {
+          return action.payload.updatedUser[0];
         }
 
         return entity;

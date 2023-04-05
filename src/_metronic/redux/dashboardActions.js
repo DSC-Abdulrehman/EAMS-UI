@@ -90,3 +90,14 @@ export const fetchDashboardVehicles = (body) => async (dispatch) => {
       toast.error("Somethign went wrong");
     });
 };
+
+export const updateVehicelStatus = (body) => async (dispatch) => {
+  return await requestFromServer
+    .updateVehicleStatus(body)
+    .then((response) => {
+      toast.success("Updated Successfully");
+    })
+    .catch((error) => {
+      toast.error("Somethign went wrong");
+    });
+};

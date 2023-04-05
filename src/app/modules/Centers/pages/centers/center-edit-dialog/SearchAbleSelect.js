@@ -11,6 +11,7 @@ export function SearchAbleSelect({
   touched,
   options,
   value,
+  isDisabled,
 }) {
   const filterColors = (inputValue) => {
     return options.filter((i) =>
@@ -32,6 +33,7 @@ export function SearchAbleSelect({
     <>
       {label && <label>Enter {label}</label>}
       <AsyncSelect
+        isDisabled={isDisabled}
         name={name}
         label={label}
         id={id}

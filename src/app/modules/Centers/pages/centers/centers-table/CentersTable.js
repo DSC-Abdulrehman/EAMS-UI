@@ -58,7 +58,7 @@ export function CentersTable() {
   const isAccessForDelete = userAccess.find(
     (item) => item.componentName === "DeleteCenter"
   );
-  console.log("currentStatecenters", currentStatecenters);
+  //console.log("currentStatecenters", currentStatecenters);
   const { totalCount, entities, listLoading } = currentStatecenters;
   // console.log("currentStatecenters", currentStatecenters)
 

@@ -10,6 +10,7 @@ import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
 //import { IncidentsEditDialog } from "../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
 import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";
 import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
+import { DropdownMenu4 } from "../dropdowns";
 
 export function Demo2Dashboard() {
   const dispatch = useDispatch();
@@ -19,35 +20,40 @@ export function Demo2Dashboard() {
   const [standByvehicles, setStandbyVehicels] = useState([]);
   const [onDutyVehicles, setOnDutyVehicels] = useState([]);
   const [offDutyVehicles, setOffDutyVehicels] = useState([]);
-
   const [vehicle, setVehicle] = useState([]);
-
   const [open, setOpen] = useState(false);
   const [openCloseTripDialogue, setCloseTripDialogue] = useState(false);
+  const [closeTripId, setCloseTripId] = useState();
 
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
 
   let history = useHistory();
 
+  //console.log("vehicle", vehicle);
+
   useEffect(() => {
     // const interval = setInterval(() => {
     //   // console.log("Set interval called");
     //   dispatch(fetchDashboardVehicles({ cityId: user.cityId }));
     //   dispatch(fetchAllCityCenters(user.cityId));
-    // }, 2500);
+    // }, 3000);
 
     // return () => clearInterval(interval);
 
-    dispatch(fetchDashboardVehicles({ cityId: user.cityId }));
+    dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
     dispatch(fetchAllCityCenters(user.cityId));
   }, [user.cityId]);
-
+  console.log("vehicle", vehicle);
   useEffect(() => {
-    const getSeletedCity = dashboard.allCity.filter(
-      (item) => item.value === user.cityId
-    );
-    setCity(getSeletedCity[0]);
+    //console.log("save city called");
+    const getSeletedCity =
+      dashboard.allCity &&
+      dashboard.allCity.filter((item) => {
+        return item.value === user.cityId;
+      });
+    setCity(getSeletedCity.length > 0 ? getSeletedCity[0] : []);
+    //setCity(1);
   }, [dashboard.allCity]);
 
   useEffect(() => {
@@ -60,7 +66,7 @@ export function Demo2Dashboard() {
 
   useEffect(() => {
     setOffDutyVehicels(dashboard.offDuty);
-  }, [dashboard.offDuty]);
+  }, [dashboard.offDuty, dispatch]);
 
   // Function for create incident Dialogue
   const handleClickOpen = () => {
@@ -73,13 +79,12 @@ export function Demo2Dashboard() {
   // Function for close Trip dialogue
   const openTripcloseDialogue = () => {
     setCloseTripDialogue(true);
+    setCloseTripId(vehicle);
   };
 
   const handleCloseDialoge = () => {
     setCloseTripDialogue(false);
   };
-
-  //console.log("openCloseTripDialogue", openCloseTripDialogue);
 
   return (
     <>
@@ -106,6 +111,8 @@ export function Demo2Dashboard() {
             handleClickOpen={handleClickOpen}
             setVehicle={setVehicle}
             vehicle={vehicle}
+            seletedCity={city}
+            selectionType="checkbox"
           />
           <IncidentCreateDialog
             show={open}
@@ -116,6 +123,7 @@ export function Demo2Dashboard() {
             city={city && city.value}
             center={center && center.value}
             subCenter={subCenter && subCenter.value}
+            setVehicle={setVehicle}
           />
         </div>
         <div className="col-xl-4">
@@ -129,11 +137,13 @@ export function Demo2Dashboard() {
             handleClickOpen={openTripcloseDialogue}
             setVehicle={setVehicle}
             vehicle={vehicle}
+            selectionType="radio"
           />
           <TripLogEditDialog
             show={openCloseTripDialogue}
             onHide={() => setCloseTripDialogue(false)}
-            id={25}
+            id={closeTripId}
+            cityId={user.cityId}
           />
         </div>
         <div className="col-xl-4">
@@ -141,9 +151,11 @@ export function Demo2Dashboard() {
             className="gutter-b card-stretch"
             chartColor="danger"
             heading="Off Duty"
-            buttonHeading="Active vehicle"
+            // buttonHeading="Active vehicle"
             NoofVehicle={offDutyVehicles.length}
             vehiclesData={offDutyVehicles}
+            setVehicle={setVehicle}
+            seletedCity={city}
           />
         </div>
       </div>

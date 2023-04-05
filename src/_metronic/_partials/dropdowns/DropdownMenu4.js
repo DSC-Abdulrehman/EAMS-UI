@@ -1,7 +1,27 @@
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React from "react";
+import { useDispatch } from "react-redux";
+import {
+  updateVehicelStatus,
+  fetchDashboardVehicles,
+} from "../../redux/dashboardActions";
 
-export function DropdownMenu4() {
+export function DropdownMenu4(column, seletedCity) {
+  console.log("seletedCity", seletedCity);
+  //console.log("row.veh", row.row.vehicleid);
+  const dispatch = useDispatch();
+
+  const standToOff = () => {
+    const body = {
+      id: column.column.vehicleid,
+      available: false,
+      offDuty: true,
+    };
+    dispatch(updateVehicelStatus(body));
+    // dispatch(fetchDashboardVehicles({ cityId: +cityId }));
+  };
+
+  // console.log("seletedCity", seletedCity);
   return (
     <>
       {/*begin::Navigation*/}
@@ -14,7 +34,7 @@ export function DropdownMenu4() {
             <span className="navi-text">Out</span>
           </a>
         </li>
-        <li className="navi-item">
+        <li className="navi-item" onClick={() => standToOff()}>
           <a href="#" className="navi-link">
             <span className="navi-icon">
               <i className="flaticon2-list-3"></i>

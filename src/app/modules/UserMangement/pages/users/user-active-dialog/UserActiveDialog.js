@@ -5,8 +5,7 @@ import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls
 import * as actions from "../../../_redux/usersActions";
 import { useUsersUIContext } from "../UsersUIContext";
 
-export function UserDeleteDialog({ id, status, show, onHide }) {
-  // console.log("Status", status);
+export function UserActiveDialog({ id, status, show, onHide }) {
   const [loading, setLoading] = useState(false);
   // Customers UI Context
   const usersUIContext = useUsersUIContext();
@@ -66,13 +65,11 @@ export function UserDeleteDialog({ id, status, show, onHide }) {
       {isLoading && <ModalProgressBar />}
       {/*end::Loading*/}
       <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-lg">
-          User In-Active
-        </Modal.Title>
+        <Modal.Title id="example-modal-sizes-title-lg">Mark Active</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to In-Active this user?</span>}
-        {isLoading && <span>user is deleting...</span>}
+        {!isLoading && <span>Are you sure to mark active this user?</span>}
+        {isLoading && <span>user is active...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -89,7 +86,7 @@ export function UserDeleteDialog({ id, status, show, onHide }) {
             onClick={deleteUser}
             className="btn btn-primary btn-elevate"
           >
-            In-Active
+            Make Active
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

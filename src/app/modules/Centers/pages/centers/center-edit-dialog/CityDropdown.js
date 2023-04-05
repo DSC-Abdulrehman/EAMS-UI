@@ -11,13 +11,14 @@ export function CityDropdown({
   touched,
   options,
   value,
+  isDisabled,
 }) {
-  console.log("value", value);
+  // console.log("value", value);
   const [ops, setops] = useState([]);
   const [defValue, setdefValue] = useState({});
   const [isClearable, setIsClearable] = useState(true);
   const [isSearchable, setIsSearchable] = useState(true);
-  const [isDisabled, setIsDisabled] = useState(false);
+  //const [isDisabled, setIsDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isRtl, setIsRtl] = useState(false);
 
@@ -28,7 +29,7 @@ export function CityDropdown({
 
   const getDefaultObject = ops.filter((item) => item.value == value);
 
-  console.log("getDefaultObject", getDefaultObject);
+  //console.log("getDefaultObject", getDefaultObject);
   return (
     <>
       {/* <div className="col-12 col-md-4 mb-5">

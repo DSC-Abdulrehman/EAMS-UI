@@ -25,9 +25,9 @@ export const fetchCenters = (queryparm) => async (dispatch) => {
 };
 
 export const fetchCenter = (id) => async (dispatch) => {
-  if (!id) {
-    return await dispatch(actions.centerFetched(""));
-  }
+  // if (!id) {
+  //   return await dispatch(actions.centerFetched(""));
+  // }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return await requestFromServer
@@ -48,7 +48,7 @@ export const deleteCenter = (id) => (dispatch) => {
   return requestFromServer
     .deleteRequest({ id: id })
     .then((response) => {
-      console.log("response from delete user ", response.data.message);
+      //console.log("response from delete user ", response.data.message);
       dispatch(actions.centerDeleted({ id: id }));
       toast.success(response.data.message + " Deleted", {
         position: "top-right",

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { useFormik } from "formik"
-import * as Yup from "yup"
-import { connect, useSelector, shallowEqual, useDispatch } from "react-redux"
-import { FormattedMessage, injectIntl } from "react-intl"
-import * as auth from "../_redux/authRedux"
-import { login } from "../_redux/authCrud"
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { connect, useSelector, shallowEqual, useDispatch } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
+import * as auth from "../_redux/authRedux";
+import { login } from "../_redux/authCrud";
 
 /*
   INTL (i18n) docs:
@@ -18,14 +18,13 @@ import { login } from "../_redux/authCrud"
 */
 
 const initialValues = {
-  email: "arsalanahmed.dev@gmail.com",
-  password: "Arsal@123",
-}
+  email: "abdul@gmail.com",
+  password: "test12345",
+};
 
 function Login(props) {
-  
-  const { intl } = props
-  const [loading, setLoading] = useState(false)
+  const { intl } = props;
+  const [loading, setLoading] = useState(false);
 
   // const user = useSelector(({ auth }) => auth, shallowEqual)
 
@@ -52,54 +51,53 @@ function Login(props) {
           id: "AUTH.VALIDATION.REQUIRED_FIELD",
         })
       ),
-  })
+  });
 
   const enableLoading = () => {
-    setLoading(true)
-  }
+    setLoading(true);
+  };
 
   const disableLoading = () => {
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   const getInputClasses = (fieldname) => {
     if (formik.touched[fieldname] && formik.errors[fieldname]) {
-      return "is-invalid"
+      return "is-invalid";
     }
 
     if (formik.touched[fieldname] && !formik.errors[fieldname]) {
-      return "is-valid"
+      return "is-valid";
     }
 
-    return ""
-  }
-
+    return "";
+  };
 
   const formik = useFormik({
     initialValues,
     validationSchema: LoginSchema,
     onSubmit: (values, { setStatus, setSubmitting }) => {
-      enableLoading()
+      enableLoading();
       setTimeout(() => {
-          login(values.email, values.password)
+        login(values.email, values.password)
           .then((data) => {
-            disableLoading()
-            props.login(data?.data?.data)
+            disableLoading();
+            props.login(data?.data?.data);
           })
           .catch(() => {
             setStatus(
               intl.formatMessage({
                 id: "AUTH.VALIDATION.INVALID_LOGIN",
               })
-            )
+            );
           })
           .finally(() => {
-            disableLoading()
-            setSubmitting(false)
-          })
-      }, 1000)
+            disableLoading();
+            setSubmitting(false);
+          });
+      }, 1000);
     },
-  })
+  });
 
   return (
     <div className="login-form login-signin" id="kt_login_signin_form">
@@ -123,16 +121,17 @@ function Login(props) {
           <div className="mb-10 alert alert-custom alert-light-danger alert-dismissible">
             <div className="alert-text font-weight-bold">{formik.status}</div>
           </div>
-        ) : 
-        // (
-        //   <div className="mb-10 alert alert-custom alert-light-info alert-dismissible">
-        //     <div className="alert-text ">
-        //       Use account <strong>admin@demo.com</strong> and password{" "}
-        //       <strong>demo</strong> to continue.
-        //     </div>
-        //   </div>
-        // )
-        ''}
+        ) : (
+          // (
+          //   <div className="mb-10 alert alert-custom alert-light-info alert-dismissible">
+          //     <div className="alert-text ">
+          //       Use account <strong>admin@demo.com</strong> and password{" "}
+          //       <strong>demo</strong> to continue.
+          //     </div>
+          //   </div>
+          // )
+          ""
+        )}
 
         <div className="form-group fv-plugins-icon-container">
           <input
@@ -187,7 +186,7 @@ function Login(props) {
       </form>
       {/*end::Form*/}
     </div>
-  )
+  );
 }
 
-export default injectIntl(connect(null, auth.actions)(Login))
+export default injectIntl(connect(null, auth.actions)(Login));
