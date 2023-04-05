@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
+  const [seletCity, setSelectCity] = useState({});
+  const [seletCenter, setSelectCenter] = useState({});
+  const [seletSubcenter, setSelectsubCenter] = useState({});
+
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -46,6 +50,8 @@ export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
     }),
     shallowEqual
   );
+
+  // console.log("driverTripForEdit", driverTripForEdit);
   const enableLoading = () => {
     setLoading(true);
   };
@@ -82,17 +88,10 @@ export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
   // }
   const updateTripLog = (incident) => {
     // console.log("i'm in update", incident);
-    const {
-      sourceCenterId,
-      price,
-      sourceSubCenterId,
-      finalReading,
-      logBookNo,
-      status,
-      endDateTime,
-    } = incident;
+    const { price, finalReading, logBookNo, status, endDateTime } = incident;
+
     const newObject = {
-      subCenterId: sourceSubCenterId,
+      subCenterId: seletSubcenter.value,
       price: price.toString(),
       finalReading: finalReading,
       logBookNo: logBookNo,
@@ -100,6 +99,7 @@ export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
       id: +id,
       //endDateTime: endDateTime,
     };
+    console.log("newObject", newObject);
     enableLoading();
     dispatch(actions.updateTrip(newObject, disabledLoading, onHide)).then(
       () => {
@@ -167,6 +167,12 @@ export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
             isUserForRead={userForRead}
             setCenter={setCenter}
             loading={loading}
+            setSelectCity={setSelectCity}
+            setSelectCenter={setSelectCenter}
+            setSelectsubCenter={setSelectsubCenter}
+            seletCity={seletCity}
+            seletCenter={seletCenter}
+            seletSubcenter={seletSubcenter}
           />
         </>
       )}

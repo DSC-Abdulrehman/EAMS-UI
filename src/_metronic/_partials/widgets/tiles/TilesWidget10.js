@@ -26,6 +26,7 @@ export function TilesWidget10({
   setCenter,
   center,
   setSubcenter,
+  subCenter,
 }) {
   const dispatch = useDispatch();
 
@@ -34,9 +35,9 @@ export function TilesWidget10({
   const { countryId, cityId } = useSelector((state) => state.auth.user);
   const dashboard = useSelector((state) => state.dashboard);
 
-  useEffect(() => {
-    dispatch(action.fetchAllCity(countryId));
-  }, [countryId]);
+  // useEffect(() => {
+  //   dispatch(action.fetchAllCity(countryId));
+  // }, []);
 
   return (
     <>
@@ -68,6 +69,8 @@ export function TilesWidget10({
                           action.fetchDashboardVehicles({ cityId: e.value })
                         );
                         setCity(e);
+                        setCenter([]);
+                        setSubcenter([]);
                       }}
                       value={seletCity}
                     />
@@ -86,8 +89,9 @@ export function TilesWidget10({
                           })
                         );
                         setCenter(e);
+                        setSubcenter([]);
                       }}
-                      // value={defCenter}
+                      value={center}
                     />
                   </div>
                   <div className="col-4">
@@ -105,7 +109,7 @@ export function TilesWidget10({
                         );
                         setSubcenter(e);
                       }}
-                      // value={defSubcenter}
+                      value={subCenter}
                     />
                   </div>
                 </div>

@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
 import {
+  fetchAllCity,
   fetchDashboardVehicles,
   fetchAllCityCenters,
 } from "../../redux/dashboardActions";
 import { TilesWidget1, TilesWidget10 } from "../widgets";
-import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
-//import { IncidentsEditDialog } from "../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
+//import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
 import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";
 import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
-import { DropdownMenu4 } from "../dropdowns";
+//import { DropdownMenu4 } from "../dropdowns";
 
 export function Demo2Dashboard() {
   const dispatch = useDispatch();
+
+  // All useState Hook
   const [city, setCity] = useState([]);
   const [center, setCenter] = useState([]);
   const [subCenter, setSubcenter] = useState([]);
@@ -21,16 +22,43 @@ export function Demo2Dashboard() {
   const [onDutyVehicles, setOnDutyVehicels] = useState([]);
   const [offDutyVehicles, setOffDutyVehicels] = useState([]);
   const [vehicle, setVehicle] = useState([]);
+  const [seletedOnDuty, setSeletecOnDuty] = useState([]);
   const [open, setOpen] = useState(false);
   const [openCloseTripDialogue, setCloseTripDialogue] = useState(false);
   const [closeTripId, setCloseTripId] = useState();
+  const [diable, setDisable] = useState(true);
+  const [diableOnDutyButton, setDisableOnDutyButton] = useState(true);
 
+  // Getting Redux state
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
 
-  let history = useHistory();
+  // useEffect(() => {
+  //   dispatch(action.fetchAllCity(user.countryId));
+  // }, [user.countryId]);
+  useEffect(() => {
+    //console.log("Fetch city by user id one thime");
+    dispatch(fetchAllCity(user.countryId));
+  }, []);
 
-  //console.log("vehicle", vehicle);
+  useEffect(() => {
+    console.log("seleted cit yis called");
+    const getSeletedCity =
+      dashboard.allCity &&
+      dashboard.allCity.find((item) => {
+        return item.value === user.cityId;
+      });
+
+    setCity(getSeletedCity);
+  }, [dashboard.allCity]);
+
+  useEffect(() => {
+    setDisable(vehicle.length > 0 ? false : true);
+  }, [vehicle]);
+
+  useEffect(() => {
+    setDisableOnDutyButton(seletedOnDuty.length > 0 ? false : true);
+  }, [seletedOnDuty]);
 
   useEffect(() => {
     // const interval = setInterval(() => {
@@ -43,18 +71,7 @@ export function Demo2Dashboard() {
 
     dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
     dispatch(fetchAllCityCenters(user.cityId));
-  }, [user.cityId]);
-  console.log("vehicle", vehicle);
-  useEffect(() => {
-    //console.log("save city called");
-    const getSeletedCity =
-      dashboard.allCity &&
-      dashboard.allCity.filter((item) => {
-        return item.value === user.cityId;
-      });
-    setCity(getSeletedCity.length > 0 ? getSeletedCity[0] : []);
-    //setCity(1);
-  }, [dashboard.allCity]);
+  }, []);
 
   useEffect(() => {
     setStandbyVehicels(dashboard.standBy);
@@ -68,7 +85,7 @@ export function Demo2Dashboard() {
     setOffDutyVehicels(dashboard.offDuty);
   }, [dashboard.offDuty, dispatch]);
 
-  // Function for create incident Dialogue
+  // Fn create incident Dialogue
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -76,10 +93,10 @@ export function Demo2Dashboard() {
     setOpen(false);
   };
 
-  // Function for close Trip dialogue
+  // Fn close Trip dialogue
   const openTripcloseDialogue = () => {
     setCloseTripDialogue(true);
-    setCloseTripId(vehicle);
+    setCloseTripId(seletedOnDuty[0]);
   };
 
   const handleCloseDialoge = () => {
@@ -96,8 +113,9 @@ export function Demo2Dashboard() {
             seletCity={city}
             setCity={setCity}
             setCenter={setCenter}
-            setSubcenter={setSubcenter}
             center={center}
+            setSubcenter={setSubcenter}
+            subCenter={subCenter}
           />
         </div>
         <div className="col-xl-4">
@@ -113,6 +131,7 @@ export function Demo2Dashboard() {
             vehicle={vehicle}
             seletedCity={city}
             selectionType="checkbox"
+            diable={diable}
           />
           <IncidentCreateDialog
             show={open}
@@ -135,9 +154,10 @@ export function Demo2Dashboard() {
             NoofVehicle={onDutyVehicles.length}
             vehiclesData={onDutyVehicles}
             handleClickOpen={openTripcloseDialogue}
-            setVehicle={setVehicle}
-            vehicle={vehicle}
+            setVehicle={setSeletecOnDuty}
+            vehicle={seletedOnDuty}
             selectionType="radio"
+            diable={diableOnDutyButton}
           />
           <TripLogEditDialog
             show={openCloseTripDialogue}
@@ -156,6 +176,7 @@ export function Demo2Dashboard() {
             vehiclesData={offDutyVehicles}
             setVehicle={setVehicle}
             seletedCity={city}
+            selectionType="radio"
           />
         </div>
       </div>

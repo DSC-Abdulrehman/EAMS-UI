@@ -23,10 +23,11 @@ import { useNavigate } from "react-router-dom";
 const PositiveRegex = /^[1-9]+[0-9]*$/;
 // Validation schema
 const triplogEditSchema = Yup.object().shape({
-  cityId: Yup.string(),
+  // cityId: Yup.string(),
   destinationCenterId: Yup.string(),
   destinationSubCenterId: Yup.string(),
-  finalReading: Yup.string(),
+  finalReading: Yup.string().required("Final reading is required"),
+  //logBookNo: Yup.string().required("Log Book No. is required"),
   logBookNo: Yup.string()
     .nullable()
     .matches(PositiveRegex, "Value should be number")
@@ -35,7 +36,7 @@ const triplogEditSchema = Yup.object().shape({
     .nullable()
     .matches(PositiveRegex, "Value should be number")
     .required("Price is required"),
-  status: Yup.string(),
+  status: Yup.string().required("Status is required"),
 });
 
 // function validateCenterId(value) {
@@ -53,6 +54,12 @@ export function TripLogEditForm({
   driverTrip,
   onHide,
   loading,
+  setSelectCity,
+  setSelectCenter,
+  setSelectsubCenter,
+  seletCity,
+  seletCenter,
+  seletSubcenter,
 }) {
   const TripStatus = [
     {
@@ -66,50 +73,10 @@ export function TripLogEditForm({
     },
   ];
 
-  const [seletCity, setSelectCity] = useState({});
-  const [seletCenter, setSelectCenter] = useState({});
-  const [seletSubcenter, setSelectsubCenter] = useState({});
-
   const dispatch = useDispatch();
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
-
-  useEffect(() => {
-    dispatch(fetchAllCity(user.countryId));
-  }, [user]);
-
-  useEffect(() => {
-    dispatch(fetchAllCityCenters(user.cityId));
-  }, [user]);
-
-  useEffect(() => {
-    dispatch(fetchAllSubCenter(driverTrip.sourceCenterId));
-  }, [user]);
-
-  useEffect(() => {
-    setSelectsubCenter(
-      dashboard.allSubCenter &&
-        dashboard.allSubCenter.filter(
-          (item) => item.value === driverTrip.sourceSubCenterId
-        )
-    );
-  }, [dashboard.allSubCenter, driverTrip.sourceSubCenterId]);
-
-  useEffect(() => {
-    setSelectCity(
-      dashboard.allCity &&
-        dashboard.allCity.filter((item) => item.value === user.cityId)
-    );
-  }, [dashboard.allCity]);
-
-  useEffect(() => {
-    setSelectCenter(
-      dashboard.cityCenters &&
-        dashboard.cityCenters.filter(
-          (item) => item.value === driverTrip.sourceCenterId
-        )
-    );
-  }, [dashboard.cityCenters]);
+  console.log("driverTrip", driverTrip);
 
   const {
     sourceCenterId,
@@ -118,30 +85,78 @@ export function TripLogEditForm({
     logBookNo,
     price,
     status,
+    driver,
+    vehicle,
+    initialReading,
+    sourcecenter,
   } = driverTrip;
 
   const iniValue = {
-    sourceCenterId: sourceCenterId || seletCenter.value,
-    sourceSubCenterId: sourceSubCenterId,
-    finalReading: finalReading,
-    logBookNo: logBookNo || 0,
-    price: price || 0,
-    status: status,
+    driverName: driver.firstName,
+    vehicleRegNo: vehicle.regNo,
+    initialReading: initialReading,
+    destinationSubCenterId: "",
+    finalReading: "",
+    logBookNo: "",
+    price: "",
+    status: "",
   };
-  // console.log("auth", auth);
-  // console.log("driverTrip initial value", iniValue);
+
+  // useEffect(() => {
+  //   dispatch(fetchAllCity(user.countryId));
+  // }, [driverTrip]);
+
+  useEffect(() => {
+    dispatch(fetchAllCityCenters(sourcecenter.city.id));
+  }, [user, driverTrip]);
+
+  useEffect(() => {
+    dispatch(fetchAllSubCenter(driverTrip.sourceCenterId));
+  }, [user, driverTrip]);
+
+  useEffect(() => {
+    setSelectCity(
+      dashboard.allCity &&
+        dashboard.allCity.find((item) => item.value === sourcecenter.city.id)
+    );
+  }, [dashboard.allCity]);
+
+  useEffect(() => {
+    setSelectCenter(
+      dashboard.cityCenters &&
+        dashboard.cityCenters.find((item) => item.value === sourceCenterId)
+    );
+  }, [dashboard.cityCenters]);
+
+  useEffect(() => {
+    setSelectsubCenter(
+      dashboard.allSubCenter &&
+        dashboard.allSubCenter.find((item) => item.value === sourceSubCenterId)
+    );
+  }, [dashboard.allSubCenter]);
+
+  console.log("driverTrip", driverTrip);
+  console.log("seletCenter", seletCenter);
 
   return (
     <>
       <Formik
         enableReinitialize={true}
-        initialValues={driverTrip}
-        //validationSchema={triplogEditSchema}
+        initialValues={iniValue}
+        validationSchema={triplogEditSchema}
         onSubmit={(values) => {
+          //const { destinationSubCenterId } = values;
+          // const submissionValues = {
+          //   destinationSubCenterId: seletSubcenter.value,
+          //   ...values,
+          // };
+          // console.log("value", values);
+          // console.log("seletSubcenter", seletSubcenter);
+          //console.log("submissionValues", submissionValues);
           updateTripLog(values);
         }}
       >
-        {({ handleSubmit, setFieldValue, handleBlur }) => (
+        {({ handleSubmit, setFieldValue, handleBlur, errors, touched }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               <Form className="from form-label-right">
@@ -149,7 +164,7 @@ export function TripLogEditForm({
                   <div className="form-group row">
                     <div className="col-lg-4">
                       <Field
-                        name="driver.firstName"
+                        name="driverName"
                         component={Input}
                         label="Driver Name"
                         disabled
@@ -157,7 +172,7 @@ export function TripLogEditForm({
                     </div>
                     <div className="col-lg-4">
                       <Field
-                        name="vehicle.regNo"
+                        name="vehicleRegNo"
                         component={Input}
                         label="Registration Number"
                         disabled
@@ -177,43 +192,57 @@ export function TripLogEditForm({
                       <SearchSelect
                         name="cityId"
                         options={dashboard.allCity}
-                        label="Select City"
+                        label="Select City*"
+                        onBlur={() => {
+                          handleBlur({ target: { name: "cityId" } });
+                        }}
                         onChange={(e) => {
                           dispatch(fetchAllCityCenters(e.value));
                           setSelectCity(e);
                         }}
                         value={seletCity}
+                        // error={errors.cityId}
+                        //touched={touched.cityId}
                       />
                     </div>
                     <div className="col-12 col-md-4">
                       <SearchSelect
                         name="destinationCenterId"
                         options={dashboard.cityCenters}
-                        label="Select Center"
+                        label="Select Center*"
                         onBlur={() => {
                           handleBlur({
                             target: { name: "destinationCenterId" },
                           });
                         }}
                         onChange={(e) => {
-                          setFieldValue("destinationCenterId", e.value);
+                          //setFieldValue("destinationCenterId", e.value);
                           dispatch(fetchAllSubCenter(e.value));
                           setSelectCenter(e);
                         }}
                         value={seletCenter}
+                        // error={errors.destinationCenterId}
+                        //touched={touched.destinationCenterId}
                       />
                     </div>
                     <div className="col-12 col-md-4">
                       <SearchSelect
                         name="destinationSubCenterId"
                         options={dashboard.allSubCenter}
-                        label="Select Sub-Center"
+                        label="Select Sub-Center*"
+                        onBlur={() => {
+                          handleBlur({
+                            target: { name: "destinationSubCenterId" },
+                          });
+                        }}
                         onChange={(e) => {
                           setFieldValue("destinationSubCenterId", e.value);
                           // dispatch(fetchAllSubCenter(e.value));
                           setSelectsubCenter(e);
                         }}
                         value={seletSubcenter}
+                        // error={errors.destinationSubCenterId}
+                        // touched={touched.destinationSubCenterId}
                       />
                     </div>
                   </div>
@@ -223,18 +252,18 @@ export function TripLogEditForm({
                       <Field
                         name="finalReading"
                         component={Input}
-                        label="Final Reading"
+                        label="Final Reading*"
                       />
                     </div>
                     <div className="col-lg-4">
                       <Field
                         name="logBookNo"
                         component={Input}
-                        label="Log Book No"
+                        label="Log Book No*"
                       />
                     </div>
                     <div className="col-lg-4">
-                      <Field name="price" component={Input} label="Price" />
+                      <Field name="price" component={Input} label="Price*" />
                     </div>
                   </div>
                   <div className="form-group row">
