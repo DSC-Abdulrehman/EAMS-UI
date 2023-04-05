@@ -55,9 +55,9 @@ const userEditSchema = Yup.object().shape(
       .matches(cnicRegExp, "CNIC should be like 35401-2432321-1")
       .required("CNIC is required"),
     status: Yup.string().required("Please select status"),
-    roleId: Yup.mixed()
-      .nullable(false)
-      .required("Please select role"),
+    // roleId: Yup.mixed()
+    //   .nullable(false)
+    //   .required("Please select role"),
     // password: Yup.string()
     // .matches(
     //   passwordRegex,
@@ -338,6 +338,7 @@ export function UserEditForm({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         style={{ display: "block" }}
+                        disabled={values.roleId == 1 || values.roleId == 3 ? false : true}
                       >
                         <option value="" label="Select Role" />
                         {roles &&

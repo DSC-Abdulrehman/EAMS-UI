@@ -31,7 +31,7 @@ export function ActionsColumnFormatter(
   return (
     <>
       <OverlayTrigger
-        overlay={<Tooltip id="products-edit-tooltip">Read Center</Tooltip>}
+        overlay={<Tooltip id="products-edit-tooltip">Read Sub Center</Tooltip>}
       >
         <a
           title="Read User"
@@ -47,7 +47,7 @@ export function ActionsColumnFormatter(
       </OverlayTrigger>
       {isAccessForEdit && (
         <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Edit Center</Tooltip>}
+          overlay={<Tooltip id="products-edit-tooltip">Edit Sub Center</Tooltip>}
         >
           <a
             title="Edit customer"

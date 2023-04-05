@@ -22,9 +22,9 @@ const userEditSchema = Yup.object().shape({
   phoneNo: Yup.string()
     .matches(phoneRegExp, "Invalid format it should be 03049018107")
     .required("Phone No is required"),
-  location: Yup.string().required("Location is Required"),
-  longitude: Yup.string().required("Lognitude is required"),
-  latitude: Yup.string().required("Latitude is required"),
+  // location: Yup.string().required("Location is Required"),
+  // longitude: Yup.string().required("Lognitude is required"),
+  // latitude: Yup.string().required("Latitude is required"),
 });
 
 export function CenterEditForm({
@@ -130,16 +130,16 @@ export function CenterEditForm({
                         label="Phone No*"
                       />
                     </div>
-                    <div className="col-12 col-md-4 mb-5">
+                    {/* <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="location"
                         component={Input}
                         placeholder="Location"
                         label="Location*"
                       />
-                    </div>
+                    </div> */}
 
-                    <div className="col-12 col-md-4 mb-5">
+                    {/* <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="longitude"
                         component={Input}
@@ -154,7 +154,7 @@ export function CenterEditForm({
                         placeholder="Latitude"
                         label="Latitude*"
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </fieldset>
                 {isUserForRead ? (

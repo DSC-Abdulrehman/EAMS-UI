@@ -58,9 +58,9 @@ export function CentersUIProvider({ centersUIEvents, children }) {
     centerId: "",
     name: "",
     phoneNo: "",
-    location: "",
-    longitude: "",
-    latitude: "",
+    // location: "",
+    // longitude: "",
+    // latitude: "",
   };
 
   const value = {

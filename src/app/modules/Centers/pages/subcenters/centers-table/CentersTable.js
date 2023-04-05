@@ -90,16 +90,16 @@ export function SubCenterTable() {
         minWidth: "130px",
       },
     },
-    {
-      dataField: "location",
-      text: "Location",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "130px",
-      },
-    },
+    // {
+    //   dataField: "location",
+    //   text: "Location",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "130px",
+    //   },
+    // },
     {
       dataField: "phoneNo",
       text: "Phone",

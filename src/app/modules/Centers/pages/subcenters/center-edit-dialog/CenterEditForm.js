@@ -15,13 +15,13 @@ const userEditSchema = Yup.object().shape({
   name: Yup.string()
     .min(3, "Minimum 3 letters")
     .max(50, "Maximum 50 letters")
-    .required("Center Name is required"),
+    .required("Sub Center Name is required"),
   phoneNo: Yup.string()
     .matches(phoneRegExp, "Invalid format it should be 03049018107")
     .required("Phone No is required"),
-  location: Yup.string().required("Location is Required"),
-  longitude: Yup.string().required("Lognitude is required"),
-  latitude: Yup.string().required("Latitude is required"),
+  // location: Yup.string().required("Location is Required"),
+  // longitude: Yup.string().required("Lognitude is required"),
+  // latitude: Yup.string().required("Latitude is required"),
 });
 
 export function CenterEditForm({
@@ -95,7 +95,7 @@ export function CenterEditForm({
                     <div className="col-12 col-md-4 mb-5">
                       <SearchAbleSelect
                         name="centerId"
-                        label="Mian Center*"
+                        label="Main Center*"
                         onBlur={() => {
                           handleBlur({ target: { name: "centerId" } });
                         }}
@@ -117,8 +117,8 @@ export function CenterEditForm({
                       <Field
                         name="name"
                         component={Input}
-                        placeholder="Center Name"
-                        label="Sub-Center Name*"
+                        placeholder="sub Center Name"
+                        label="Sub Center Name*"
                       />
                     </div>
                     <div className="col-12 col-md-4 mb-5">
@@ -129,16 +129,16 @@ export function CenterEditForm({
                         label="Phone No*"
                       />
                     </div>
-                    <div className="col-12 col-md-4 mb-5">
+                    {/* <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="location"
                         component={Input}
                         placeholder="Location"
                         label="Location*"
                       />
-                    </div>
+                    </div> */}
 
-                    <div className="col-12 col-md-4 mb-5">
+                    {/* <div className="col-12 col-md-4 mb-5">
                       <Field
                         name="longitude"
                         component={Input}
@@ -153,7 +153,7 @@ export function CenterEditForm({
                         placeholder="Latitude"
                         label="Latitude*"
                       />
-                    </div>
+                    </div> */}
                   </div>
                 </fieldset>
                 {isUserForRead ? (

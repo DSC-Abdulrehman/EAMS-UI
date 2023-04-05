@@ -92,9 +92,9 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         id: center.id,
         name: center.name,
         phoneNo: center.phoneNo,
-        location: center.location,
-        longitude: center.longitude,
-        latitude: center.latitude,
+        // location: center.location,
+        // longitude: center.longitude,
+        // latitude: center.latitude,
         conuntryId: center.conuntryId,
         cityId: center.cityId,
       };

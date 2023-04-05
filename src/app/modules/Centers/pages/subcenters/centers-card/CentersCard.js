@@ -43,7 +43,7 @@ export function CentersCard() {
                 className="btn btn-primary"
                 onClick={centersUIProps.newCenterButtonClick}
               >
-                Add New Center
+                Add New sub Center
               </button>
             ) : (
               <></>

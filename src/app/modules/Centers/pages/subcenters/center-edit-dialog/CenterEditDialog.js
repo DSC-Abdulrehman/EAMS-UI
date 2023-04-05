@@ -57,7 +57,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
     shallowEqual
   );
 
-  console.log("centerState", centerForEdit);
+  console.log("subcenterState", centerForEdit);
 
   // useEffect(() => {
   //   if (id) {
@@ -81,7 +81,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
   }, [id, centerForEdit]);
   // console.log("listLoading", listLoading);
   const saveCenter = (center) => {
-    console.log("Update center", center);
+    console.log("Update sub center", center);
     const { centerId, ...rest } = center;
     const finalObj = {
       centerId: centerId.value,
@@ -96,9 +96,9 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         id: center.id,
         name: center.name,
         phoneNo: center.phoneNo,
-        location: center.location,
-        longitude: center.longitude,
-        latitude: center.latitude,
+        // location: center.location,
+        // longitude: center.longitude,
+        // latitude: center.latitude,
         centerId: center.centerId?.value,
         // conuntryId: center.conuntryId,
         // cityId: center.cityId,

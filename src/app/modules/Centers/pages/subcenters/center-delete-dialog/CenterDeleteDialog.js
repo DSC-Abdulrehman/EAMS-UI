@@ -66,12 +66,12 @@ export function CenterDeleteDialog({ id, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Delete Center
+          In-Active Sub Center
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {!isLoading && (
-          <span>Are you sure to permanently delete this center?</span>
+          <span>Are you sure to permanently In-Active this sub center?</span>
         )}
       </Modal.Body>
       <Modal.Footer>
