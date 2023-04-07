@@ -67,7 +67,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         })
       );
     }
-  }, [id]);
+  }, [id, centersUIProps.secondQueryParams]);
 
   // useEffect(() => {
   //   if (id) {
@@ -109,8 +109,18 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
       aria-labelledby="example-modal-sizes-title-lg"
     >
       <CenterEditDialogHeader id={id} isUserForRead={userForRead} />
-
-      {actionLoading ? (
+      <CenterEditForm
+        saveCenter={saveCenter}
+        center={centerForEdit || centersUIProps.initCenter}
+        onHide={onHide}
+        roles={roles}
+        centers={centers}
+        isUserForRead={userForRead}
+        vehiclesForCenter={vehiclesForCenter}
+        totalCount={totalCount}
+        id={id}
+      />
+      {/* {actionLoading ? (
         <>
           <div className={classes.root}>
             <CircularProgress />
@@ -127,9 +137,10 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
             isUserForRead={userForRead}
             vehiclesForCenter={vehiclesForCenter}
             totalCount={totalCount}
+            id={id}
           />
         </>
-      )}
+      )} */}
 
       <ToastContainer
         position="top-right"

@@ -124,7 +124,7 @@ export function UsersTable() {
       sort: false,
       sortCaret: sortCaret,
       style: {
-        minWidth: "130px",
+        minWidth: "60px",
       },
     },
     {

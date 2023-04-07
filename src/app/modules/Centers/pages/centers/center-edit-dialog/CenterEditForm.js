@@ -40,6 +40,7 @@ export function CenterEditForm({
   isUserForRead,
   vehiclesForCenter,
   totalCount,
+  id,
 }) {
   const [loading, setLoading] = useState(false);
   const [seletCountry, setSeletCountry] = useState([]);
@@ -225,6 +226,7 @@ export function CenterEditForm({
                     <CentersVehiclesTable
                       vehiclesForCenter={vehiclesForCenter}
                       totalCount={totalCount}
+                      id={id}
                     />
                   </>
                 ) : (

@@ -19,11 +19,11 @@ import { useCentersUIContext } from "../CentersUIContext";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { Spinner, Button, ButtonToolbar } from "react-bootstrap";
 import { CenterVehiclesFilter } from "./center-vehicle-filter/CenterVehiclesFilter";
+import { fetchVehicle } from "../../../../Vehicles/_redux/vehiclesActions";
 
-export function CentersVehiclesTable({ vehiclesForCenter, totalCount }) {
+export function CentersVehiclesTable({ vehiclesForCenter, totalCount, id }) {
+  const dispatch = useDispatch();
   const [isFetching, setIsFetching] = useState(true);
-  //console.log("Center vEHICLES", props.vehiclesForCenter.ro)
-  //Users UI Context
   const centersUIContext = useCentersUIContext();
 
   const centersUIProps = useMemo(() => {
@@ -36,75 +36,17 @@ export function CentersVehiclesTable({ vehiclesForCenter, totalCount }) {
     };
   }, [centersUIContext]);
 
-  // console.log(
-  //   "currentStatecenters",
-  //   currentStatecenters.centers.vehiclesForCenter.rows
-  // )
-  // if (currentStatecenters.vehiclesForCenter) {
-  //   var entities = currentStatecenters.vehiclesForCenter.rows
-  //   var totalCount = currentStatecenters.vehiclesForCenter.totalResults
-  //   var listLoading = currentStatecenters.listLoading
-  // }
+  // const state = useSelector((state) => state);
+  //console.log("id", id);
 
-  // console.log("entities", entities)
-  // Centers Redux state
-
-  // useCallback(() => {
-
-  // })
-  // const { entities, totalCount, userAccess } = useSelector(
-  //   (state) => ({
-  //     entities: state.centers?.vehiclesForCenter,
-  //     totalCount: state.centers.vehiclesForCenter,
-  //     userAccess: state.auth.userAccess.Users,
-  //   }),
-  //   shallowEqual
-  // )
-
-  //console.log("props", vehiclesForCenter, totalCount)
-  // const dispatch = useDispatch()
-  //dispatch(actions.fetchVehicles(centersUIProps.queryParms))
+  // centersUIProps.queryParms["centerId"] = +id
+  // console.log("mainQuery", centersUIProps.queryParms);
   // useEffect(() => {
-  //   // if(token) dispatch(actions.fetchVehicles({token}))
-  //   // setTimeout(function() {
-  //   //   //console.log("Delayed for 5 second.")
-  //   //   dispatch(actions.fetchVehicles(centersUIProps.queryParms))
-  //   //   setIsFetching(false)
-  //   // }, 3000)
-  //   // dispatch(actions.fetchVehicles(centersUIProps.queryParms))
-  // }, [dispatch])
-  // if (entities !== null) {
-  //   var finalentities = entities.rows
-  // }
-  // console.log("props", finalentities)
-
-  // const useCenterVehicles = () => {
-  //   const terminology = useSelector((state) => state.centers.vehiclesForCenter)
-
-  //   return terminology
-  // }
-
-  // const { terminology } = useCenterVehicles()
-
-  //console.log("entities", terminology)
-  // console.log(
-  //   "entities",
-  //   setTimeout(function() {
-  //     return entities.limit
-  //   }, 3000)
-  // )
-  //console.log("userAccess", userAccess, "Current State", currentState)
-  // const isAccessForEdit = userAccess.find(
-  //   (item) => item.componentName === "UpdateUser"
-  // )
-
-  // const isAccessForDelete = userAccess.find(
-  //   (item) => item.componentName === "DeleteUser"
-  // )
-  // console.log("currentStatecenters", currentStatecenters.vehiclesForCenter)
-  // const entities = currentStatecenters.vehiclesForCenter
-  // const totalCount = currentStatecenters.vehiclesForCenter.totalResults
-  // const listLoading = currentStatecenters.listLoading
+  //   async function fetchData() {
+  //     await dispatch(fetchVehicle(centersUIProps.queryParms));
+  //   }
+  //   fetchData();
+  // }, [centersUIProps.queryParms]);
 
   // Table columns
   const columns = [
@@ -224,12 +166,12 @@ export function CentersVehiclesTable({ vehiclesForCenter, totalCount }) {
   return (
     <>
       <h4>Registered Vehicles</h4>
-      {/* <CenterVehiclesFilter /> */}
+      <CenterVehiclesFilter />
       <PaginationProvider pagination={paginationFactory(paginationOptions)}>
         {({ paginationProps, paginationTableProps }) => {
           return (
             <Pagination
-              // isLoading={listLoading}
+              //isLoading={listLoading}
               paginationProps={paginationProps}
             >
               <BootstrapTable
