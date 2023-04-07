@@ -106,6 +106,7 @@ export function UserEditForm({
 
   const { dashboard, users } = useSelector((state) => state);
 
+  console.log("users", users?.userForEdit?.roleId)
   // const enableLoading = () => {
   //   setLoading(true);
   // };
@@ -338,7 +339,7 @@ export function UserEditForm({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         style={{ display: "block" }}
-                        disabled={values.roleId == 1 || values.roleId == 3 ? false : true}
+                        disabled={users?.userForEdit?.roleId == 1 || users?.userForEdit?.roleId == 3 ? false : true}
                       >
                         <option value="" label="Select Role" />
                         {roles &&

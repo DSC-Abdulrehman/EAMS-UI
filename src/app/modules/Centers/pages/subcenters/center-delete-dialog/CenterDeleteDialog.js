@@ -73,6 +73,7 @@ export function CenterDeleteDialog({ id, show, onHide }) {
         {!isLoading && (
           <span>Are you sure to permanently In-Active this sub center?</span>
         )}
+        {isLoading && <span> sub center is de-activating...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -89,7 +90,7 @@ export function CenterDeleteDialog({ id, show, onHide }) {
             onClick={deleteUser}
             className="btn btn-primary btn-elevate"
           >
-            Delete
+            In-Active
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}
