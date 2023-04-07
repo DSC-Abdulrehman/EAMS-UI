@@ -9,7 +9,7 @@ import {
   DropdownMenu3,
 } from "../../dropdowns";
 import { useHtmlClassService } from "../../../layout";
-import Button from "@material-ui/core/Button";
+//import Button from "@material-ui/core/Button";
 import { IncidentsEditDialog } from "../../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
 import Modal from "react-bootstrap/Modal";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
@@ -18,6 +18,8 @@ import {
   fetchDashboardVehicles,
 } from "../../../redux/dashboardActions";
 import { useDispatch } from "react-redux";
+import { getDate, getTime, getCurrentTime } from "../../../../app/utils/common";
+import moment from "moment";
 
 export function TilesWidget1({
   className,
@@ -32,6 +34,7 @@ export function TilesWidget1({
   seletedCity,
   selectionType,
   diable,
+  rowSelection,
 }) {
   //console.log("seletedCity", seletedCity);
   const dispatch = useDispatch();
@@ -40,33 +43,59 @@ export function TilesWidget1({
   const uiService = useHtmlClassService();
 
   // console.log("diable", diable);
-  const layoutProps = useMemo(() => {
-    return {
-      colorsGrayGray500: objectPath.get(
-        uiService.config,
-        "js.colors.gray.gray500"
-      ),
-      colorsGrayGray300: objectPath.get(
-        uiService.config,
-        "js.colors.gray.gray300"
-      ),
-      colorsThemeBaseColor: objectPath.get(
-        uiService.config,
-        `js.colors.theme.base.${chartColor}`
-      ),
-      colorsThemeLightColor: objectPath.get(
-        uiService.config,
-        `js.colors.theme.light.${chartColor}`
-      ),
-      fontFamily: objectPath.get(uiService.config, "js.fontFamily"),
-    };
-  }, [uiService, chartColor]);
+  // const layoutProps = useMemo(() => {
+  //   return {
+  //     colorsGrayGray500: objectPath.get(
+  //       uiService.config,
+  //       "js.colors.gray.gray500"
+  //     ),
+  //     colorsGrayGray300: objectPath.get(
+  //       uiService.config,
+  //       "js.colors.gray.gray300"
+  //     ),
+  //     colorsThemeBaseColor: objectPath.get(
+  //       uiService.config,
+  //       `js.colors.theme.base.${chartColor}`
+  //     ),
+  //     colorsThemeLightColor: objectPath.get(
+  //       uiService.config,
+  //       `js.colors.theme.light.${chartColor}`
+  //     ),
+  //     fontFamily: objectPath.get(uiService.config, "js.fontFamily"),
+  //   };
+  // }, [uiService, chartColor]);
 
+  // useEffect(() =>{
+  //   var now = moment(new Date());
+  //   var end = moment(cellContent);
+  //   var minutes = now.diff(end, "minutes");
+  //   console.log("minutes", minutes);
+  // },[])
   const statusFormater = (cell, row) => (
     <span className={row.status === true ? "text-success" : "text-warning"}>
       {row.name}
     </span>
   );
+
+  // function func() {
+  //   console.log("Ran");
+  // }
+  // setInterval(func, 5000);
+
+  const timerFormater = (cellContent) => {
+    var now = moment(new Date());
+    var end = moment(cellContent);
+    var minutes = now.diff(end, "minutes");
+    console.log("minutes", minutes);
+
+    return (
+      <>
+        <span className={minutes > 2 ? "text-danger" : ""}>
+          {getTime(cellContent)}
+        </span>
+      </>
+    );
+  };
 
   const actionFormater = (cell, row) => {
     const standToOff = () => {
@@ -99,82 +128,64 @@ export function TilesWidget1({
 
     return (
       <>
-        <Dropdown className="dropdown-inline" alignRight>
-          <Dropdown.Toggle
-            className="btn btn-clean btn-hover-light-primary btn-sm btn-icon"
-            variant="transparent"
-            id="dropdown-toggle-top"
-            as={DropdownCustomToggler}
-          >
-            <i className="ki ki-bold-more-hor" />
-          </Dropdown.Toggle>
-          <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-            <ul className="navi navi-hover py-5">
-              {heading === "Stand By" ? (
-                <>
-                  <li className="navi-item" onClick={() => standToOff()}>
+        {heading != "On Duty" && (
+          <Dropdown className="dropdown-inline" alignRight>
+            <Dropdown.Toggle
+              className=" btn-clean btn-hover-light-primary btn-sm btn-icon"
+              variant="transparent"
+              id="dropdown-toggle-top"
+              as={DropdownCustomToggler}
+            >
+              <i className="ki ki-bold-more-hor" />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+              <ul className="navi navi-hover py-5">
+                {heading === "Stand By" ? (
+                  <>
+                    <li className="navi-item" onClick={() => standToOff()}>
+                      <a href="#" className="navi-link">
+                        <span className="navi-icon">
+                          <i className="flaticon2-list-3"></i>
+                        </span>
+                        <span className="navi-text">Off Duty</span>
+                      </a>
+                    </li>
+                    <li className="navi-item">
+                      <a href="#" className="navi-link">
+                        <span className="navi-icon">
+                          <i className="flaticon2-rocket-1"></i>
+                        </span>
+                        <span className="navi-text">Update</span>
+                      </a>
+                    </li>
+                    <li className="navi-item">
+                      <a href="#" className="navi-link">
+                        <span className="navi-icon">
+                          <i className="flaticon2-bell-2"></i>
+                        </span>
+                        <span className="navi-text">Last 20 Trips</span>
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <li className="navi-item" onClick={() => offToStand()}>
                     <a href="#" className="navi-link">
                       <span className="navi-icon">
                         <i className="flaticon2-list-3"></i>
                       </span>
-                      <span className="navi-text">Off Duty</span>
+                      <span className="navi-text">Stand By</span>
                     </a>
                   </li>
-                  <li className="navi-item">
-                    <a href="#" className="navi-link">
-                      <span className="navi-icon">
-                        <i className="flaticon2-rocket-1"></i>
-                      </span>
-                      <span className="navi-text">Update</span>
-                    </a>
-                  </li>
-                  <li className="navi-item">
-                    <a href="#" className="navi-link">
-                      <span className="navi-icon">
-                        <i className="flaticon2-bell-2"></i>
-                      </span>
-                      <span className="navi-text">Last 20 Trips</span>
-                    </a>
-                  </li>
-                </>
-              ) : (
-                <li className="navi-item" onClick={() => offToStand()}>
-                  <a href="#" className="navi-link">
-                    <span className="navi-icon">
-                      <i className="flaticon2-list-3"></i>
-                    </span>
-                    <span className="navi-text">Stand By</span>
-                  </a>
-                </li>
-              )}
-
-              {/* <li className="navi-item">
-                <a href="#" className="navi-link">
-                  <span className="navi-icon">
-                    <i className="flaticon2-drop"></i>
-                  </span>
-                  <span className="navi-text">Out</span>
-                </a>
-              </li> */}
-            </ul>
-            {/* {heading === "Stand By" ? (
-              <>
-                <DropdownMenu4 column={row} seletedCity={seletedCity} />
-              </>
-            ) : (
-              <>
-                <DropdownMenu3 column={row} />
-              </>
-            )} */}
-          </Dropdown.Menu>
-        </Dropdown>
+                )}
+              </ul>
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
       </>
     );
   };
 
-  // useEffect(() => {
-  //   dispatch(fetchDashboardVehicles({ cityId: seletedCity.value }));
-  // }, [dispatch, seletedCity]);
+  //setInterval(timerFormater, 5000);
 
   const columns = [
     {
@@ -192,24 +203,21 @@ export function TilesWidget1({
       dataField: "regNo",
       text: "Registration No",
       align: "center",
-      //formatter: (cell, row) => types[cell],
-      //headerTitle: false,
       headerAttrs: {
         hidden: true,
       },
       style: { verticalAlign: "middle" },
-      // formatter: statusFormater,
     },
-    // {
-    //   dataField: "center",
-    //   text: "Center",
-    //   align: "center",
-    //   headerAttrs: {
-    //     hidden: true,
-    //   },
-
-    //   // filter: textFilter(), // apply text filter
-    // },
+    {
+      dataField: "start_time",
+      text: "time",
+      align: "center",
+      headerAttrs: {
+        hidden: true,
+      },
+      style: { verticalAlign: "middle" },
+      formatter: timerFormater,
+    },
     {
       dataField: "",
       text: "Action",
@@ -223,9 +231,8 @@ export function TilesWidget1({
   ];
 
   const selectRow = {
-    // mode: "radio",
-    // clickToSelect: true,
     mode: selectionType,
+    hideSelectColumn: rowSelection,
     style: { backgroundColor: "#c8e6c9" },
     selectColumnStyle: {
       textAlign: "center",
@@ -234,8 +241,7 @@ export function TilesWidget1({
     classes: "custom-class",
     align: "center",
     hideSelectAll: true,
-    // style: { verticalAlign: "middle" },
-    //clickToSelect: true,
+    clickToSelect: true,
     onSelect: (row, isSelect, rowIndex, e) => {
       if (isSelect) {
         let vehicleId;
@@ -278,7 +284,7 @@ export function TilesWidget1({
           <div className="card-toolbar">
             {buttonHeading && (
               <button
-                className="btn btn-dark"
+                className="btn btn-primary"
                 disabled={diable}
                 onClick={handleClickOpen}
                 //onClick={handleShow}
@@ -291,6 +297,7 @@ export function TilesWidget1({
 
         <div className="table-box">
           <BootstrapTable
+            classes="dasboard-table"
             keyField="vehicleid"
             data={vehiclesData || []}
             columns={columns}

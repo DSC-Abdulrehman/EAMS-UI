@@ -23,6 +23,7 @@ export function Demo2Dashboard() {
   const [offDutyVehicles, setOffDutyVehicels] = useState([]);
   const [vehicle, setVehicle] = useState([]);
   const [seletedOnDuty, setSeletecOnDuty] = useState([]);
+  const [seletedOnOffDuty, setSeleteOffDuty] = useState([]);
   const [open, setOpen] = useState(false);
   const [openCloseTripDialogue, setCloseTripDialogue] = useState(false);
   const [closeTripId, setCloseTripId] = useState();
@@ -39,10 +40,24 @@ export function Demo2Dashboard() {
   useEffect(() => {
     //console.log("Fetch city by user id one thime");
     dispatch(fetchAllCity(user.countryId));
+    dispatch(fetchAllCityCenters(user.cityId));
   }, []);
 
   useEffect(() => {
-    console.log("seleted cit yis called");
+    // const interval = setInterval(() => {
+    //   console.log("Set interval called");
+    //   dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
+    // }, 5000);
+    // setOnDutyVehicels(dashboard.onDuty);
+    // return () => clearInterval(interval);
+
+    dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.value }));
+    // //dispatch(fetchAllCityCenters(user.cityId));
+  }, []);
+
+  // console.log("city", city);
+  useEffect(() => {
+    //console.log("seleted cit yis called");
     const getSeletedCity =
       dashboard.allCity &&
       dashboard.allCity.find((item) => {
@@ -61,19 +76,6 @@ export function Demo2Dashboard() {
   }, [seletedOnDuty]);
 
   //console.log("vehicle", vehicle);
-
-  useEffect(() => {
-    // const interval = setInterval(() => {
-    //   // console.log("Set interval called");
-    //   dispatch(fetchDashboardVehicles({ cityId: user.cityId }));
-    //   dispatch(fetchAllCityCenters(user.cityId));
-    // }, 3000);
-
-    // return () => clearInterval(interval);
-
-    dispatch(fetchDashboardVehicles({ cityId: user.cityId || city.values }));
-    dispatch(fetchAllCityCenters(user.cityId));
-  }, []);
 
   useEffect(() => {
     setStandbyVehicels(dashboard.standBy);
@@ -134,6 +136,7 @@ export function Demo2Dashboard() {
             seletedCity={city}
             selectionType="checkbox"
             diable={diable}
+            rowSelection={false}
           />
           <IncidentCreateDialog
             show={open}
@@ -160,6 +163,7 @@ export function Demo2Dashboard() {
             vehicle={seletedOnDuty}
             selectionType="radio"
             diable={diableOnDutyButton}
+            rowSelection={false}
           />
           <TripLogEditDialog
             show={openCloseTripDialogue}
@@ -173,11 +177,12 @@ export function Demo2Dashboard() {
             className="gutter-b card-stretch"
             chartColor="danger"
             heading="Off Duty"
-            // buttonHeading="Active vehicle"
+            //buttonHeading="Active vehicle"
             NoofVehicle={offDutyVehicles.length}
             vehiclesData={offDutyVehicles}
-            setVehicle={setVehicle}
+            setVehicle={setSeleteOffDuty}
             seletedCity={city}
+            rowSelection={true}
             selectionType="radio"
           />
         </div>

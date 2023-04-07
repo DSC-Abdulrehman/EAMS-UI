@@ -61,10 +61,11 @@ export const centersSlice = createSlice({
       );
     },
     centerCreated: (state, action) => {
+      //console.log("action.payload", action.payload);
       state.actionsLoading = false;
       state.listLoading = false;
       state.error = null;
-      state.entities.unshift(action.payload.user);
+      state.entities.unshift(action.payload);
     },
     centerUpdated: (state, action) => {
       state.error = null;

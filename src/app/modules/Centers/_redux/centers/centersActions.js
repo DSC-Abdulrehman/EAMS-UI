@@ -25,9 +25,9 @@ export const fetchCenters = (queryparm) => async (dispatch) => {
 };
 
 export const fetchCenter = (id) => async (dispatch) => {
-  // if (!id) {
-  //   return await dispatch(actions.centerFetched(""));
-  // }
+  if (!id) {
+    return await dispatch(actions.centerFetched(""));
+  }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
   return await requestFromServer
@@ -73,7 +73,8 @@ export const createCenter = (userForCreation) => (dispatch) => {
     .createRequest(userForCreation)
     .then((res) => {
       const user = res.data?.data;
-      dispatch(actions.centerCreated({ user }));
+      // console.log("user", user);
+      dispatch(actions.centerCreated(user[0]));
       toast.success(res.data.message, {
         position: "top-right",
         autoClose: 5000,

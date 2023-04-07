@@ -7,4 +7,12 @@ export const getDate = (
   noDateFoundMessage = "-"
 ) => (date ? moment(date).format("lll") : noDateFoundMessage);
 
+export const getTime = (
+  date,
+  format = DateTimeFormats.General,
+  noDateFoundMessage = "-"
+) => (date ? moment(date).format("LT") : noDateFoundMessage);
+
+export const getCurrentTime = () => moment().format("LT");
+
 //export const getDate = (data) => {};

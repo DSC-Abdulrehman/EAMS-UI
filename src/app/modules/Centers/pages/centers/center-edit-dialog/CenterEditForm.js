@@ -74,7 +74,7 @@ export function CenterEditForm({
   return (
     <>
       <Formik
-        //enableReinitialize={true}
+        enableReinitialize={true}
         initialValues={center}
         validationSchema={userEditSchema}
         onSubmit={(values) => {
@@ -95,7 +95,7 @@ export function CenterEditForm({
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="form-group row">
-                    <div className="col-12 col-md-4 mb-5">
+                    <div className="col-12 col-md-6 mb-5">
                       <SearchSelect
                         name="countryId"
                         label="Country*"
@@ -132,7 +132,7 @@ export function CenterEditForm({
                       /> */}
                     </div>
 
-                    <div className="col-12 col-md-4 mb-5">
+                    <div className="col-12 col-md-6 mb-5">
                       <SearchSelect
                         name="cityId"
                         label="City*"
@@ -167,7 +167,7 @@ export function CenterEditForm({
                       options={citiesDropdown}
                     /> */}
 
-                    <div className="col-12 col-md-4 mb-5">
+                    <div className="col-12 col-md-6 mb-5">
                       <Field
                         name="name"
                         component={Input}
@@ -175,7 +175,7 @@ export function CenterEditForm({
                         label="Center Name*"
                       />
                     </div>
-                    <div className="col-12 col-md-4 mb-5">
+                    <div className="col-12 col-md-6 mb-5">
                       <Field
                         name="phoneNo"
                         component={Input}
