@@ -27,6 +27,7 @@ export function CentersTable() {
     return {
       openEditCenterDialog: centersUIContext.openEditCenterDialog,
       openDeleteCenterDialog: centersUIContext.openDeleteCenterDialog,
+      openActiveCenterDialog: centersUIContext.openActiveCenterDialog,
       openReadCenterDialog: centersUIContext.openReadCenterDialog,
       queryParms: centersUIContext.queryParams,
       setQueryParams: centersUIContext.setQueryParams,
@@ -141,6 +142,7 @@ export function CentersTable() {
       formatExtraData: {
         openEditCenterDialog: centersUIProps.openEditCenterDialog,
         openDeleteCenterDialog: centersUIProps.openDeleteCenterDialog,
+        openActiveCenterDialog: centersUIProps.openActiveCenterDialog,
         openReadCenterDialog: centersUIProps.openReadCenterDialog,
         isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
         isAccessForDelete: isAccessForDelete

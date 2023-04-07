@@ -77,6 +77,7 @@ export function CentersUIProvider({ centersUIEvents, children }) {
     newCenterButtonClick: centersUIEvents.newCenterButtonClick,
     openEditCenterDialog: centersUIEvents.openEditCenterDialog,
     openDeleteCenterDialog: centersUIEvents.openDeleteCenterDialog,
+    openActiveCenterDialog: centersUIEvents.openActiveCenterDialog,
     openReadCenterDialog: centersUIEvents.openReadCenterDialog,
   };
   return (
