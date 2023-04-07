@@ -118,7 +118,6 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         isUserForRead={userForRead}
         vehiclesForCenter={vehiclesForCenter}
         totalCount={totalCount}
-        id={id}
       />
       {/* {actionLoading ? (
         <>

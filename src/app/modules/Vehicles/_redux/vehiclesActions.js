@@ -169,9 +169,9 @@ export const fetchDrivers = (id) => async (dispatch) => {
     .then((response) => {
       const entities = response?.data?.data;
       dispatch(actions.driversByCetner(entities));
-      if (entities.length == 0) {
-        toast.error("Driver not found");
-      }
+      // if (entities.length == 0) {
+      //   toast.error("Driver not found");
+      // }
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.list }));

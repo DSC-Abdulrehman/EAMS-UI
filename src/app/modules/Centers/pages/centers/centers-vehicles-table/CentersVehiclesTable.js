@@ -21,7 +21,7 @@ import { Spinner, Button, ButtonToolbar } from "react-bootstrap";
 import { CenterVehiclesFilter } from "./center-vehicle-filter/CenterVehiclesFilter";
 import { fetchVehicle } from "../../../../Vehicles/_redux/vehiclesActions";
 
-export function CentersVehiclesTable({ vehiclesForCenter, totalCount, id }) {
+export function CentersVehiclesTable({ vehiclesForCenter, totalCount }) {
   const dispatch = useDispatch();
   const [isFetching, setIsFetching] = useState(true);
   const centersUIContext = useCentersUIContext();
@@ -35,18 +35,6 @@ export function CentersVehiclesTable({ vehiclesForCenter, totalCount, id }) {
       setQueryParams: centersUIContext.setSecondQueryParams,
     };
   }, [centersUIContext]);
-
-  // const state = useSelector((state) => state);
-  //console.log("id", id);
-
-  // centersUIProps.queryParms["centerId"] = +id
-  // console.log("mainQuery", centersUIProps.queryParms);
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     await dispatch(fetchVehicle(centersUIProps.queryParms));
-  //   }
-  //   fetchData();
-  // }, [centersUIProps.queryParms]);
 
   // Table columns
   const columns = [

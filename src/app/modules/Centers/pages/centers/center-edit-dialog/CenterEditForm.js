@@ -40,7 +40,6 @@ export function CenterEditForm({
   isUserForRead,
   vehiclesForCenter,
   totalCount,
-  id,
 }) {
   const [loading, setLoading] = useState(false);
   const [seletCountry, setSeletCountry] = useState([]);
@@ -70,7 +69,7 @@ export function CenterEditForm({
     setLoading(true);
   };
 
-  // console.log("center", center);
+  console.log("center value", center);
 
   return (
     <>
@@ -226,7 +225,6 @@ export function CenterEditForm({
                     <CentersVehiclesTable
                       vehiclesForCenter={vehiclesForCenter}
                       totalCount={totalCount}
-                      id={id}
                     />
                   </>
                 ) : (

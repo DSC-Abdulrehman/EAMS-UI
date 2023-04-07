@@ -16,9 +16,9 @@
     display: none;
 }
 
-.card-body {
+/* .card-body {
     overflow-x: scroll;
-}
+} */
 
 ::-webkit-scrollbar-thumb {
     background: 0 0;

@@ -7,6 +7,7 @@ import { Input } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, useDispatch } from "react-redux";
 import { CentersVehiclesTable } from "../centers-vehicles-table/CentersVehiclesTable";
 import { SearchAbleSelect } from "./SearchAbleSelect";
+import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // Validation schema
@@ -39,6 +40,7 @@ export function CenterEditForm({
   // const [city, setCity] = useState();
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [mainCenter, setMainCenter] = useState([]);
   const mainCenterDropdown = useSelector((item) => item.dashboard?.allCenters);
   const [state, selectedVal] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,6 +67,17 @@ export function CenterEditForm({
     selectedVal({ selectedVal: e.value });
     //this.setState({ selectedVal: e.value });
   };
+
+  const { dashboard } = useSelector((state) => state);
+
+  useEffect(() => {
+    setMainCenter(
+      dashboard.allCenters &&
+        dashboard.allCenters.find((item) => {
+          return item.value === center?.centerId;
+        })
+    );
+  }, [center, dashboard.allCenters]);
   //console.log("state", state);
   // console.log("mainCenterDropdown", mainCenterDropdown);
 
@@ -93,7 +106,17 @@ export function CenterEditForm({
                 <fieldset disabled={isUserForRead}>
                   <div className="form-group row">
                     <div className="col-12 col-md-4 mb-5">
-                      <SearchAbleSelect
+                      <SearchSelect
+                        name="centerId"
+                        options={dashboard.allCenters}
+                        label="Main Center"
+                        onChange={(e) => {
+                          setFieldValue("centerId", e.value);
+                          setMainCenter(e);
+                        }}
+                        value={mainCenter}
+                      />
+                      {/* <SearchAbleSelect
                         name="centerId"
                         label="Main Center*"
                         onBlur={() => {
@@ -110,7 +133,7 @@ export function CenterEditForm({
                         touched={touched.centerId}
                         options={mainCenterDropdown}
                         // defalutValue={state}
-                      />
+                      /> */}
                     </div>
 
                     <div className="col-12 col-md-4 mb-5">

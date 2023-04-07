@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
-  const title = "CenterEditDialog";
   const classes = useStyles();
   const [isForEdit, setIsForEdit] = useState();
   const centersUIContext = useCentersUIContext();
@@ -34,6 +33,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
   }, [centersUIContext]);
 
   const dispatch = useDispatch();
+
   const {
     centerState,
     actionLoading,
@@ -51,25 +51,24 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
       roles: state.users.roles,
       centers: state.users.centers,
       isuserForRead: state.users.userForRead,
-      vehiclesForCenter: state.centers.vehiclesForCenter?.rows,
-      totalCount: state.centers.vehiclesForCenter?.totalResults,
+      vehiclesForCenter: state.subCenters.vehiclesForCenter?.rows,
+      totalCount: state.subCenters.vehiclesForCenter?.totalResults,
     }),
     shallowEqual
   );
 
-  console.log("subcenterState", centerForEdit);
-
-  // useEffect(() => {
-  //   if (id) {
-  //     // dispatch(actions.fetchCenter(id));
-  //     // dispatch(
-  //     //   actions.fetchVehicles({
-  //     //     ...centersUIProps.secondQueryParams,
-  //     //     centerId: id,
-  //     //   })
-  //     // );
-  //   }
-  // }, [id, dispatch, centersUIProps.secondQueryParams]);
+  useEffect(() => {
+    if (id) {
+      // dispatch(actions.fetchCenter(id));
+      dispatch(
+        actions.fetchVehicles({
+          ...centersUIProps.secondQueryParams,
+          subCenterId: id,
+          centerId: centerForEdit.centerId,
+        })
+      );
+    }
+  }, [id, centersUIProps.secondQueryParams]);
 
   useEffect(() => {
     if (id) {
@@ -79,7 +78,8 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
       }
     }
   }, [id, centerForEdit]);
-  // console.log("listLoading", listLoading);
+
+  //console.log("centerForEdit", centerForEdit);
   const saveCenter = (center) => {
     console.log("Update sub center", center);
     const { centerId, ...rest } = center;
@@ -118,7 +118,17 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
     >
       <CenterEditDialogHeader id={id} isUserForRead={userForRead} />
 
-      {actionLoading ? (
+      <CenterEditForm
+        saveCenter={saveCenter}
+        center={centerForEdit || centersUIProps.initCenter}
+        onHide={onHide}
+        roles={roles}
+        centers={centers}
+        isUserForRead={userForRead}
+        vehiclesForCenter={vehiclesForCenter}
+        totalCount={totalCount}
+      />
+      {/* {actionLoading ? (
         <>
           <div className={classes.root}>
             <CircularProgress />
@@ -137,7 +147,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
             totalCount={totalCount}
           />
         </>
-      )}
+      )} */}
 
       <ToastContainer
         position="top-right"

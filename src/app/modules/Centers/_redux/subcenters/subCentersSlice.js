@@ -79,6 +79,7 @@ export const subCentersSlice = createSlice({
     },
     vehiclesFetched: (state, action) => {
       const entities = action.payload;
+      console.log("action.payload", entities);
       state.error = null;
       state.actionsLoading = false;
       state.vehiclesForCenter = entities;
