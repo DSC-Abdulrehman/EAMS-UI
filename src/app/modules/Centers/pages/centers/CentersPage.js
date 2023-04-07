@@ -4,6 +4,7 @@ import { Route } from "react-router-dom";
 import { CentersUIProvider } from "./CentersUIContext";
 import { CenterEditDialog } from "./center-edit-dialog/CenterEditDialog";
 import { CenterDeleteDialog } from "./center-delete-dialog/CenterDeleteDialog";
+import { CenterActiveDialog } from "./center-active-dialog/CenterActiveDialog";
 import { CentersCard } from "./centers-card/CentersCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,8 +49,11 @@ export function CentersPage({ history }) {
       dispatch(actions.fetchCenter(id));
       history.push(`/centers/read-all-centers/${id}/edit`);
     },
-    openDeleteCenterDialog: (id) => {
-      history.push(`/centers/read-all-centers/${id}/delete`);
+    openDeleteCenterDialog: (id, status) => {
+      history.push(`/centers/read-all-centers/${id}/${status}/delete`);
+    },
+    openActiveCenterDialog: (id) => {
+      history.push(`/centers/read-all-centers/${id}/active`);
     },
     openReadCenterDialog: (id, isUserRead) => {
       dispatch(actions.fetchCenter(id));
@@ -98,7 +102,7 @@ export function CentersPage({ history }) {
           />
         )}
       </Route>
-      <Route path="/centers/read-all-centers/:id/delete">
+      {/* <Route path="/centers/read-all-centers/:id/delete">
         {({ history, match }) => (
           <CenterDeleteDialog
             show={match != null}
@@ -108,7 +112,34 @@ export function CentersPage({ history }) {
             }}
           />
         )}
+      </Route> */}
+
+      <Route path="/centers/read-all-centers/:id/:status/delete">
+        {({ history, match }) => (
+          <CenterDeleteDialog
+            show={match != null}
+            id={match && match.params.id}
+            status={match && match.params.status}
+            onHide={() => {
+              history.push("/centers/read-all-centers");
+            }}
+          />
+        )}
       </Route>
+      <Route path="/centers/read-all-centers/:id/active">
+        {({ history, match }) => (
+          <CenterActiveDialog
+            show={match != null}
+            id={match && match.params.id}
+            //status={match && match.params.status}
+            onHide={() => {
+              history.push("/centers/read-all-centers");
+            }}
+          />
+        )}
+      </Route>
+
+
       {/* {isAdd && (
         <Route exact path="/list/new">
           {({ history, match }) => (

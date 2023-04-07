@@ -11,6 +11,7 @@ export function ActionsColumnFormatter(
   {
     openEditCenterDialog,
     openDeleteCenterDialog,
+    openActiveCenterDialog,    
     openReadCenterDialog,
     isAccessForEdit,
     isAccessForDelete,
@@ -68,19 +69,34 @@ export function ActionsColumnFormatter(
       <> </>
       {isAccessForDelete && (
         <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>}
+          overlay={
+            <Tooltip id="products-edit-tooltip">
+              {row.isActive ? "Mark Inactive" : "Mark Active"}
+            </Tooltip>
+          }
         >
-          <a
-            // title="Delete customer"
-            className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
-            onClick={() => openDeleteCenterDialog(row.id)}
-          >
-            <span className="svg-icon svg-icon-md svg-icon-danger">
-              <SVG
-                src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
-              />
-            </span>
-          </a>
+          {row.isActive ? (
+            <a
+              title="In-Active Sub Center"
+              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+              onClick={() => openDeleteCenterDialog(row.id, row.isActive)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-danger">
+                <SVG
+                  src={toAbsoluteUrl("/media/svg/icons/General/disable.svg")}
+                  title=""
+                />
+              </span>
+            </a>
+          ) : (
+            <a
+              title="Active Sub Center"
+              className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
+              onClick={() => openActiveCenterDialog(row.id, row.isActive)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-success">A</span>
+            </a>
+          )}
         </OverlayTrigger>
       )}
     </>

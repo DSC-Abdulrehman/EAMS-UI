@@ -106,8 +106,7 @@ export function UserEditForm({
 
   const { dashboard, users } = useSelector((state) => state);
 
-  //console.log("dashboard", dashboard);
-
+  console.log("users", users?.userForEdit?.roleId);
   // const enableLoading = () => {
   //   setLoading(true);
   // };
@@ -118,6 +117,8 @@ export function UserEditForm({
   const title = "UserEditForm";
   const statusOption = [{ label: "Available", value: 1 }];
 
+  // Get User Details
+  const { auth } = useSelector((state) => state);
   // if (user.countryId) {
   //   dispatch(fetchAllCity(user.countryId));
   // }
@@ -341,7 +342,7 @@ export function UserEditForm({
                         onBlur={handleBlur}
                         style={{ display: "block" }}
                         disabled={
-                          values.roleId == 1 || values.roleId == 3
+                          auth.user.roleId == 1 || auth.user.roleId == 3
                             ? false
                             : true
                         }
