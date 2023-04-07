@@ -117,6 +117,8 @@ export function UserEditForm({
   const title = "UserEditForm";
   const statusOption = [{ label: "Available", value: 1 }];
 
+  // Get User Details
+  const { auth } = useSelector((state) => state);
   // if (user.countryId) {
   //   dispatch(fetchAllCity(user.countryId));
   // }
@@ -339,7 +341,7 @@ export function UserEditForm({
                         onChange={handleChange}
                         onBlur={handleBlur}
                         style={{ display: "block" }}
-                        disabled={users?.userForEdit?.roleId == 1 || users?.userForEdit?.roleId == 3 ? false : true}
+                        disabled={auth.user.roleId == 1 || auth.user.roleId == 3 ? false : true}
                       >
                         <option value="" label="Select Role" />
                         {roles &&
