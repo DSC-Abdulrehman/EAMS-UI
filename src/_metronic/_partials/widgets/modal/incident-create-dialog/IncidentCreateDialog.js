@@ -48,6 +48,7 @@ export function IncidentCreateDialog({
   subCenter,
   setVehicle,
 }) {
+  // console.log("city", city);
   const title = "UserEditDialog";
   const classes = useStyles();
   const [centerId, setCenter] = useState("");
@@ -105,7 +106,7 @@ export function IncidentCreateDialog({
   const saveIncident = (incident) => {
     enableLoading();
     dispatch(actions.createIncident(incident)).then((res) => {
-      dispatch(fetchDashboardVehicles({ cityId: city }));
+      dispatch(fetchDashboardVehicles({ cityId: city.value }));
       disabledLoading();
       onHide();
       setVehicle([]);

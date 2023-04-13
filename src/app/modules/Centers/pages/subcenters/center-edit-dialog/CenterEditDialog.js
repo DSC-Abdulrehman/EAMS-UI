@@ -64,7 +64,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         actions.fetchVehicles({
           ...centersUIProps.secondQueryParams,
           subCenterId: id,
-          centerId: centerForEdit.centerId,
+          // centerId: centerForEdit.centerId,
         })
       );
     }
@@ -81,14 +81,16 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
 
   //console.log("centerForEdit", centerForEdit);
   const saveCenter = (center) => {
-    console.log("Update sub center", center);
+    console.log("cneter", center);
+    //console.log("Update sub center", center);
     const { centerId, ...rest } = center;
-    const finalObj = {
-      centerId: centerId.value,
-      ...rest,
-    };
+    // const finalObj = {
+    //   centerId: centerId.value,
+    //   ...rest,
+    // };
+    // console.log("finalObj", finalObj);
     if (!id) {
-      dispatch(actions.createCenter(finalObj)).then((res) => {
+      dispatch(actions.createCenter(center)).then((res) => {
         onHide();
       });
     } else {
@@ -99,7 +101,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         // location: center.location,
         // longitude: center.longitude,
         // latitude: center.latitude,
-        centerId: center.centerId?.value,
+        centerId: center.centerId,
         // conuntryId: center.conuntryId,
         // cityId: center.cityId,
       };

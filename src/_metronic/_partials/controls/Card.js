@@ -122,6 +122,7 @@ export const CardBody = forwardRef(
       ref={ref}
       className={clsx(
         "card-body",
+        "table-body",
         {
           "card-body-fit": fit,
           "card-body-fluid": fluid,

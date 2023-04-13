@@ -20,7 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
+export function TripLogEditDialog({
+  id,
+  show,
+  onHide,
+  userForRead,
+  seletedCity,
+}) {
   const [seletCity, setSelectCity] = useState({});
   const [seletCenter, setSelectCenter] = useState({});
   const [seletSubcenter, setSelectsubCenter] = useState({});
@@ -99,11 +105,11 @@ export function TripLogEditDialog({ id, show, onHide, userForRead, cityId }) {
       id: +id,
       //endDateTime: endDateTime,
     };
-    console.log("newObject", newObject);
+    // console.log("newObject", newObject);
     enableLoading();
     dispatch(actions.updateTrip(newObject, disabledLoading, onHide)).then(
       () => {
-        dispatch(fetchDashboardVehicles({ cityId: cityId }));
+        dispatch(fetchDashboardVehicles({ cityId: seletedCity.value }));
         // disabledLoading();
         // onHide();
       }

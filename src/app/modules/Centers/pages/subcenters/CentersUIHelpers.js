@@ -31,5 +31,5 @@ export const initialvehicleFilter = {
   sortOrder: "name",
   pageNumber: 1,
   pageSize: 2,
-  centerId: null,
+  // centerId: null,
 };

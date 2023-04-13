@@ -70,9 +70,7 @@ export function CenterDeleteDialog({ id, show, onHide }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && (
-          <span>Are you sure to permanently In-Active this sub center?</span>
-        )}
+        {!isLoading && <span>Are you sure to in-active this sub center?</span>}
         {isLoading && <span> sub center is de-activating...</span>}
       </Modal.Body>
       <Modal.Footer>

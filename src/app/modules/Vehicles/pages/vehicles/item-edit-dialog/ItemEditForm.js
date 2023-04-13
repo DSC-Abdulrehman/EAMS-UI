@@ -39,6 +39,7 @@ export function ItemEditForm({
   const [defSubcenter, setDefaultSubCenter] = useState([]);
   const [defDriver, setDefaultDriver] = useState([]);
 
+  console.log("item", item);
   // useEffect(() => {
   //   dispatch(fetchDrivers(cetnerId));
   // }, [cetnerId]);
@@ -73,29 +74,31 @@ export function ItemEditForm({
   //console.log("dashboard", dashboard);
   useEffect(
     (e) => {
-      item.centerId && dispatch(fetchAllSubCenter(item.centerId));
+      item.tempCenterId && dispatch(fetchAllSubCenter(item.tempCenterId));
     },
     [item]
   );
 
   useEffect(
     (e) => {
-      item.subCenterId && dispatch(fetchDrivers(item.centerId));
+      item.tempCenterId && dispatch(fetchDrivers(item.tempCenterId));
     },
     [item]
   );
 
   useEffect(() => {
     const getDefaultValue = dashboard?.allCenters.filter(
-      (e) => e.value == item.centerId
+      (e) => e.value == item.tempCenterId
     );
     setDefaultCenter(getDefaultValue);
-  }, [item?.centerId, dashboard?.allCenters]);
+  }, [dashboard?.allCenters]);
 
   useEffect(() => {
-    const getDefaultValue = dashboard?.allSubCenter.filter(
-      (e) => e.value == item.subCenterId
-    );
+    const getDefaultValue = dashboard?.allSubCenter.filter((e) => {
+      console.log("e", e);
+      return e.value == item.tempSubCenterId;
+    });
+    // console.log("getDefaultValue", getDefaultValue);
     setDefaultSubCenter(getDefaultValue);
   }, [dashboard?.allSubCenter]);
 
@@ -237,7 +240,7 @@ export function ItemEditForm({
                         name="name"
                         component={Input}
                         placeholder=""
-                        label="Vehicle Name*"
+                        label="Vehicle Name"
                         customFeedbackLabel="hello"
                       />
                     </div>
@@ -254,7 +257,7 @@ export function ItemEditForm({
                         name="engineCapacity"
                         component={Input}
                         placeholder=""
-                        label="Engine Capacity*"
+                        label="Engine Capacity"
                       />
                     </div>
                   </div>
@@ -264,7 +267,7 @@ export function ItemEditForm({
                         name="registerCity"
                         component={Input}
                         placeholder=""
-                        label="Register City*"
+                        label="Register City"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -272,7 +275,7 @@ export function ItemEditForm({
                         name="chasis"
                         component={Input}
                         placeholder=""
-                        label="Chasis*"
+                        label="Chasis"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -280,7 +283,7 @@ export function ItemEditForm({
                         name="milleage"
                         component={Input}
                         placeholder=""
-                        label="Milleage*"
+                        label="Milleage"
                       />
                     </div>
                   </div>
@@ -298,7 +301,7 @@ export function ItemEditForm({
                         name="make"
                         component={Input}
                         placeholder=""
-                        label="Make*"
+                        label="Make"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -306,7 +309,7 @@ export function ItemEditForm({
                         name="model"
                         component={Input}
                         placeholder=""
-                        label="Model*"
+                        label="Model"
                       />
                     </div>
                   </div>
@@ -316,7 +319,7 @@ export function ItemEditForm({
                         name="color"
                         component={Input}
                         placeholder=""
-                        label="Color*"
+                        label="Color"
                       />
                     </div>
                     <div className="col-lg-4">
@@ -324,12 +327,12 @@ export function ItemEditForm({
                         name="engineNo"
                         component={Input}
                         placeholder=""
-                        label="Engine No.*"
+                        label="Engine No."
                       />
                     </div>
                     <div className="col-lg-4">
                       <Select
-                        label="Fuel Type*"
+                        label="Fuel Type"
                         name="fuelType"
                         value={values.fuelType}
                         onChange={handleChange}
@@ -561,26 +564,26 @@ const itemEditSchema = Yup.object().shape({
   driverId: Yup.string().required("Driver Id is required"),
   name: Yup.string()
     .min(3, "Minimum 3 symbols")
-    .max(50, "Maximum 50 symbols")
-    .required("Name is required"),
+    .max(50, "Maximum 50 symbols"),
+  //.required("Name is required"),
   regNo: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
     .required("Registration No is required"),
-  engineCapacity: Yup.string().required("Engine capacity is required"),
-  registerCity: Yup.string().required("Register city is required"),
-  chasis: Yup.string().required("Chasis is required"),
-  milleage: Yup.string().required("Milleage is required"),
+  engineCapacity: Yup.string(),
+  registerCity: Yup.string(),
+  chasis: Yup.string(),
+  milleage: Yup.string(),
   year: Yup.string()
-    .required("Register year is required")
-    .matches(/^\d*[1-9]\d*$/, "Year should be number"),
-  make: Yup.string().required("Maker name is required"),
-  model: Yup.string().required("Model No is required"),
-  color: Yup.string().required("Color is required"),
-  fuelType: Yup.string().required("Fuel type is required"),
+    .matches(/^\d*[1-9]\d*$/, "Year should be number")
+    .required("Year is required."),
+  make: Yup.string(),
+  model: Yup.string(),
+  color: Yup.string(),
+  fuelType: Yup.string(),
   status: Yup.string().required("Status is required"),
   transmission: Yup.string(),
   oldDriverId: Yup.string(),
   vehicleCategoryId: Yup.string().required("Vehicle category is required"),
-  engineNo: Yup.string().required(" Engine No is required"),
+  engineNo: Yup.string(),
 });

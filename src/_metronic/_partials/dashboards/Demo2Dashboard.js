@@ -38,7 +38,7 @@ export function Demo2Dashboard() {
   //   dispatch(action.fetchAllCity(user.countryId));
   // }, [user.countryId]);
   useEffect(() => {
-    //console.log("Fetch city by user id one thime");
+    console.log("Fetch city by user id one thime");
     dispatch(fetchAllCity(user.countryId));
     dispatch(fetchAllCityCenters(user.cityId));
   }, []);
@@ -144,7 +144,7 @@ export function Demo2Dashboard() {
             handleClose={handleClose}
             selectedVehicles={vehicle}
             setStandbyVehicels={setStandbyVehicels}
-            city={city && city.value}
+            city={city}
             center={center && center.value}
             subCenter={subCenter && subCenter.value}
             setVehicle={setVehicle}
@@ -169,7 +169,7 @@ export function Demo2Dashboard() {
             show={openCloseTripDialogue}
             onHide={() => setCloseTripDialogue(false)}
             id={closeTripId}
-            cityId={user.cityId}
+            seletedCity={city}
           />
         </div>
         <div className="col-xl-4">

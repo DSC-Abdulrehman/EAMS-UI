@@ -20,6 +20,7 @@ import {
 import { useDispatch } from "react-redux";
 import { getDate, getTime, getCurrentTime } from "../../../../app/utils/common";
 import moment from "moment";
+import { func } from "prop-types";
 
 export function TilesWidget1({
   className,
@@ -38,6 +39,49 @@ export function TilesWidget1({
 }) {
   //console.log("seletedCity", seletedCity);
   const dispatch = useDispatch();
+  const [data, setData] = useState([]);
+
+  const timerFormater = (cellContent) => {
+    // setDutyVehicleTime(cellContent);
+    // var now = moment(new Date());
+    // var start = moment(cellContent);
+    // //console.log("DutyVehicleTime", DutyVehicleTime);
+    // //getMinutes(now, start);
+    // // console.log("minutes", minutes);
+    // var minutes = now.diff(start, "minutes");
+    // console.log("minutes", minutes);
+    // console.log("minutes", minutes);
+    //console.log("DutyVehicleTime", DutyVehicleTime);
+
+    return (
+      <>
+        <span>{getTime(cellContent)}</span>
+      </>
+    );
+  };
+
+  // useEffect(() => {
+  //   // Start the interval to update the data every 5 seconds
+  //   const interval = setInterval(() => {
+  //     // Format the data
+  //     const formattedData = vehiclesData.map((item) => {
+  //       console.log("Data called");
+  //       return {
+  //         ...item,
+  //         // Add formatted date to the row
+  //         formattedDate: timerFormater,
+  //       };
+  //     });
+
+  //     // Update the state with the formatted data
+  //     setData(formattedData);
+  //   }, 5000);
+
+  //   // Clear the interval on component unmount
+  //   return () => clearInterval(interval);
+  // }, [vehiclesData]);
+
+  const [DutyVehicleTime, setDutyVehicleTime] = useState();
   const [selectedVehile, setSelectedVehicle] = useState([]);
 
   const uiService = useHtmlClassService();
@@ -82,20 +126,15 @@ export function TilesWidget1({
   // }
   // setInterval(func, 5000);
 
-  const timerFormater = (cellContent) => {
+  const getMinutes = (start) => {
     var now = moment(new Date());
-    var end = moment(cellContent);
-    var minutes = now.diff(end, "minutes");
-    console.log("minutes", minutes);
-
-    return (
-      <>
-        <span className={minutes > 2 ? "text-danger" : ""}>
-          {getTime(cellContent)}
-        </span>
-      </>
-    );
+    return now.diff(start, "minutes");
   };
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     return getMinutes();
+  //   }, 10000);
+  // }, []);
 
   const actionFormater = (cell, row) => {
     const standToOff = () => {
@@ -187,6 +226,15 @@ export function TilesWidget1({
 
   //setInterval(timerFormater, 5000);
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 10000);
+    return () => clearInterval(intervalId);
+  }, []);
+
   const columns = [
     {
       dataField: "name",
@@ -196,7 +244,13 @@ export function TilesWidget1({
       headerAttrs: {
         hidden: true,
       },
-      style: { verticalAlign: "middle" },
+      style: (cell, row, rowIndex, colIndex) => {
+        var minutes = getMinutes(row.start_time);
+        if (row.status != "offDuty" && minutes > 5) {
+          return { color: "red", verticalAlign: "middle" };
+        }
+        return { verticalAlign: "middle" };
+      },
     },
 
     {
@@ -206,7 +260,13 @@ export function TilesWidget1({
       headerAttrs: {
         hidden: true,
       },
-      style: { verticalAlign: "middle" },
+      style: (cell, row, rowIndex, colIndex) => {
+        var minutes = getMinutes(row.start_time);
+        if (row.status != "offDuty" && minutes > 5) {
+          return { color: "red", verticalAlign: "middle" };
+        }
+        return { verticalAlign: "middle" };
+      },
     },
     {
       dataField: "start_time",
@@ -215,7 +275,13 @@ export function TilesWidget1({
       headerAttrs: {
         hidden: true,
       },
-      style: { verticalAlign: "middle" },
+      style: (cell, row, rowIndex, colIndex) => {
+        var minutes = getMinutes(row.start_time);
+        if (row.status != "offDuty" && minutes > 5) {
+          return { color: "red", verticalAlign: "middle" };
+        }
+        return { verticalAlign: "middle" };
+      },
       formatter: timerFormater,
     },
     {

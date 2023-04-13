@@ -75,7 +75,7 @@ export function ItemsTable() {
       headerSortingClasses,
     },
     {
-      dataField: "name",
+      dataField: "center.name",
       text: "Center Name",
       sort: false,
       sortCaret: sortCaret,
@@ -84,6 +84,16 @@ export function ItemsTable() {
         minWidth: "130px",
       },
     },
+    // {
+    //   dataField: "name",
+    //   text: "Center Name",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "130px",
+    //   },
+    // },
     {
       dataField: "regNo",
       text: "Reg No",
@@ -111,16 +121,7 @@ export function ItemsTable() {
     //   sortCaret: sortCaret,
     //   headerSortingClasses,
     // },
-    {
-      dataField: "center.name",
-      text: "Center",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "130px",
-      },
-    },
+
     {
       dataField: "category.name",
       text: "Category",
