@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import AsyncSelect from "react-select/async";
+import AsyncSelect, { createFilter } from "react-select/async";
 
 export function SearchSelect({
   name,
@@ -13,6 +13,7 @@ export function SearchSelect({
   value,
   onInputChange,
   isDisabled,
+  isClearable,
 }) {
   const [selectedOption, setSelectedOption] = useState();
 
@@ -42,6 +43,7 @@ export function SearchSelect({
         value={value}
         defaultOptions={options}
         loadOptions={promiseOptions}
+        isClearable={isClearable}
       />
 
       {error && touched ? <div className="form-feedBack">{error}</div> : null}

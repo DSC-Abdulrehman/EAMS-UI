@@ -4,6 +4,7 @@ import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
 import { BuilderPage } from "./pages/BuilderPage";
 import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { Dashboard } from "./modules/Dashboard/pages";
 import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { fetchAllCountry } from "./modules/Centers/_redux/centers/centersActions";
 //import SettingsPage from "./modules/Settings/pages/SettingsPage"
@@ -61,7 +62,7 @@ export default function BasePage() {
           /* Redirect from root URL to /dashboard. */
           <Redirect exact from="/" to="/dashboard" />
         }
-        <ContentRoute path="/dashboard" component={DashboardPage} />
+        <ContentRoute path="/dashboard" component={Dashboard} />
         {/* <ContentRoute path="/builder" component={BuilderPage} />
         <ContentRoute path="/my-page" component={MyPage} />
         <Route path="/google-material" component={GoogleMaterialPage} />

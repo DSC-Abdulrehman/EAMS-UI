@@ -11,6 +11,8 @@ const initialDashboardState = {
   standBy: [],
   onDuty: [],
   offDuty: [],
+  lastTrips: [],
+  alarmTime: [],
 };
 
 export const callTypes = {
@@ -44,6 +46,22 @@ export const dashboardSlice = createSlice({
       state.standBy = action.payload.standBy;
       state.onDuty = action.payload.onDuty;
       state.offDuty = action.payload.offDuty;
+    },
+    lastTripsVehicles: (state, action) => {
+      // console.log("Payload", action.payload);
+      state.lastTrips = action.payload;
+    },
+    setData: (state, action) => {
+      state.data = action.payload;
+    },
+    updateData: (state, action) => {
+      console.log("action payload", action.payload);
+      const { id, fieldName, value } = action.payload;
+      const rowIndex = state.lastTrips.findIndex((row) => row.id === id);
+      state.lastTrips[rowIndex] = action.payload;
+    },
+    AlaramTime: (state, action) => {
+      state.alarmTime = action.payload;
     },
   },
 });

@@ -79,16 +79,16 @@ export function UsersTable() {
         minWidth: "130px",
       },
     },
-    {
-      dataField: "lastName",
-      text: "Last Name",
-      sort: false,
-      sortCaret: sortCaret,
-      headerSortingClasses,
-      style: {
-        minWidth: "130px",
-      },
-    },
+    // {
+    //   dataField: "lastName",
+    //   text: "Last Name",
+    //   sort: false,
+    //   sortCaret: sortCaret,
+    //   headerSortingClasses,
+    //   style: {
+    //     minWidth: "130px",
+    //   },
+    // },
     {
       dataField: "email",
       text: "Email",
@@ -127,9 +127,28 @@ export function UsersTable() {
         minWidth: "60px",
       },
     },
+
     {
       dataField: "center.name",
       text: "Center",
+      sort: false,
+      sortCaret: sortCaret,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "subcenter.name",
+      text: "Sub-Center",
+      sort: false,
+      sortCaret: sortCaret,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "status",
+      text: "Status",
       sort: false,
       sortCaret: sortCaret,
       style: {
@@ -167,6 +186,8 @@ export function UsersTable() {
     sizePerPage: usersUIProps.queryParams.pageSize,
     page: usersUIProps.queryParams.pageNumber,
   };
+
+  // console.log("entities", entities);
 
   return (
     <>

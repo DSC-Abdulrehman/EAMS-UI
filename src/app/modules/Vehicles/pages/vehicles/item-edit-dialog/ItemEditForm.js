@@ -39,7 +39,7 @@ export function ItemEditForm({
   const [defSubcenter, setDefaultSubCenter] = useState([]);
   const [defDriver, setDefaultDriver] = useState([]);
 
-  console.log("item", item);
+  //console.log("item", item);
   // useEffect(() => {
   //   dispatch(fetchDrivers(cetnerId));
   // }, [cetnerId]);
@@ -81,7 +81,7 @@ export function ItemEditForm({
 
   useEffect(
     (e) => {
-      item.tempCenterId && dispatch(fetchDrivers(item.tempCenterId));
+      item.tempCenterId && dispatch(fetchDrivers(item.tempSubCenterId));
     },
     [item]
   );
@@ -95,7 +95,7 @@ export function ItemEditForm({
 
   useEffect(() => {
     const getDefaultValue = dashboard?.allSubCenter.filter((e) => {
-      console.log("e", e);
+      //console.log("e", e);
       return e.value == item.tempSubCenterId;
     });
     // console.log("getDefaultValue", getDefaultValue);
@@ -181,6 +181,7 @@ export function ItemEditForm({
                     <div className="col-12 col-md-4">
                       <SearchSelect
                         name="centerId"
+                        isDisabled={itemForRead && true}
                         label="Main Center*"
                         onBlur={() => {
                           handleBlur({ target: { name: "centerId" } });
@@ -200,6 +201,7 @@ export function ItemEditForm({
                       <SearchSelect
                         name="subCenterId"
                         label="Sub-Center*"
+                        isDisabled={itemForRead && true}
                         onBlur={() => {
                           handleBlur({ target: { name: "subCenterId" } });
                         }}
@@ -217,7 +219,8 @@ export function ItemEditForm({
                     <div className="col-12 col-md-4">
                       <SearchSelect
                         name="driverId"
-                        label="Driver*"
+                        label="Driver"
+                        isDisabled={itemForRead && true}
                         onBlur={() => {
                           handleBlur({ target: { name: "driverId" } });
                         }}
@@ -561,29 +564,30 @@ export function ItemEditForm({
 const itemEditSchema = Yup.object().shape({
   centerId: Yup.string().required("Center is required"),
   subCenterId: Yup.string().required("Subcenter is required"),
-  driverId: Yup.string().required("Driver Id is required"),
+  driverId: Yup.number().nullable(),
   name: Yup.string()
     .min(3, "Minimum 3 symbols")
-    .max(50, "Maximum 50 symbols"),
+    .max(50, "Maximum 50 symbols")
+    .nullable(),
   //.required("Name is required"),
   regNo: Yup.string()
     .min(3, "Minimum 3 symbols")
     .max(50, "Maximum 50 symbols")
     .required("Registration No is required"),
-  engineCapacity: Yup.string(),
-  registerCity: Yup.string(),
-  chasis: Yup.string(),
-  milleage: Yup.string(),
+  engineCapacity: Yup.string().nullable(),
+  registerCity: Yup.string().nullable(),
+  chasis: Yup.string().nullable(),
+  milleage: Yup.string().nullable(),
   year: Yup.string()
     .matches(/^\d*[1-9]\d*$/, "Year should be number")
     .required("Year is required."),
-  make: Yup.string(),
-  model: Yup.string(),
-  color: Yup.string(),
-  fuelType: Yup.string(),
+  make: Yup.string().nullable(),
+  model: Yup.string().nullable(),
+  color: Yup.string().nullable(),
+  fuelType: Yup.string().nullable(),
   status: Yup.string().required("Status is required"),
-  transmission: Yup.string(),
-  oldDriverId: Yup.string(),
+  transmission: Yup.string().nullable(),
+  oldDriverId: Yup.string().nullable(),
   vehicleCategoryId: Yup.string().required("Vehicle category is required"),
-  engineNo: Yup.string(),
+  engineNo: Yup.string().nullable(),
 });

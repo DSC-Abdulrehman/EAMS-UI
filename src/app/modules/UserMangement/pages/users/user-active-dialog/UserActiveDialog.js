@@ -44,7 +44,7 @@ export function UserActiveDialog({ id, status, show, onHide }) {
   const deleteUser = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.deleteUser(id)).then(() => {
+    dispatch(actions.activeUser(id)).then(() => {
       onHide();
       // refresh list after deletion
       dispatch(actions.fetchUsers(usersUIProps.queryParams));
@@ -65,11 +65,13 @@ export function UserActiveDialog({ id, status, show, onHide }) {
       {isLoading && <ModalProgressBar />}
       {/*end::Loading*/}
       <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-lg">Mark Active</Modal.Title>
+        <Modal.Title id="example-modal-sizes-title-lg">
+          Activate User
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to mark active this user?</span>}
-        {isLoading && <span>user is active...</span>}
+        {!isLoading && <span>Are you sure to activate this user?</span>}
+        {isLoading && <span>user is activating...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -86,7 +88,7 @@ export function UserActiveDialog({ id, status, show, onHide }) {
             onClick={deleteUser}
             className="btn btn-primary btn-elevate"
           >
-            Make Active
+            Activate
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

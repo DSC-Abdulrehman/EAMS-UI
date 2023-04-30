@@ -67,12 +67,12 @@ export function UserDeleteDialog({ id, status, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          In-Active User
+          Deactivate User
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to In-Active this user?</span>}
-        {isLoading && <span>user is de-activating...</span>}
+        {!isLoading && <span>Are you sure to deactivate this user?</span>}
+        {isLoading && <span>user is deactivating...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -89,7 +89,7 @@ export function UserDeleteDialog({ id, status, show, onHide }) {
             onClick={deleteUser}
             className="btn btn-primary btn-elevate"
           >
-            In-Active
+            Deactivate
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

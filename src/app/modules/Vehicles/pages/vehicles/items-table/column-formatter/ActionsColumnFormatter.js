@@ -11,6 +11,7 @@ export function ActionsColumnFormatter(
   {
     openEditCenterDialog,
     openDeleteCenterDialog,
+    openActiveDialog,
     openReadCenterDialog,
     isAccessForEdit,
     isAccessForDelete,
@@ -69,7 +70,7 @@ export function ActionsColumnFormatter(
         (row?.isActive ? (
           <OverlayTrigger
             overlay={
-              <Tooltip id="products-edit-tooltip">Mark Inactive</Tooltip>
+              <Tooltip id="products-edit-tooltip">Mark Deactivate</Tooltip>
             }
           >
             <a
@@ -85,11 +86,11 @@ export function ActionsColumnFormatter(
           </OverlayTrigger>
         ) : (
           <OverlayTrigger
-            overlay={<Tooltip id="products-edit-tooltip">Active</Tooltip>}
+            overlay={<Tooltip id="products-edit-tooltip">Mark Active</Tooltip>}
           >
             <a
               className="btn btn-icon btn-light btn-hover-danger btn-sm"
-              onClick={() => openDeleteCenterDialog(row.id)}
+              onClick={() => openActiveDialog(row.id)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
                 A

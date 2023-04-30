@@ -69,13 +69,13 @@ export function ActionsColumnFormatter(
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">
-              {row.isActive ? "Mark Inactive" : "Mark Active"}
+              {row.isActive ? "Mark Deactivate" : "Mark Active"}
             </Tooltip>
           }
         >
           {row.isActive ? (
             <a
-              title="In-Active Center"
+              title=""
               className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
               onClick={() => openDeleteCenterDialog(row.id, row.isActive)}
             >
@@ -88,7 +88,7 @@ export function ActionsColumnFormatter(
             </a>
           ) : (
             <a
-              title="Active Center"
+              title=""
               className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
               onClick={() => openActiveCenterDialog(row.id, row.isActive)}
             >

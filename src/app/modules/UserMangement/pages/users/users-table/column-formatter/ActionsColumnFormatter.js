@@ -37,7 +37,7 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">Read User</Tooltip>}
       >
         <a
-          title="Read User"
+          title=""
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
           onClick={() => openReadUserDialog(row.id, isUserRead)}
         >
@@ -53,7 +53,7 @@ export function ActionsColumnFormatter(
           overlay={<Tooltip id="products-edit-tooltip">Edit User</Tooltip>}
         >
           <a
-            title="Edit User"
+            title=""
             className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
             onClick={() => openEditUserDialog(row.id)}
           >
@@ -72,13 +72,13 @@ export function ActionsColumnFormatter(
         <OverlayTrigger
           overlay={
             <Tooltip id="products-edit-tooltip">
-              {row.isActive ? "Mark Inactive" : "Mark Active"}
+              {row.isActive ? "Mark Deactivate" : "Mark Active"}
             </Tooltip>
           }
         >
           {row.isActive ? (
             <a
-              title="Delete User"
+              title=""
               className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
               onClick={() => openDeleteUserDialog(row.id, row.isActive)}
             >
@@ -91,7 +91,7 @@ export function ActionsColumnFormatter(
             </a>
           ) : (
             <a
-              title="Active User"
+              title=""
               className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
               onClick={() => openActiveUserDialog(row.id, row.isActive)}
             >

@@ -49,7 +49,7 @@ export const deleteUser = (id) => (dispatch) => {
     .then((response) => {
       //console.log("response from delete user ", response.data.message)
       dispatch(actions.userDeleted({ id: id }));
-      toast.success(response.data.message + " Updated", {
+      toast.success("Successfully Deactivated", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -60,9 +60,31 @@ export const deleteUser = (id) => (dispatch) => {
       });
     })
     .catch((error) => {
-      error.clientMessage = "can't delete user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error("Error 😣");
+      toast.error(error.response.data.message);
+    });
+};
+
+export const activeUser = (id) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .deleteUser({ id: id })
+    .then((response) => {
+      //console.log("response from delete user ", response.data.message)
+      dispatch(actions.userDeleted({ id: id }));
+      toast.success("Successfully Activated", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+    .catch((error) => {
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error.response.data.message);
     });
 };
 
@@ -79,7 +101,7 @@ export const createUser = (userForCreation, disbaleLoading, onHide) => (
       const user = res.data?.data;
       dispatch(actions.userCreated(user));
       disbaleLoading();
-      toast.success("Succesfully Created.", {
+      toast.success("Successfully Created", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -107,8 +129,6 @@ export const createUser = (userForCreation, disbaleLoading, onHide) => (
 };
 
 export const updateUser = (user, disbaleLoading, onHide) => (dispatch) => {
-  //console.log("updatedUser data", user)
-
   return requestFromServer
     .updateUser(user)
     .then((response) => {

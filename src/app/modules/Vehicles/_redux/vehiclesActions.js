@@ -40,13 +40,36 @@ export const fetchVehicle = (id) => (dispatch) => {
 
 export const deleteVehicle = (id) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
-  // console.log("delete user id", id)
   return requestFromServer
     .deleteRequest({ id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
       dispatch(actions.vehicleDeleted({ id: id }));
-      toast.success(response.data.message + " Deleted", {
+      // toast.success(response.data.message + " Deleted", {
+      toast.success("Successfully Deactivated", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+    .catch((error) => {
+      error.clientMessage = "can't delete user";
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error("Error 😣");
+    });
+};
+
+export const activeVehicle = (id) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .deleteRequest({ id: id })
+    .then((response) => {
+      dispatch(actions.vehicleDeleted({ id: id }));
+      // toast.success(response.data.message + " Deleted", {
+      toast.success("Successfully Activated", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -97,15 +120,15 @@ export const createVehicle = (item) => (dispatch) => {
 };
 
 export const updateVehicle = (user) => (dispatch) => {
-  console.log("Update Vehicle data", user);
+  // console.log("Update Vehicle data", user);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(user)
     .then((response) => {
       const updatedVehicle = response.data?.data;
-      console.log("userAction Res", updatedVehicle);
+      // console.log("userAction Res", updatedVehicle);
       dispatch(actions.vehicleUpdated({ updatedVehicle }));
-      toast.success(response.data.message + " Updated", {
+      toast.success("Successfully Updated", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -116,9 +139,7 @@ export const updateVehicle = (user) => (dispatch) => {
       });
     })
     .catch((error) => {
-      // console.log("error User update", error)
-      // error.clientMessage = "Can't update User"
-      toast.error(error, {
+      toast.error(error?.response?.data?.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

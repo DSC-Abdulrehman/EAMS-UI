@@ -69,6 +69,7 @@ export function ItemUIProvider({ itemUIEvents, children }) {
     newCenterButtonClick: itemUIEvents.newCenterButtonClick,
     openEditCenterDialog: itemUIEvents.openEditCenterDialog,
     openDeleteCenterDialog: itemUIEvents.openDeleteCenterDialog,
+    openActiveDialog: itemUIEvents.openActiveDialog,
     openReadCenterDialog: itemUIEvents.openReadCenterDialog,
   };
   return (

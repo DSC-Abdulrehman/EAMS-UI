@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+
 import {
   Input,
   Select,
   TextArea,
 } from "../../../../../_metronic/_partials/controls";
+import { SearchSelect } from "../../../../_helpers/SearchSelect";
 // import MaskedInput from "react-text-mask";
 // import InputMask from "react-input-mask";
 // import { TextField } from "@material-ui/core";
@@ -33,6 +35,7 @@ const incidentEditSchema = Yup.object().shape({
   // location: Yup.string().required("Locations is required"),
   area: Yup.string().required("Area ia required"),
   shortDescription: Yup.string(),
+  alarmTimeId: Yup.string(),
   // incidentTypeId: Yup.string(),
   // incidentSeverityId: Yup.string(),
   // centerId: Yup.string().required("Center is required"),
@@ -68,6 +71,13 @@ export function IncidentEditForm({
   const logTitle = " IncidentEditForm() ";
   const dispatch = useDispatch();
   const [incidentSeverityState, setIncidentSeverityState] = useState();
+  const [alarmTimes, setAlarmTimes] = useState("");
+
+  const { dashboard } = useSelector((state) => state);
+
+  console.log("dashboard time", dashboard);
+
+  // console.log("alaramTime option in form", alaramTime);
   const getCenterId = (id) => {
     const queryParams = {
       // filter: {
@@ -129,6 +139,7 @@ export function IncidentEditForm({
           const updatedValue = {
             ...values,
             vehicleId: selectedVehicles,
+            alarmTimeId: alarmTimes.value ? alarmTimes.value : 0,
           };
 
           saveIncident(updatedValue);
@@ -149,7 +160,7 @@ export function IncidentEditForm({
                 <Form className="form form-label-right">
                   <fieldset>
                     <div className="form-group row">
-                      <div className="col-lg-6">
+                      <div className="col-lg-4">
                         <Field
                           name="callerName"
                           component={Input}
@@ -163,24 +174,54 @@ export function IncidentEditForm({
                           label="Caller CNIC"
                         />
                       </div> */}
-                      <div className="col-lg-6">
+                      <div className="col-lg-4">
                         <Field
                           name="callerPhoneNo"
                           component={Input}
                           label="Caller Phone No*"
                         />
                       </div>
-                    </div>
-                    <div className="form-group row">
-                      <div className="col-lg-6">
+                      <div className="col-lg-4">
                         <Field
                           name="patientName"
                           component={Input}
                           label="Patient Name"
                         />
                       </div>
+                    </div>
+                    <div className="form-group row">
                       <div className="col-lg-6">
                         <Field name="area" component={Input} label="Area*" />
+                      </div>
+                      <div className="col-lg-6">
+                        <SearchSelect
+                          name="alarmTimeId"
+                          options={dashboard.alarmTime}
+                          label="Alarm"
+                          onChange={(e) => {
+                            setAlarmTimes(e);
+                          }}
+                          value={alarmTimes}
+                        />
+                        {/* <Select
+                          label="Alaram"
+                          name="alarmTimeId"
+                          value="90"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          style={{ display: "block" }}
+                        >
+                          {alaramTime &&
+                            alaramTime.map((response) => {
+                              return (
+                                <option
+                                  key={response.value}
+                                  value={response.value}
+                                  label={response.label}
+                                />
+                              );
+                            })}
+                        </Select> */}
                       </div>
                       {/* <div className="col-lg-4">
                         <Field

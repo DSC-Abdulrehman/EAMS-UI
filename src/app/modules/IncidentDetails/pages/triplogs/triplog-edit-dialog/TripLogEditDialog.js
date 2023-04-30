@@ -26,16 +26,24 @@ export function TripLogEditDialog({
   onHide,
   userForRead,
   seletedCity,
+  center,
+  subCenter,
+  setVehicle,
+  setSeletecOnDuty,
 }) {
+  const classes = useStyles();
+  const dispatch = useDispatch();
   const [seletCity, setSelectCity] = useState({});
   const [seletCenter, setSelectCenter] = useState({});
   const [seletSubcenter, setSelectsubCenter] = useState({});
-
-  const classes = useStyles();
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const [centerId, setCenter] = useState(0);
   const triplogsUIContext = useTripLogsUIContext();
+  const [loading, setLoading] = useState(false);
+  const [centerId, setCenter] = useState(0);
+
+  useEffect(() => {
+    dispatch(actions.fetchTripLog(id));
+  }, [id]);
+
   const triplogsUIProps = useMemo(() => {
     return {
       //initTripLog: triplogsUIContext.initTripLog,
@@ -43,10 +51,16 @@ export function TripLogEditDialog({
     };
   }, [triplogsUIContext]);
 
-  const { actionsLoading, driverTripForEdit, isuserForRead } = useSelector(
+  const {
+    actionsLoading,
+    driverTripForEdit,
+    isuserForRead,
+    getTripLogforEdit,
+  } = useSelector(
     (state) => ({
       actionsLoading: state.triplogs.actionsLoading,
       driverTripForEdit: state.triplogs.driverTripForEdit,
+      getTripLogforEdit: state.triplogs,
       // isuserForRead: state.incidentDetails.userForRead,
       // IncidentType: state.incidentDetails.incidentTypes,
       // incidentSeverity: state.incidentDetails.incidentSeverity,
@@ -57,45 +71,18 @@ export function TripLogEditDialog({
     shallowEqual
   );
 
-  // console.log("driverTripForEdit", driverTripForEdit);
+  //console.log("getTripLogforEdit", getTripLogforEdit);
+  // const { createdAt } = driverTripForEdit;
+  //console.log("createdAt", createdAt);
   const enableLoading = () => {
     setLoading(true);
   };
   const disabledLoading = () => {
     setLoading(false);
   };
-  //console.log("driverTripForEdit", driverTripForEdit)
-  useEffect(() => {
-    // dispatch(actions.fetchIncidentTypes())
-    // dispatch(actions.fetchSeverityTypes())
-    // dispatch(actions.fetchCenters())
-    // dispatch(actions.fetchTripLogs(triplogsUIProps.queryParams))
-    dispatch(actions.fetchTripLog(id));
-    // console.log("centerId", centerId)
-    // dispatch(
-    //   actions.fetchVehicleById({
-    //     ...triplogsUIProps.queryParams,
-    //     centerId: centerId,
-    //   })
-    // )
 
-    // dispatch(actions.fetchVehicleById(parseInt(centerId)))
-    // console.log("id is", id)
-    if (!id) {
-    } else {
-      // dispatch(actions.fetchIncident(id))
-      // if (incidentForEdit) {
-      // }
-    }
-  }, [id, dispatch, triplogsUIProps, centerId]);
-  // console.log("incidentForEdit", incidentForEdit)
-  // if (incidentForEdit) {
-  //   return
-  // }
   const updateTripLog = (incident) => {
-    // console.log("i'm in update", incident);
     const { price, finalReading, logBookNo, status, endDateTime } = incident;
-
     const newObject = {
       subCenterId: seletSubcenter.value,
       price: price.toString(),
@@ -109,7 +96,18 @@ export function TripLogEditDialog({
     enableLoading();
     dispatch(actions.updateTrip(newObject, disabledLoading, onHide)).then(
       () => {
-        dispatch(fetchDashboardVehicles({ cityId: seletedCity.value }));
+        var filterObj = {};
+        if (seletedCity.value) {
+          filterObj.cityId = seletedCity.value;
+        }
+        if (center) {
+          filterObj.centerId = center;
+        }
+        if (subCenter) {
+          filterObj.subCenterId = subCenter;
+        }
+        dispatch(fetchDashboardVehicles(filterObj));
+        setSeletecOnDuty([]);
         // disabledLoading();
         // onHide();
       }
@@ -161,7 +159,7 @@ export function TripLogEditDialog({
         <>
           <div className={classes.root}>
             <CircularProgress />
-          </div>{" "}
+          </div>
         </>
       ) : (
         <>

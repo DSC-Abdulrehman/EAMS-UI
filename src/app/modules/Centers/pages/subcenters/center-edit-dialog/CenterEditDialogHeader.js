@@ -19,7 +19,7 @@ export function CenterEditDialogHeader({ id, isUserForRead }) {
   useEffect(() => {
     let _title = id ? "" : "New Center";
     if (id) {
-      _title = `Sub Center Details`;
+      _title = `Edit Sub Center`;
     } else {
       _title = `Add New Sub Center`;
     }

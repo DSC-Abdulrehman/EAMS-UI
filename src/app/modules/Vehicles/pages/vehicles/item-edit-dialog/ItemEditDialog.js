@@ -67,31 +67,152 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
 
   const saveItem = (item) => {
     if (!id) {
-      dispatch(actions.createVehicle(item)).then((res) => {
+      const itemUpdatedFields = {};
+
+      if (item.name) {
+        itemUpdatedFields.name = item.name;
+      }
+      if (item.regNo) {
+        itemUpdatedFields.regNo = item.regNo;
+      }
+      if (item.engineNo) {
+        itemUpdatedFields.engineNo = item.engineNo;
+      }
+      if (item.engineCapacity) {
+        itemUpdatedFields.engineCapacity = item.engineCapacity;
+      }
+      if (item.registerCity) {
+        itemUpdatedFields.name = item.registerCity;
+      }
+      if (item.chasis) {
+        itemUpdatedFields.chasis = item.chasis;
+      }
+      if (item.milleage) {
+        itemUpdatedFields.milleage = item.milleage;
+      }
+      if (item.year) {
+        itemUpdatedFields.year = item.year;
+      }
+      if (item.make) {
+        itemUpdatedFields.make = item.make;
+      }
+      if (item.model) {
+        itemUpdatedFields.model = item.model;
+      }
+      if (item.color) {
+        itemUpdatedFields.color = item.color;
+      }
+      if (item.fuelType) {
+        itemUpdatedFields.fuelType = item.fuelType;
+      }
+      if (item.transmission) {
+        itemUpdatedFields.transmission = item.transmission;
+      }
+      if (item.status) {
+        itemUpdatedFields.status = item.status;
+      }
+
+      if (item.centerId) {
+        itemUpdatedFields.centerId = item.centerId;
+      }
+      if (item.subCenterId) {
+        itemUpdatedFields.subCenterId = item.subCenterId;
+      }
+      if (item.vehicleCategoryId) {
+        itemUpdatedFields.vehicleCategoryId = item.vehicleCategoryId;
+      }
+      if (item.driverId) {
+        itemUpdatedFields.driverId = item.driverId;
+      }
+      if (item.oldDriverId) {
+        itemUpdatedFields.oldDriverId = item.oldDriverId;
+      }
+
+      dispatch(actions.createVehicle(itemUpdatedFields)).then((res) => {
         onHide();
       });
     } else {
-      const itemUpdatedFields = {
-        id: item.id,
-        name: item.name,
-        regNo: item.regNo,
-        engineNo: item.engineNo,
-        engineCapacity: item.engineCapacity,
-        registerCity: item.registerCity,
-        chasis: item.chasis,
-        milleage: item.milleage,
-        year: item.year,
-        make: item.make,
-        model: item.model,
-        color: item.color,
-        fuelType: item.fuelType,
-        transmission: item.transmission,
-        status: item.status,
-        centerId: item.centerId,
-        vehicleCategoryId: item.vehicleCategoryId,
-        driverId: item.driverId,
-        oldDriverId: item.oldDriverId,
-      };
+      // id: item.id,
+      //   name: item.name,
+      //   regNo: item.regNo,
+      //   engineNo: item.engineNo,
+      //   engineCapacity: item.engineCapacity,
+      //   registerCity: item.registerCity,
+      //   chasis: item.chasis,
+      //   milleage: item.milleage,
+      //   year: item.year,
+      //   make: item.make,
+      //   model: item.model,
+      //   color: item.color,
+      //   fuelType: item.fuelType,
+      //   transmission: item.transmission,
+      //   status: item.status,
+      //   centerId: item.centerId,
+      //   vehicleCategoryId: item.vehicleCategoryId,
+      //   driverId: item.driverId,
+      //   oldDriverId: item.oldDriverId,
+      const itemUpdatedFields = {};
+
+      if (item.id) {
+        itemUpdatedFields.id = item.id;
+      }
+      if (item.name) {
+        itemUpdatedFields.name = item.name;
+      }
+      if (item.regNo) {
+        itemUpdatedFields.regNo = item.regNo;
+      }
+      if (item.engineNo) {
+        itemUpdatedFields.engineNo = item.engineNo;
+      }
+      if (item.engineCapacity) {
+        itemUpdatedFields.engineCapacity = item.engineCapacity;
+      }
+      if (item.registerCity) {
+        itemUpdatedFields.name = item.registerCity;
+      }
+      if (item.chasis) {
+        itemUpdatedFields.chasis = item.chasis;
+      }
+      if (item.milleage) {
+        itemUpdatedFields.milleage = item.milleage;
+      }
+      if (item.year) {
+        itemUpdatedFields.year = item.year;
+      }
+      if (item.make) {
+        itemUpdatedFields.make = item.make;
+      }
+      if (item.model) {
+        itemUpdatedFields.model = item.model;
+      }
+      if (item.color) {
+        itemUpdatedFields.color = item.color;
+      }
+      if (item.fuelType) {
+        itemUpdatedFields.fuelType = item.fuelType;
+      }
+      if (item.transmission) {
+        itemUpdatedFields.transmission = item.transmission;
+      }
+      if (item.status) {
+        itemUpdatedFields.status = item.status;
+      }
+      if (item.centerId) {
+        itemUpdatedFields.centerId = item.centerId;
+      }
+      if (item.subCenterId) {
+        itemUpdatedFields.subCenterId = item.subCenterId;
+      }
+      if (item.vehicleCategoryId) {
+        itemUpdatedFields.vehicleCategoryId = item.vehicleCategoryId;
+      }
+      if (item.driverId) {
+        itemUpdatedFields.driverId = item.driverId;
+      }
+      if (item.oldDriverId) {
+        itemUpdatedFields.oldDriverId = item.oldDriverId;
+      }
       dispatch(actions.updateVehicle(itemUpdatedFields));
       onHide();
     }

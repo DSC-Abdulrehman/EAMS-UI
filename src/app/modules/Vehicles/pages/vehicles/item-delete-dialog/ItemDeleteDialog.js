@@ -50,12 +50,11 @@ export function ItemDeleteDialog({ id, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {" "}
-          Delete Vehicle
+          Deactivate Vehicle
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <span>Are you sure to permanently delete this vehicle?</span>
+        <span>Are you sure to deactivate this vehicle?</span>
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -72,7 +71,7 @@ export function ItemDeleteDialog({ id, show, onHide }) {
             onClick={deleteItem}
             className="btn btn-primary btn-elevate"
           >
-            {isLoading ? <span>Deleting...</span> : <span>Delete</span>}
+            {isLoading ? <span>Deactivate...</span> : <span>Deactivate</span>}
           </button>
         </div>
       </Modal.Footer>

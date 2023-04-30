@@ -3,29 +3,29 @@ import React, { useMemo, useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import objectPath from "object-path";
 import { Dropdown } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import {
   DropdownCustomToggler,
   DropdownMenu4,
   DropdownMenu3,
 } from "../../dropdowns";
-import { useHtmlClassService } from "../../../layout";
-//import Button from "@material-ui/core/Button";
-import { IncidentsEditDialog } from "../../../../app/modules/IncidentDetails/pages/incidents/incident-edit-dialog/IncidentEditDialog";
+
 import Modal from "react-bootstrap/Modal";
 import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
 import {
   updateVehicelStatus,
   fetchDashboardVehicles,
+  getLastTrips,
 } from "../../../redux/dashboardActions";
 import { useDispatch } from "react-redux";
 import { getDate, getTime, getCurrentTime } from "../../../../app/utils/common";
 import moment from "moment";
-import { func } from "prop-types";
 
 export function TilesWidget1({
   className,
   chartColor = "danger",
   heading,
+  setRegNo,
   buttonHeading,
   NoofVehicle,
   vehiclesData,
@@ -37,104 +37,37 @@ export function TilesWidget1({
   diable,
   rowSelection,
 }) {
-  //console.log("seletedCity", seletedCity);
+  // const triplogsUIContext = useLastTripsUIContext();
+  // const triplogsUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: triplogsUIContext.queryParams,
+  //     setQueryParams: triplogsUIContext.setQueryParams,
+  //     setQueryParamsBase: triplogsUIContext.setQueryParamsBase,
+  //     openEditUserDialog: triplogsUIContext.openLastTripsDialog,
+  //   };
+  // }, [triplogsUIContext]);
+
   const dispatch = useDispatch();
-  const [data, setData] = useState([]);
-
   const timerFormater = (cellContent) => {
-    // setDutyVehicleTime(cellContent);
-    // var now = moment(new Date());
-    // var start = moment(cellContent);
-    // //console.log("DutyVehicleTime", DutyVehicleTime);
-    // //getMinutes(now, start);
-    // // console.log("minutes", minutes);
-    // var minutes = now.diff(start, "minutes");
-    // console.log("minutes", minutes);
-    // console.log("minutes", minutes);
-    //console.log("DutyVehicleTime", DutyVehicleTime);
-
     return (
       <>
         <span>{getTime(cellContent)}</span>
       </>
     );
   };
-
-  // useEffect(() => {
-  //   // Start the interval to update the data every 5 seconds
-  //   const interval = setInterval(() => {
-  //     // Format the data
-  //     const formattedData = vehiclesData.map((item) => {
-  //       console.log("Data called");
-  //       return {
-  //         ...item,
-  //         // Add formatted date to the row
-  //         formattedDate: timerFormater,
-  //       };
-  //     });
-
-  //     // Update the state with the formatted data
-  //     setData(formattedData);
-  //   }, 5000);
-
-  //   // Clear the interval on component unmount
-  //   return () => clearInterval(interval);
-  // }, [vehiclesData]);
-
-  const [DutyVehicleTime, setDutyVehicleTime] = useState();
-  const [selectedVehile, setSelectedVehicle] = useState([]);
-
-  const uiService = useHtmlClassService();
-
-  // console.log("diable", diable);
-  // const layoutProps = useMemo(() => {
-  //   return {
-  //     colorsGrayGray500: objectPath.get(
-  //       uiService.config,
-  //       "js.colors.gray.gray500"
-  //     ),
-  //     colorsGrayGray300: objectPath.get(
-  //       uiService.config,
-  //       "js.colors.gray.gray300"
-  //     ),
-  //     colorsThemeBaseColor: objectPath.get(
-  //       uiService.config,
-  //       `js.colors.theme.base.${chartColor}`
-  //     ),
-  //     colorsThemeLightColor: objectPath.get(
-  //       uiService.config,
-  //       `js.colors.theme.light.${chartColor}`
-  //     ),
-  //     fontFamily: objectPath.get(uiService.config, "js.fontFamily"),
-  //   };
-  // }, [uiService, chartColor]);
-
-  // useEffect(() =>{
-  //   var now = moment(new Date());
-  //   var end = moment(cellContent);
-  //   var minutes = now.diff(end, "minutes");
-  //   console.log("minutes", minutes);
-  // },[])
-  const statusFormater = (cell, row) => (
-    <span className={row.status === true ? "text-success" : "text-warning"}>
-      {row.name}
-    </span>
-  );
-
-  // function func() {
-  //   console.log("Ran");
-  // }
-  // setInterval(func, 5000);
-
   const getMinutes = (start) => {
     var now = moment(new Date());
     return now.diff(start, "minutes");
   };
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     return getMinutes();
-  //   }, 10000);
-  // }, []);
+
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    history.push(`/dashboard`);
+    setOpen(false);
+  };
+
+  const history = useHistory();
 
   const actionFormater = (cell, row) => {
     const standToOff = () => {
@@ -165,6 +98,22 @@ export function TilesWidget1({
       });
     };
 
+    const handleClickLastTripsDialoge = () => {
+      history.push(`/dashboard/read-vehicle-trip-logs/${row.vehicleid}/edit`);
+
+      const body = {
+        vehicleId: row.vehicleid,
+        filter: {
+          searchQuery: "",
+        },
+        sortOrder: "name",
+        pageSize: 20,
+        pageNumber: 1,
+      };
+      dispatch(getLastTrips(body));
+      setOpen(true);
+    };
+
     return (
       <>
         {heading != "On Duty" && (
@@ -189,15 +138,18 @@ export function TilesWidget1({
                         <span className="navi-text">Off Duty</span>
                       </a>
                     </li>
-                    <li className="navi-item">
+                    {/* <li className="navi-item">
                       <a href="#" className="navi-link">
                         <span className="navi-icon">
                           <i className="flaticon2-rocket-1"></i>
                         </span>
                         <span className="navi-text">Update</span>
                       </a>
-                    </li>
-                    <li className="navi-item">
+                    </li> */}
+                    <li
+                      className="navi-item"
+                      onClick={() => handleClickLastTripsDialoge()}
+                    >
                       <a href="#" className="navi-link">
                         <span className="navi-icon">
                           <i className="flaticon2-bell-2"></i>
@@ -224,8 +176,6 @@ export function TilesWidget1({
     );
   };
 
-  //setInterval(timerFormater, 5000);
-
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -239,7 +189,7 @@ export function TilesWidget1({
     {
       dataField: "name",
       text: "Vehicle Name",
-      align: "center",
+      align: "start",
       headerAlign: "center",
       headerAttrs: {
         hidden: true,
@@ -256,7 +206,7 @@ export function TilesWidget1({
     {
       dataField: "regNo",
       text: "Registration No",
-      align: "center",
+      align: "start",
       headerAttrs: {
         hidden: true,
       },
@@ -314,7 +264,9 @@ export function TilesWidget1({
         // console.log("row", row);
         if (row.status === "Available") {
           vehicleId = row.vehicleid;
+          // console.log("row", row);
           setVehicle((item) => [...item, vehicleId]);
+          setRegNo((item) => [...item, row.regNo]);
         } else {
           vehicleId = row.tripLogId;
           setVehicle([row.tripLogId]);
@@ -326,6 +278,10 @@ export function TilesWidget1({
         if (index > -1) {
           vehicle.splice(index, 1);
           setVehicle([...vehicle]);
+          // if()
+          //console.log("Uncseleted called", row);
+
+          setRegNo([row.regNo]);
           //setVehicle((item) => [...item, vehicle]);
         }
       }
@@ -373,6 +329,7 @@ export function TilesWidget1({
             noDataIndication={emptyDataMessage}
           />
         </div>
+        {/* <LastTripsDialog open={open} handleClose={handleClose} /> */}
       </div>
     </>
   );

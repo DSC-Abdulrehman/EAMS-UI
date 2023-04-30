@@ -4,6 +4,7 @@ import { Route } from "react-router-dom";
 import { ItemUIProvider } from "./ItemUIContext";
 import { ItemEditDialog } from "./item-edit-dialog/ItemEditDialog";
 import { ItemDeleteDialog } from "./item-delete-dialog/ItemDeleteDialog";
+import { ItemActiveDialog } from "./item-active-dialog/ItemActiveDialog";
 import { ItemsCard } from "./items-card/ItemsCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -48,10 +49,14 @@ export function ItemPage({ history }) {
     openEditCenterDialog: (id) => {
       dispatch(fetchVehicle(id));
       dispatch(fetchAllCenters());
+      dispatch(fetchCategory());
       history.push(`/vehicles/read-all-vehicles/${id}/edit`);
     },
     openDeleteCenterDialog: (id) => {
       history.push(`/vehicles/read-all-vehicles/${id}/delete`);
+    },
+    openActiveDialog: (id) => {
+      history.push(`/vehicles/read-all-vehicles/${id}/active`);
     },
     openReadCenterDialog: (id, isUserRead) => {
       dispatch(fetchAllCenters());
@@ -99,6 +104,17 @@ export function ItemPage({ history }) {
       <Route path="/vehicles/read-all-vehicles/:id/delete">
         {({ history, match }) => (
           <ItemDeleteDialog
+            show={match != null}
+            id={match && match.params.id}
+            onHide={() => {
+              history.push("/vehicles/read-all-vehicles");
+            }}
+          />
+        )}
+      </Route>
+      <Route path="/vehicles/read-all-vehicles/:id/active">
+        {({ history, match }) => (
+          <ItemActiveDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {

@@ -13,14 +13,15 @@ import { fetchDashboardVehicles } from "../../../../redux/dashboardActions";
 
 const initIncident = {
   callerName: "",
-  callerCNIC: "",
+  // callerCNIC: "",
   callerPhoneNo: "",
   patientName: "",
-  patientCNIC: "",
+  // patientCNIC: "",
   shortDescription: "",
-  location: "",
+  // location: "",
   area: "",
   vehicleId: "",
+  alarmTimeId: "",
   // incidentTypeId: undefined,
   // incidentSeverityId: undefined,
   // centerId: undefined,
@@ -49,13 +50,19 @@ export function IncidentCreateDialog({
   setVehicle,
 }) {
   // console.log("city", city);
+  // console.log("center", center);
+  // console.log("subCenter", subCenter);
   const title = "UserEditDialog";
   const classes = useStyles();
   const [centerId, setCenter] = useState("");
   const [loading, setLoading] = useState(false);
+  //const [alaramTime, setAlaramTime] = useState();
   const incidentsUIContext = useIncidentsUIContext();
 
   const { dashboard } = useSelector((state) => state);
+
+  //console.log("dashboard", dashboard);
+
   //console.log("incidentsUIContext", incidentsUIContext);
   // const incidentsUIProps = useMemo(() => {
   //   return {
@@ -74,7 +81,6 @@ export function IncidentCreateDialog({
     centers,
     vehicleByCenterId,
     vehiclesForDropdown,
-    getState,
   } = useSelector(
     (state) => ({
       actionsLoading: state.incidentDetails.actionsLoading,
@@ -85,7 +91,6 @@ export function IncidentCreateDialog({
       centers: state.incidentDetails.centers,
       vehicleByCenterId: state.incidentDetails.vehicleByCenterId,
       vehiclesForDropdown: state.incidentDetails.vehiclesForDropdown,
-      getState: state,
     }),
     shallowEqual
   );
@@ -99,14 +104,22 @@ export function IncidentCreateDialog({
     setLoading(false);
   };
 
-  // console.log("default city", city);
-  // console.log("default center", center);
-  // console.log("default subCenter", subCenter);
-
   const saveIncident = (incident) => {
     enableLoading();
     dispatch(actions.createIncident(incident)).then((res) => {
-      dispatch(fetchDashboardVehicles({ cityId: city.value }));
+      var filterObj = {};
+      if (city.value) {
+        filterObj.cityId = city.value;
+      }
+      if (center) {
+        filterObj.centerId = center;
+      }
+      if (subCenter) {
+        filterObj.subCenterId = subCenter;
+      }
+
+      dispatch(fetchDashboardVehicles(filterObj));
+
       disabledLoading();
       onHide();
       setVehicle([]);
@@ -135,6 +148,7 @@ export function IncidentCreateDialog({
         loading={loading}
         handleClose={handleClose}
         selectedVehicles={selectedVehicles}
+        //alaramTime={dashboard.alaramTime}
       />
       <ToastContainer
         position="top-right"

@@ -26,6 +26,7 @@ export function ItemsTable() {
     return {
       openEditCenterDialog: itemUIContext.openEditCenterDialog,
       openDeleteCenterDialog: itemUIContext.openDeleteCenterDialog,
+      openActiveDialog: itemUIContext.openActiveDialog,
       openReadCenterDialog: itemUIContext.openReadCenterDialog,
       queryParms: itemUIContext.queryParams,
       setQueryParams: itemUIContext.setQueryParams,
@@ -189,6 +190,7 @@ export function ItemsTable() {
       formatExtraData: {
         openEditCenterDialog: itemUIProps.openEditCenterDialog,
         openDeleteCenterDialog: itemUIProps.openDeleteCenterDialog,
+        openActiveDialog: itemUIProps.openActiveDialog,
         openReadCenterDialog: itemUIProps.openReadCenterDialog,
         isAccessForEdit: isAccessForEdit?.isAccess,
         isAccessForDelete: isAccessForDelete?.isAccess,

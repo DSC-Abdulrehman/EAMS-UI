@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { shallowEqual, useSelector } from "react-redux"
-import { Modal } from "react-bootstrap"
-import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls"
+import React, { useState, useEffect } from "react";
+import { shallowEqual, useSelector } from "react-redux";
+import { Modal } from "react-bootstrap";
+import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
 export function ItemEditDialogHeader({ id, itemForRead }) {
   //const userForEdit = false
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("");
 
   const { itemForEdit, actionsLoading } = useSelector(
     (state) => ({
@@ -13,19 +13,19 @@ export function ItemEditDialogHeader({ id, itemForRead }) {
       actionsLoading: state.vehicles.actionsLoading,
     }),
     shallowEqual
-  )
+  );
 
   //console.log("itemForEdit", itemForEdit)
 
   useEffect(() => {
-    let _title = id ? "" : "New Vehicle"
+    let _title = id ? "" : "New Vehicle";
     if (itemForEdit && id) {
-      _title = `Edit '${itemForEdit.name}'`
+      _title = `Edit Vehicle`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }
-    setTitle(_title)
-  }, [itemForEdit, actionsLoading])
+    setTitle(_title);
+  }, [itemForEdit, actionsLoading]);
 
   return (
     <>
@@ -36,5 +36,5 @@ export function ItemEditDialogHeader({ id, itemForRead }) {
         </Modal.Title>
       </Modal.Header>
     </>
-  )
+  );
 }

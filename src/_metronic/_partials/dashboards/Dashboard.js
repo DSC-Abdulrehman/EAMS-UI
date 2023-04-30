@@ -32,13 +32,13 @@ export function Dashboard() {
   }, [uiService]);
   return (
     <>
-      {layoutProps.demo === "demo1" && <Demo1Dashboard />}
+      {/* {layoutProps.demo === "demo1" && <Demo1Dashboard />} */}
       {layoutProps.demo === "demo2" && <Demo2Dashboard />}
-      {layoutProps.demo === "demo3" && <Demo3Dashboard />}
+      {/* {layoutProps.demo === "demo3" && <Demo3Dashboard />}
       {layoutProps.demo === "demo4" && <Demo4Dashboard />}
       {layoutProps.demo === "demo5" && <Demo5Dashboard />}
       {layoutProps.demo === "demo6" && <Demo6Dashboard />}
-      {layoutProps.demo === "demo7" && <Demo7Dashboard />}
+      {layoutProps.demo === "demo7" && <Demo7Dashboard />} */}
 
       <ToastContainer
         position="top-right"

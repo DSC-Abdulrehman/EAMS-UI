@@ -4,14 +4,17 @@ import {
   fetchAllCity,
   fetchDashboardVehicles,
   fetchAllCityCenters,
+  alaramTime,
 } from "../../redux/dashboardActions";
+import { Route, Switch } from "react-router-dom";
 import { TilesWidget1, TilesWidget10 } from "../widgets";
 //import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
 import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";
 import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
 //import { DropdownMenu4 } from "../dropdowns";
-
-export function Demo2Dashboard() {
+import { LastTripsUIProvider } from "../widgets/tiles/LastTrips/LastTripsUIContext";
+import LastTripsDialog from "../widgets/tiles/LastTrips/LastTripsDialog";
+export function Demo2Dashboard({ history }) {
   const dispatch = useDispatch();
 
   // All useState Hook
@@ -22,6 +25,7 @@ export function Demo2Dashboard() {
   const [onDutyVehicles, setOnDutyVehicels] = useState([]);
   const [offDutyVehicles, setOffDutyVehicels] = useState([]);
   const [vehicle, setVehicle] = useState([]);
+  const [regNo, setRegNo] = useState([]);
   const [seletedOnDuty, setSeletecOnDuty] = useState([]);
   const [seletedOnOffDuty, setSeleteOffDuty] = useState([]);
   const [open, setOpen] = useState(false);
@@ -29,18 +33,16 @@ export function Demo2Dashboard() {
   const [closeTripId, setCloseTripId] = useState();
   const [diable, setDisable] = useState(true);
   const [diableOnDutyButton, setDisableOnDutyButton] = useState(true);
+  const [alarmTime, setAlarmTime] = useState([]);
 
   // Getting Redux state
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
 
-  // useEffect(() => {
-  //   dispatch(action.fetchAllCity(user.countryId));
-  // }, [user.countryId]);
   useEffect(() => {
-    console.log("Fetch city by user id one thime");
     dispatch(fetchAllCity(user.countryId));
     dispatch(fetchAllCityCenters(user.cityId));
+    dispatch(alaramTime());
   }, []);
 
   useEffect(() => {
@@ -55,6 +57,7 @@ export function Demo2Dashboard() {
     // //dispatch(fetchAllCityCenters(user.cityId));
   }, []);
 
+  //console.log("dashboard", dashboard);
   // console.log("city", city);
   useEffect(() => {
     //console.log("seleted cit yis called");
@@ -85,6 +88,10 @@ export function Demo2Dashboard() {
     setOnDutyVehicels(dashboard.onDuty);
   }, [dashboard.onDuty]);
 
+  // useEffect(() => {
+  //   setAlarmTime(dashboard.alarmTime);
+  // }, [dashboard.alarmTime]);
+
   useEffect(() => {
     setOffDutyVehicels(dashboard.offDuty);
   }, [dashboard.offDuty, dispatch]);
@@ -107,86 +114,114 @@ export function Demo2Dashboard() {
     setCloseTripDialogue(false);
   };
 
+  const LastTripLogUIEvents = {
+    // newUserButtonClick: () => {
+    //   history.push("/incident-details/read-all-incident-details/new")
+    // },
+    openLastTripsDialog: (id) => {
+      history.push(`/dashboard/read-vehicle-trip-logs/${id}/edit`);
+    },
+  };
   return (
     <>
-      <div className="row">
-        <div className="col-xl-12">
-          <TilesWidget10
-            className="gutter-b"
-            widgetHeight="125px"
-            seletCity={city}
-            setCity={setCity}
-            setCenter={setCenter}
-            center={center}
-            setSubcenter={setSubcenter}
-            subCenter={subCenter}
-          />
+      <LastTripsUIProvider TripLogsUIEvents={LastTripLogUIEvents}>
+        <Route path="/dashboard/read-vehicle-trip-logs/:id/edit">
+          {({ history, match }) => (
+            <LastTripsDialog
+              open={match != null}
+              id={match && match.params.id}
+              // onHide={() => {
+              //   history.push("/incident-details/read-all-driver-trip-logs");
+              // }}
+            />
+          )}
+        </Route>
+        <div className="row">
+          <div className="col-xl-12">
+            <TilesWidget10
+              className="gutter-b"
+              widgetHeight="125px"
+              seletCity={city}
+              setCity={setCity}
+              setCenter={setCenter}
+              center={center}
+              setSubcenter={setSubcenter}
+              subCenter={subCenter}
+              alarmTime={alarmTime}
+              setAlarmTime={setAlarmTime}
+              setVehicle={setVehicle}
+            />
+          </div>
+          <div className="col-xl-4">
+            <TilesWidget1
+              className="gutter-b card-stretch"
+              chartColor="danger"
+              heading="Stand By"
+              buttonHeading="Create Incident"
+              NoofVehicle={standByvehicles.length}
+              vehiclesData={standByvehicles}
+              handleClickOpen={handleClickOpen}
+              setVehicle={setVehicle}
+              vehicle={vehicle}
+              seletedCity={city}
+              selectionType="checkbox"
+              diable={diable}
+              rowSelection={false}
+              setRegNo={setRegNo}
+            />
+            <IncidentCreateDialog
+              show={open}
+              onHide={handleClose}
+              handleClose={handleClose}
+              selectedVehicles={vehicle}
+              setStandbyVehicels={setStandbyVehicels}
+              city={city}
+              center={center && center.value}
+              subCenter={subCenter && subCenter.value}
+              setVehicle={setVehicle}
+            />
+          </div>
+          <div className="col-xl-4">
+            <TilesWidget1
+              className="gutter-b card-stretch"
+              chartColor="danger"
+              heading="On Duty"
+              buttonHeading="In Vehicle"
+              NoofVehicle={onDutyVehicles.length}
+              vehiclesData={onDutyVehicles}
+              handleClickOpen={openTripcloseDialogue}
+              setVehicle={setSeletecOnDuty}
+              vehicle={seletedOnDuty}
+              selectionType="radio"
+              diable={diableOnDutyButton}
+              rowSelection={false}
+            />
+            <TripLogEditDialog
+              show={openCloseTripDialogue}
+              onHide={() => setCloseTripDialogue(false)}
+              id={closeTripId}
+              seletedCity={city}
+              center={center && center.value}
+              subCenter={subCenter && subCenter.value}
+              setVehicle={setVehicle}
+            />
+          </div>
+          <div className="col-xl-4">
+            <TilesWidget1
+              className="gutter-b card-stretch"
+              chartColor="danger"
+              heading="Off Duty"
+              //buttonHeading="Active vehicle"
+              NoofVehicle={offDutyVehicles.length}
+              vehiclesData={offDutyVehicles}
+              setVehicle={setSeleteOffDuty}
+              seletedCity={city}
+              rowSelection={true}
+              selectionType="radio"
+            />
+          </div>
         </div>
-        <div className="col-xl-4">
-          <TilesWidget1
-            className="gutter-b card-stretch"
-            chartColor="danger"
-            heading="Stand By"
-            buttonHeading="Create Incident"
-            NoofVehicle={standByvehicles.length}
-            vehiclesData={standByvehicles}
-            handleClickOpen={handleClickOpen}
-            setVehicle={setVehicle}
-            vehicle={vehicle}
-            seletedCity={city}
-            selectionType="checkbox"
-            diable={diable}
-            rowSelection={false}
-          />
-          <IncidentCreateDialog
-            show={open}
-            onHide={handleClose}
-            handleClose={handleClose}
-            selectedVehicles={vehicle}
-            setStandbyVehicels={setStandbyVehicels}
-            city={city}
-            center={center && center.value}
-            subCenter={subCenter && subCenter.value}
-            setVehicle={setVehicle}
-          />
-        </div>
-        <div className="col-xl-4">
-          <TilesWidget1
-            className="gutter-b card-stretch"
-            chartColor="danger"
-            heading="On Duty"
-            buttonHeading="In Vehicle"
-            NoofVehicle={onDutyVehicles.length}
-            vehiclesData={onDutyVehicles}
-            handleClickOpen={openTripcloseDialogue}
-            setVehicle={setSeletecOnDuty}
-            vehicle={seletedOnDuty}
-            selectionType="radio"
-            diable={diableOnDutyButton}
-            rowSelection={false}
-          />
-          <TripLogEditDialog
-            show={openCloseTripDialogue}
-            onHide={() => setCloseTripDialogue(false)}
-            id={closeTripId}
-            seletedCity={city}
-          />
-        </div>
-        <div className="col-xl-4">
-          <TilesWidget1
-            className="gutter-b card-stretch"
-            chartColor="danger"
-            heading="Off Duty"
-            //buttonHeading="Active vehicle"
-            NoofVehicle={offDutyVehicles.length}
-            vehiclesData={offDutyVehicles}
-            setVehicle={setSeleteOffDuty}
-            seletedCity={city}
-            rowSelection={true}
-            selectionType="radio"
-          />
-        </div>
-      </div>
+      </LastTripsUIProvider>
     </>
   );
 }

@@ -40,6 +40,8 @@ export function CentersUIProvider({ centersUIEvents, children }) {
   const [secondQueryParams, setSecondQueryParamsBase] = useState(
     initialvehicleFilter
   );
+  console.log("secondQueryParams", secondQueryParams);
+
   const setSecondQueryParams = useCallback((nextQueryParams) => {
     setSecondQueryParamsBase((prevQueryParams) => {
       if (isFunction(nextQueryParams)) {
@@ -76,7 +78,7 @@ export function CentersUIProvider({ centersUIEvents, children }) {
     newCenterButtonClick: centersUIEvents.newCenterButtonClick,
     openEditCenterDialog: centersUIEvents.openEditCenterDialog,
     openDeleteCenterDialog: centersUIEvents.openDeleteCenterDialog,
-    openActiveCenterDialog: centersUIEvents.openActiveCenterDialog,    
+    openActiveCenterDialog: centersUIEvents.openActiveCenterDialog,
     openReadCenterDialog: centersUIEvents.openReadCenterDialog,
   };
   return (

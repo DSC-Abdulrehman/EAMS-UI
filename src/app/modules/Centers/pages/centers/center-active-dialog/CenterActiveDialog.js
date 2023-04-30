@@ -42,7 +42,7 @@ export function CenterActiveDialog({ id, show, onHide }) {
   const deleteUser = () => {
     // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.deleteCenter(id)).then(() => {
+    dispatch(actions.activeCenter(id)).then(() => {
       onHide();
       // refresh list after deletion
       dispatch(actions.fetchCenters(centersUIProps.queryParams));
@@ -86,7 +86,7 @@ export function CenterActiveDialog({ id, show, onHide }) {
             onClick={deleteUser}
             className="btn btn-primary btn-elevate"
           >
-            Make Active
+            Activate
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

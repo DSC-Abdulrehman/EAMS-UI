@@ -39,6 +39,7 @@ export const fetchTripLog = (id) => (dispatch) => {
     .getDriverTripById({ id: id })
     .then((response) => {
       const entities = response.data?.data;
+
       dispatch(actions.driverTripFetched({ driverTripForEdit: entities }));
     })
     .catch((error) => {

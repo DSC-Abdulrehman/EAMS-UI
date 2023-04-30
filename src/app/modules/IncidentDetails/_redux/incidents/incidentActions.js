@@ -84,7 +84,7 @@ export const deleteIncident = (id) => (dispatch) => {
     });
 };
 export const createIncident = (incidentForCreation) => (dispatch) => {
-  console.log("incidentForCreation", incidentForCreation);
+  //console.log("incidentForCreation", incidentForCreation);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createIncident(incidentForCreation)
@@ -92,7 +92,8 @@ export const createIncident = (incidentForCreation) => (dispatch) => {
       const incident = res.data?.data;
       console.log("incident", incident);
       dispatch(actions.incidentCreated(incident));
-      toast.success("Incident Create Successfully.", {
+
+      toast.success("Incident Created Successfully", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

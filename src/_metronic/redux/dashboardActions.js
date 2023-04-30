@@ -1,3 +1,4 @@
+import { async } from "q";
 import * as requestFromServer from "./dashboardCrud";
 import { dashboardSlice, callTypes } from "./dashboardSlice";
 import { ToastContainer, toast } from "react-toastify";
@@ -87,7 +88,7 @@ export const fetchDashboardVehicles = (body) => async (dispatch) => {
       dispatch(actions.dashboardVehicles(entities));
     })
     .catch((error) => {
-      toast.error("Somethign went wrong");
+      toast.error("Something went wrong");
     });
 };
 
@@ -95,9 +96,44 @@ export const updateVehicelStatus = (body) => async (dispatch) => {
   return await requestFromServer
     .updateVehicleStatus(body)
     .then((response) => {
-      toast.success("Updated Successfully");
+      toast.success("Successfully Updated");
     })
     .catch((error) => {
-      toast.error("Somethign went wrong");
+      toast.error("Something went wrong");
+    });
+};
+
+export const getLastTrips = (body) => async (dispatch) => {
+  return await requestFromServer
+    .getLastTrips(body)
+    .then((response) => {
+      // console.log("res", response);
+      dispatch(actions.lastTripsVehicles(response?.data?.data));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong");
+    });
+};
+
+export const updateTripLog = (payload) => async (dispatch) => {
+  return await requestFromServer
+    .updateTripLog(payload)
+    .then((response) => {
+      //console.log("response?.data?.data", response?.data?.data);
+      dispatch(actions.updateData(response?.data?.data));
+    })
+    .catch((error) => {
+      toast.error(error?.response?.data?.message);
+    });
+};
+
+export const alaramTime = () => async (dispatch) => {
+  return await requestFromServer
+    .getAlaramTime()
+    .then((response) => {
+      dispatch(actions.AlaramTime(response?.data?.data));
+    })
+    .catch((error) => {
+      toast.error(error?.response?.data?.message);
     });
 };

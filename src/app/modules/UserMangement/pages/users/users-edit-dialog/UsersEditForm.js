@@ -106,7 +106,7 @@ export function UserEditForm({
 
   const { dashboard, users } = useSelector((state) => state);
 
-  console.log("users", users?.userForEdit?.roleId);
+  //lconsole.log("userStatusTypes", userStatusTypes);
   // const enableLoading = () => {
   //   setLoading(true);
   // };
@@ -189,10 +189,11 @@ export function UserEditForm({
 
     setDefaultStatus(
       userStatusTypes &&
-        userStatusTypes.filter((item) => item.label === user.status.trim())
+        userStatusTypes.find((item) => item.label === user.status.trim())
     );
   }, [user]);
 
+  //console.log("defStatus", defStatus);
   return (
     <>
       <Formik
@@ -228,6 +229,7 @@ export function UserEditForm({
                       <SearchSelect
                         name="countryId"
                         label="Select Country*"
+                        isDisabled={isUserForRead && true}
                         onBlur={() => {
                           handleBlur({ target: { name: "countryId" } });
                         }}
@@ -246,6 +248,7 @@ export function UserEditForm({
                       <SearchSelect
                         name="cityId"
                         label="Select City*"
+                        isDisabled={isUserForRead && true}
                         onBlur={() => {
                           handleBlur({ target: { name: "cityId" } });
                         }}
@@ -264,6 +267,7 @@ export function UserEditForm({
                       <SearchSelect
                         name="centerId"
                         label="Select Center*"
+                        isDisabled={isUserForRead && true}
                         onBlur={() => {
                           handleBlur({ target: { name: "centerId" } });
                         }}
@@ -282,6 +286,7 @@ export function UserEditForm({
                       <SearchSelect
                         name="subCenterId"
                         label="Select Sub-Center*"
+                        isDisabled={isUserForRead && true}
                         onBlur={() => {
                           handleBlur({ target: { name: "subCenterId" } });
                         }}
@@ -441,14 +446,15 @@ export function UserEditForm({
                       <Select
                         name="status"
                         label="Status*"
-                        value={defStatus && defStatus[0]?.value}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
+                        value={defStatus && defStatus.value}
+                        onChange={(e) => {
+                          // console.log("default", e.target.value);
+                          setFieldValue("status", e.target.value);
+                          setDefaultStatus(e.target.value);
+                        }}
+                        // onBlur={handleBlur}
                         style={{ display: "block" }}
                       >
-                        {/* <option value="" disabled>
-                          Please select status
-                        </option> */}
                         <option value="" label="Select Status" />
                         {userStatusTypes &&
                           userStatusTypes.map((item) => {

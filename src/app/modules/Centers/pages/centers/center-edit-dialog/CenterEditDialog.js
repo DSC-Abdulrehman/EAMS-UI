@@ -79,6 +79,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
   // }, [id, centerForEdit]);
   // console.log("listLoading", listLoading);
   const saveCenter = (center) => {
+    console.log("center", center);
     if (!id) {
       dispatch(actions.createCenter(center)).then((res) => {
         onHide();
@@ -91,7 +92,7 @@ export function CenterEditDialog({ id, show, isNew, onHide, userForRead }) {
         // location: center.location,
         // longitude: center.longitude,
         // latitude: center.latitude,
-        conuntryId: center.conuntryId,
+        countryId: center.countryId,
         cityId: center.cityId,
       };
 

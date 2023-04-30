@@ -76,7 +76,7 @@ export function TripLogEditForm({
   const dispatch = useDispatch();
   const { dashboard, auth } = useSelector((state) => state);
   const { user } = auth;
-  console.log("driverTrip", driverTrip);
+  //console.log("driverTrip", driverTrip);
 
   const {
     sourceCenterId,
@@ -89,6 +89,7 @@ export function TripLogEditForm({
     vehicle,
     initialReading,
     sourcecenter,
+    createdAt,
   } = driverTrip;
 
   const iniValue = {
@@ -101,6 +102,10 @@ export function TripLogEditForm({
     price: "",
     status: "",
   };
+
+  const val = 0;
+  const checkinitialReading = initialReading > 0;
+  const intReading = `${checkinitialReading ? `initialReading` : `val`}`;
 
   // useEffect(() => {
   //   dispatch(fetchAllCity(user.countryId));
@@ -134,9 +139,6 @@ export function TripLogEditForm({
         dashboard.allSubCenter.find((item) => item.value === sourceSubCenterId)
     );
   }, [dashboard.allSubCenter]);
-
-  console.log("driverTrip", driverTrip);
-  console.log("seletCenter", seletCenter);
 
   return (
     <>
@@ -180,7 +182,7 @@ export function TripLogEditForm({
                     </div>
                     <div className="col-lg-4">
                       <Field
-                        name="initialReading"
+                        name={intReading}
                         component={Input}
                         label="Initial Reading"
                         disabled
@@ -293,20 +295,13 @@ export function TripLogEditForm({
                       )} */}
 
                       <Select name="status" label="Status">
-                        {TripStatus ? (
-                          TripStatus.map((response) => {
-                            return (
-                              <option
-                                key={response.label}
-                                value={response.label}
-                              >
-                                {response.label}
-                              </option>
-                            );
-                          })
-                        ) : (
-                          <></>
-                        )}
+                        {TripStatus.map((response) => {
+                          return (
+                            <option key={response.label} value={response.label}>
+                              {response.label}
+                            </option>
+                          );
+                        })}
                       </Select>
                     </div>
                     {/* <div className="col-lg-4">

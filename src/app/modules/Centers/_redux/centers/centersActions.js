@@ -51,7 +51,7 @@ export const deleteCenter = (id) => (dispatch) => {
       //console.log("response from delete user ", response.data.message);
       dispatch(actions.centerDeleted({ id: id }));
 
-      toast.success("Successfully Updated", {
+      toast.success("Successfully Deactivated", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -63,7 +63,31 @@ export const deleteCenter = (id) => (dispatch) => {
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error("Error 😣");
+      toast.error(error.response.data.message);
+    });
+};
+
+export const activeCenter = (id) => (dispatch) => {
+  dispatch(actions.startCall({ callType: callTypes.action }));
+  return requestFromServer
+    .deleteRequest({ id: id })
+    .then((response) => {
+      //console.log("response from delete user ", response.data.message);
+      dispatch(actions.centerDeleted({ id: id }));
+
+      toast.success("Successfully Activated", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    })
+    .catch((error) => {
+      dispatch(actions.catchError({ error, callType: callTypes.action }));
+      toast.error(error.response.data.message);
     });
 };
 

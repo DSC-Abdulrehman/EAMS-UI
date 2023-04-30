@@ -55,9 +55,9 @@ export function CenterEditForm({
 
   useEffect(() => {
     setSeletCountry(
-      allCountry && allCountry.filter((item) => item.value === center.countryId)
+      allCountry && allCountry.find((item) => item.value === center.countryId)
     );
-  }, [center.countryId]);
+  }, [center.countryId, allCountry]);
 
   useEffect(() => {
     setSelectCity(
@@ -69,7 +69,7 @@ export function CenterEditForm({
     setLoading(true);
   };
 
-  console.log("center value", center);
+  //console.log("center value", center);
 
   return (
     <>

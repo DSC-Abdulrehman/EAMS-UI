@@ -84,7 +84,12 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
       };
       dispatch(actions.createUser(finalObject, disbaleLoading, onHide));
     } else {
-      // console.log("i'm in else");
+      const getUserStatus = userStatusTypes.find((item) => {
+        return item.value === +user.status;
+      });
+
+      console.log("getUserStatus", getUserStatus);
+
       const userUpdatedFields = {
         id: user.id,
         email: user.email,
@@ -95,7 +100,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
         lastName: user.lastName,
         roleId: user.roleId,
         centerId: user.centerId,
-        //status: getUserStatus[0].label,
+        status: getUserStatus?.label,
         countryId: user.countryId,
         cityId: user.cityId,
         subCenterId: user.subCenterId,

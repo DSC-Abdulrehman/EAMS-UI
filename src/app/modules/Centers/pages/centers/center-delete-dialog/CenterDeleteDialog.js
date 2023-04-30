@@ -65,12 +65,12 @@ export function CenterDeleteDialog({ id, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          In-Active Center
+          Deactivate Center
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to In-Active this center?</span>}
-        {isLoading && <span> center is de-activating...</span>}
+        {!isLoading && <span>Are you sure to deactivate this center?</span>}
+        {isLoading && <span> center is deactivating...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>
@@ -87,7 +87,7 @@ export function CenterDeleteDialog({ id, show, onHide }) {
             onClick={deleteUser}
             className="btn btn-primary btn-elevate"
           >
-            In-Active
+            Deactivate
             {loading && (
               <span className="ml-3 mr-3 spinner spinner-white"></span>
             )}

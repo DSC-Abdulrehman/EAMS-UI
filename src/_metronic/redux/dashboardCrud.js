@@ -1,4 +1,5 @@
 import axios from "axios";
+import { async } from "q";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 export const getAllCeters = async () => {
@@ -48,4 +49,25 @@ export const getDashboardVehicle = async (body) => {
 
 export const updateVehicleStatus = async (body) => {
   return await axios.put(`${USERS_URL}/vehicles/update-vehicle-status`, body);
+};
+
+export const getLastTrips = async (body) => {
+  return await axios.post(
+    `${USERS_URL}/drivertriplog/read-all-driver-trip-logs-by-vehicleId`,
+    body
+  );
+};
+
+export const updateTripLog = async (payload) => {
+  console.log("payload in crud", payload);
+  return await axios.put(
+    `${USERS_URL}/drivertriplog/update-driver-trip-log`,
+    payload
+  );
+};
+
+export const getAlaramTime = async () => {
+  return await axios.get(
+    `${USERS_URL}/settings/read-all-alarmtimes-master-data`
+  );
 };
