@@ -13,7 +13,7 @@ import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/In
 import { TripLogEditDialog } from "../../../app/modules/IncidentDetails/pages/triplogs/triplog-edit-dialog/TripLogEditDialog";
 //import { DropdownMenu4 } from "../dropdowns";
 import { LastTripsUIProvider } from "../widgets/tiles/LastTrips/LastTripsUIContext";
-import LastTripsDialog from "../widgets/tiles/LastTrips/LastTripsDialog";
+//import LastTripsDialog from "../widgets/tiles/LastTrips/LastTripsDialog";
 export function Demo2Dashboard({ history }) {
   const dispatch = useDispatch();
 
@@ -126,7 +126,7 @@ export function Demo2Dashboard({ history }) {
     <>
       <LastTripsUIProvider TripLogsUIEvents={LastTripLogUIEvents}>
         <Route path="/dashboard/read-vehicle-trip-logs/:id/edit">
-          {({ history, match }) => (
+          {/* {({ history, match }) => (
             <LastTripsDialog
               open={match != null}
               id={match && match.params.id}
@@ -134,7 +134,7 @@ export function Demo2Dashboard({ history }) {
               //   history.push("/incident-details/read-all-driver-trip-logs");
               // }}
             />
-          )}
+          )} */}
         </Route>
         <div className="row">
           <div className="col-xl-12">

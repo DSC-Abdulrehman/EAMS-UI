@@ -8,37 +8,11 @@ import { ItemActiveDialog } from "./item-active-dialog/ItemActiveDialog";
 import { ItemsCard } from "./items-card/ItemsCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  fetchVehicle,
-  fetchCenters,
-  fetchCategory,
-} from "../../_redux/vehiclesActions";
+import { fetchVehicle, fetchCategory } from "../../_redux/vehiclesActions";
 import { fetchAllCenters } from "../../../../../_metronic/redux/dashboardActions";
 
 export function ItemPage({ history }) {
   const dispatch = useDispatch();
-  const { itemForEdit } = useSelector(
-    (state) => ({
-      itemForEdit: state.vehicles.itemForEdit,
-    }),
-    shallowEqual
-  );
-  // const { auth } = useSelector((auth) => auth)
-  // console.log("UserManagement, Auth: ", auth)
-  // const { userAccess } = auth
-  // console.log("UserManagement, userAccess: ", userAccess)
-  // const isAdd = userAccess["Settings"]?.find(
-  //   (access) => access.resourceId === 5
-  // )
-  //   ? true
-  //   : false
-  // const isEdit = userAccess["Settings"]?.find(
-  //   (access) => access.resourceId == 4
-  // )
-  //   ? true
-  //   : false
-  // console.log("UserManagement, isAdd: ", isAdd)
-  // const ForRead = false
   const itemUIEvents = {
     newCenterButtonClick: () => {
       dispatch(fetchVehicle(0));
@@ -58,7 +32,7 @@ export function ItemPage({ history }) {
     openActiveDialog: (id) => {
       history.push(`/vehicles/read-all-vehicles/${id}/active`);
     },
-    openReadCenterDialog: (id, isUserRead) => {
+    openReadCenterDialog: (id) => {
       dispatch(fetchAllCenters());
       dispatch(fetchVehicle(id));
       history.push(`/vehicles/read-all-vehicles/${id}/read`);

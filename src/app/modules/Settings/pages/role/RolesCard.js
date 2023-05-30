@@ -1,27 +1,23 @@
-import React, { useMemo } from "react"
+import React, { useMemo } from "react";
 import {
   Card,
   CardBody,
   CardHeader,
   CardHeaderToolbar,
-} from "../../../../../_metronic/_partials/controls"
-import { RolesTable } from "./role-table/RolesTable"
-import { useRolesUIContext } from "./RolesUIContext"
-import { RolesFilter } from "./role-filter/RolesFilter"
+} from "../../../../../_metronic/_partials/controls";
+import { RolesTable } from "./role-table/RolesTable";
+import { useRolesUIContext } from "./RolesUIContext";
 export function RolesCard() {
-  const rolesUIContext = useRolesUIContext()
-  //console.log("RoleUIContext", rolesUIContext)
-
+  const rolesUIContext = useRolesUIContext();
   const rolesUIProps = useMemo(() => {
     return {
       newRoleButtonClick: rolesUIContext.newRoleButtonClick,
-    }
-  }, [rolesUIContext])
+    };
+  }, [rolesUIContext]);
   return (
     <Card>
       <CardHeader title="">
         <CardHeaderToolbar>
-          {/* <RolesFilter /> */}
           <button
             type="button"
             className="btn btn-primary"
@@ -35,5 +31,5 @@ export function RolesCard() {
         <RolesTable />
       </CardBody>
     </Card>
-  )
+  );
 }

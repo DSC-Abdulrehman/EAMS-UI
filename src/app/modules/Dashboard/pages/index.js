@@ -1,8 +1,7 @@
 import React, { Suspense } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
-import { DashboardPage } from "./subcenters/CentersPage";
-//import { DashboardTiles } from "./subcenters/dashboard-tiles";
+import { DashboardPage } from "./dashboard/DashboardPage";
 
 export function Dashboard() {
   return (

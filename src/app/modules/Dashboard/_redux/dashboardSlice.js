@@ -13,6 +13,7 @@ const initialDashboardState = {
   offDuty: [],
   lastTrips: [],
   alarmTime: [],
+  incidentTypes: [],
 };
 
 export const callTypes = {
@@ -48,24 +49,27 @@ export const dashboardSlice = createSlice({
       state.offDuty = action.payload.offDuty;
     },
     lastTripsVehicles: (state, action) => {
-      console.log("Payload", action.payload);
-      state.lastTrips = action.payload;
+      //console.log("Payload", action.payload);
+      state.lastTrips = action.payload.rows;
     },
     setData: (state, action) => {
       state.data = action.payload;
     },
     updateData: (state, action) => {
-      const { id, fieldName, value } = action.payload;
-      console.log("id", id);
-      console.log("action payload", action.payload);
+      // console.log("updatedUser", action.payload);
+      state.lastTrips = state.lastTrips.map((entity) => {
+        if (entity.id === action.payload.id) {
+          return action.payload;
+        }
 
-      // const rowIndex = state.lastTrips.filter((row) => row.id === id);
-      // console.log("rowIndex", rowIndex);
-
-      // state.lastTrips[rowIndex] = action.payload;
+        return entity;
+      });
     },
     AlaramTime: (state, action) => {
       state.alarmTime = action.payload;
+    },
+    AllIncidentTypes: (state, action) => {
+      state.incidentTypes = action.payload;
     },
   },
 });

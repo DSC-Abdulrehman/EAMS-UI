@@ -40,7 +40,7 @@ export function CentersUIProvider({ centersUIEvents, children }) {
   const [secondQueryParams, setSecondQueryParamsBase] = useState(
     initialvehicleFilter
   );
-  console.log("secondQueryParams", secondQueryParams);
+  //console.log("secondQueryParams", secondQueryParams);
 
   const setSecondQueryParams = useCallback((nextQueryParams) => {
     setSecondQueryParamsBase((prevQueryParams) => {

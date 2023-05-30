@@ -10,6 +10,7 @@ export { KTCodeExample } from "./code-examples-kt/KTCodeExample";
 
 // Forms
 export { DatePickerField } from "./forms/DatePickerField";
+export { DateTimePickerField } from "./forms/DateTimePickerField";
 export { FieldFeedbackLabel } from "./forms/FieldFeedbackLabel";
 export { FormAlert } from "./forms/FormAlert";
 export { Input } from "./forms/Input";

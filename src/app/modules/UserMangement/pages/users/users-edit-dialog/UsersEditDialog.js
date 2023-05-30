@@ -58,7 +58,7 @@ export function UsersEditDialog({ id, show, onHide, userForRead }) {
     dispatch(actions.fetchUser(id));
     dispatch(actions.fetchRoles());
     dispatch(actions.fetchCenters());
-    dispatch(actions.fetchUserStatusTypes());
+    dispatch(actions.fetchUserStatusTypes({ ibs: false }));
     // dispatch(actions.fetchUser(usersUIProps.queryParams))
   }, [id, dispatch]);
 

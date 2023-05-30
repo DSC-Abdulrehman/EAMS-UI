@@ -7,8 +7,6 @@ import { useItemUIContext } from "../ItemUIContext";
 import * as actions from "../../../_redux/vehiclesActions";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,6 +64,7 @@ export function ItemEditDialog({ id, show, onHide, itemForRead }) {
   // }, [id, dispatch, itemUIProps.queryParams]);
 
   const saveItem = (item) => {
+    console.log("itrem", item);
     if (!id) {
       const itemUpdatedFields = {};
 

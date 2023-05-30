@@ -18,7 +18,7 @@ export function UserEditDialogHeader({ id, isUserForRead }) {
   useEffect(() => {
     let _title = id ? "" : "New User";
     if (userForEdit && id) {
-      _title = `Edit user '${userForEdit.firstName} ${userForEdit.lastName}'`;
+      _title = `Edit user`;
     } //else if (isUserForRead) {
     //   _title = `Read user '}'`
     // }

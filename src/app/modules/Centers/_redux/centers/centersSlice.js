@@ -70,7 +70,7 @@ export const centersSlice = createSlice({
     centerUpdated: (state, action) => {
       state.error = null;
       state.actionsLoading = false;
-      console.log("action.payload", action.payload);
+      //console.log("action.payload", action.payload);
       // state.entities.push(action.payload)
       state.entities = state.entities.map((entity) => {
         if (entity.id === action.payload.updatedUser[0].id) {

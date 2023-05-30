@@ -22,7 +22,7 @@ import { Pagination } from "../../../../../../_metronic/_partials/controls";
 export function CentersTable() {
   //Users UI Context
   const centersUIContext = useCentersUIContext();
-  console.log("centersUIContext in center", centersUIContext);
+  //  console.log("centersUIContext in center", centersUIContext);
   const centersUIProps = useMemo(() => {
     return {
       openEditCenterDialog: centersUIContext.openEditCenterDialog,

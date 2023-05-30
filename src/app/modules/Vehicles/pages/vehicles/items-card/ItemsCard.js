@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-
+import { useSelector, shallowEqual } from "react-redux";
 import {
   Card,
   CardBody,
@@ -9,8 +9,6 @@ import {
 import { ItemsTable } from "../items-table/itemsTable";
 import { useItemUIContext } from "../ItemUIContext";
 import { VehicleFilter } from "../vehicles-filter/VehiclesFilter";
-
-import { useDispatch, useSelector, shallowEqual } from "react-redux";
 
 export function ItemsCard() {
   const itemsUIContext = useItemUIContext();
@@ -51,7 +49,6 @@ export function ItemsCard() {
             )}
           </CardHeaderToolbar>
         </CardHeader>
-
         <CardBody>
           <ItemsTable />
         </CardBody>

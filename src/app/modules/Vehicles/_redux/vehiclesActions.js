@@ -58,7 +58,7 @@ export const deleteVehicle = (id) => (dispatch) => {
     .catch((error) => {
       error.clientMessage = "can't delete user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error("Error 😣");
+      toast.error(error?.response?.data?.message);
     });
 };
 
@@ -82,7 +82,7 @@ export const activeVehicle = (id) => (dispatch) => {
     .catch((error) => {
       error.clientMessage = "can't delete user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error("Error 😣");
+      toast.error(error?.response?.data?.message);
     });
 };
 

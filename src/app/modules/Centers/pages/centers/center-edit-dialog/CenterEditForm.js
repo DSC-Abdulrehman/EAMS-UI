@@ -45,6 +45,9 @@ export function CenterEditForm({
   const [seletCountry, setSeletCountry] = useState([]);
   const [selectCity, setSelectCity] = useState([]);
 
+  // console.log("seletCountry", seletCountry);
+  // console.log("selectCity", selectCity);
+
   const dispatch = useDispatch();
 
   const { allCountry, allCity } = useSelector((state) => state.dashboard);
@@ -100,12 +103,12 @@ export function CenterEditForm({
                         name="countryId"
                         label="Country*"
                         isDisabled={isUserForRead ? true : false}
-                        onBlur={() => {
-                          handleBlur({ target: { name: "countryId" } });
-                        }}
-                        //options={dashboard.allCity}
+                        // onBlur={() => {
+                        //   handleBlur({ target: { name: "countryId" } });
+                        // }}
                         onChange={(e) => {
                           setFieldValue("countryId", e.value);
+                          setFieldValue("cityId", "");
                           dispatch(fetchAllCity(e.value));
                           setSeletCountry(e);
                         }}
@@ -137,9 +140,10 @@ export function CenterEditForm({
                         name="cityId"
                         label="City*"
                         isDisabled={isUserForRead ? true : false}
-                        onBlur={() => {
-                          handleBlur({ target: { name: "cityId" } });
-                        }}
+                        onBlur={handleBlur}
+                        // onBlur={() => {
+                        //   handleBlur({ target: { name: "cityId" } });
+                        // }}
                         //options={dashboard.allCity}
                         onChange={(e) => {
                           setFieldValue("cityId", e.value);

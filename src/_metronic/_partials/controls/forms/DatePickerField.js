@@ -1,5 +1,5 @@
 import React from "react";
-import {useField, useFormikContext} from "formik";
+import { useField, useFormikContext } from "formik";
 import DatePicker from "react-datepicker";
 
 const getFieldCSSClasses = (touched, errors) => {
@@ -27,7 +27,7 @@ export function DatePickerField({ ...props }) {
         {...field}
         {...props}
         selected={(field.value && new Date(field.value)) || null}
-        onChange={val => {
+        onChange={(val) => {
           setFieldValue(field.name, val);
         }}
       />

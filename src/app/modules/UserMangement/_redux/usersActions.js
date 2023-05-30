@@ -189,9 +189,9 @@ export const fetchCenters = () => (dispatch) => {
   });
 };
 
-export const fetchUserStatusTypes = () => (dispatch) => {
+export const fetchUserStatusTypes = (body) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
-  return requestFromServer.getAllUserStatusTypes().then((response) => {
+  return requestFromServer.getAllUserStatusTypes(body).then((response) => {
     const entities = response.data?.data;
     dispatch(actions.UserStatusTypesFetched(entities));
   });

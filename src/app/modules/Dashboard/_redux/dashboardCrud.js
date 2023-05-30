@@ -52,7 +52,7 @@ export const updateVehicleStatus = async (body) => {
 };
 
 export const getLastTrips = async (body) => {
-  console.log("Call in crud", body);
+  // console.log("Call in crud", body);
   return await axios.post(
     `${USERS_URL}/drivertriplog/read-all-driver-trip-logs-by-vehicleId`,
     body
@@ -60,7 +60,7 @@ export const getLastTrips = async (body) => {
 };
 
 export const updateTripLog = async (payload) => {
-  console.log("payload in crud", payload);
+  // console.log("payload in crud", payload);
   return await axios.put(
     `${USERS_URL}/drivertriplog/update-driver-trip-log`,
     payload
@@ -70,5 +70,11 @@ export const updateTripLog = async (payload) => {
 export const getAlaramTime = async () => {
   return await axios.get(
     `${USERS_URL}/settings/read-all-alarmtimes-master-data`
+  );
+};
+
+export const getIncidentTypes = async () => {
+  return await axios.get(
+    `${USERS_URL}/settings/read-all-incident-types-master-data`
   );
 };

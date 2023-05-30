@@ -39,6 +39,7 @@ export function ItemEditForm({
   const [defSubcenter, setDefaultSubCenter] = useState([]);
   const [defDriver, setDefaultDriver] = useState([]);
 
+  console.log("defSubcenter", defSubcenter);
   //console.log("item", item);
   // useEffect(() => {
   //   dispatch(fetchDrivers(cetnerId));
@@ -189,7 +190,10 @@ export function ItemEditForm({
                         onChange={(e) => {
                           setFieldValue("centerId", e.value || null);
                           setDefaultCenter(e);
+                          setDefaultSubCenter([]);
+                          setDefaultDriver([]);
                           dispatch(fetchAllSubCenter(e.value));
+                          dispatch(fetchDrivers(0));
                         }}
                         value={defCenter && defCenter[0]}
                         error={errors.centerId}
@@ -208,9 +212,10 @@ export function ItemEditForm({
                         onChange={(e) => {
                           setFieldValue("subCenterId", e.value || null);
                           setDefaultSubCenter(e);
+                          setDefaultDriver([]);
                           dispatch(fetchDrivers(e.value));
                         }}
-                        value={defSubcenter && defSubcenter[0]}
+                        value={defSubcenter}
                         error={errors.subCenterId}
                         touched={touched.subCenterId}
                         options={dashboard.allSubCenter}
@@ -286,7 +291,7 @@ export function ItemEditForm({
                         name="milleage"
                         component={Input}
                         placeholder=""
-                        label="Milleage"
+                        label="Milleage*"
                       />
                     </div>
                   </div>
@@ -577,7 +582,9 @@ const itemEditSchema = Yup.object().shape({
   engineCapacity: Yup.string().nullable(),
   registerCity: Yup.string().nullable(),
   chasis: Yup.string().nullable(),
-  milleage: Yup.string().nullable(),
+  milleage: Yup.string()
+    .nullable()
+    .required("Milleage is required"),
   year: Yup.string()
     .matches(/^\d*[1-9]\d*$/, "Year should be number")
     .required("Year is required."),

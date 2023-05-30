@@ -13,7 +13,9 @@ import { subCentersSlice } from "../app/modules/Centers/_redux/subcenters/subCen
 import { vehiclesSlice } from "../app/modules/Vehicles/_redux/vehiclesSlice";
 import { incidentSlice } from "../app/modules/IncidentDetails/_redux/incidents/incidentSlice";
 import { TriplogSlice } from "../app/modules/IncidentDetails/_redux/triplogs/triplogSlice";
-import { dashboardSlice } from "../_metronic/redux/dashboardSlice";
+import { dashboardSlice } from "../app/modules/Dashboard/_redux/dashboardSlice";
+import { infoSlice } from "../app/modules/IBS/_redux/info-personal/infoSlice";
+
 export const rootReducer = combineReducers({
   auth: auth.reducer,
   dashboard: dashboardSlice.reducer,
@@ -28,6 +30,7 @@ export const rootReducer = combineReducers({
   vehicles: vehiclesSlice.reducer,
   incidentDetails: incidentSlice.reducer,
   triplogs: TriplogSlice.reducer,
+  personalInformation: infoSlice.reducer,
 });
 
 export function* rootSaga() {

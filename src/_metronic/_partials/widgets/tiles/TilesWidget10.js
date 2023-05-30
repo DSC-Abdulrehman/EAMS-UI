@@ -35,6 +35,10 @@ export function TilesWidget10({
 }) {
   const dispatch = useDispatch();
 
+  // console.log("seletedCity", seletCity);
+  //console.log("selectedCenter on Top", center);
+  // console.log("selectedSubCenter", subCenter);
+
   //const city = useSelector((state) => state.dashboard.entities);
 
   const { countryId, cityId } = useSelector((state) => state.auth.user);
@@ -94,19 +98,43 @@ export function TilesWidget10({
                       options={dashboard.cityCenters}
                       label="Select Main Center"
                       value={center}
-                      onChange={(e) => {
-                        dispatch(actions.fetchAllSubCenter(e.value));
-                        dispatch(
-                          actions.fetchDashboardVehicles({
-                            cityId: cityId,
-                            centerId: e.value,
-                          })
-                        );
-                        setCenter(e);
-                        setSubcenter([]);
-                        setAlarmTime([]);
+                      onChange={(e, { action }) => {
+                        let payload = {};
+
+                        if (action === "clear") {
+                          console.log("Clear called");
+                          setCenter([]);
+                          setSubcenter([]);
+                          setAlarmTime([]);
+                          if (seletCity) {
+                            payload.cityId = seletCity.value;
+                          }
+
+                          dispatch(actions.fetchDashboardVehicles(payload));
+                        } else {
+                          setCenter(e);
+                          if (seletCity) {
+                            payload.cityId = seletCity.value;
+                          }
+                          if (center) {
+                            payload.centerId = center.value;
+                          }
+                          if (subCenter) {
+                            payload.subCenterId = subCenter.value;
+                          }
+                          dispatch(actions.fetchAllSubCenter(e.value));
+                          dispatch(
+                            actions.fetchDashboardVehicles({
+                              ...payload,
+                              centerId: e.value,
+                            })
+                          );
+
+                          // setSubcenter([]);
+                          //setAlarmTime([]);
+                        }
                       }}
-                      isClearable={false}
+                      isClearable={true}
                     />
                   </div>
                   <div className="col-12 col-md-3">

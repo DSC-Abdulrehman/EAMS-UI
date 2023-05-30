@@ -1,6 +1,6 @@
 import { async } from "q";
 import * as requestFromServer from "./dashboardCrud";
-import { dashboardSlice, callTypes } from "./dashboardSlice";
+import { dashboardSlice } from "./dashboardSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -107,7 +107,6 @@ export const getLastTrips = (body) => async (dispatch) => {
   return await requestFromServer
     .getLastTrips(body)
     .then((response) => {
-      console.log("res", response);
       dispatch(actions.lastTripsVehicles(response?.data?.data));
     })
     .catch((error) => {
@@ -119,8 +118,17 @@ export const updateTripLog = (payload) => async (dispatch) => {
   return await requestFromServer
     .updateTripLog(payload)
     .then((response) => {
-      //console.log("response?.data?.data", response?.data?.data);
+      const updatedUser = response?.data?.data;
       dispatch(actions.updateData(response?.data?.data));
+      toast.success("Successfully Updated", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     })
     .catch((error) => {
       toast.error(error?.response?.data?.message);
@@ -132,6 +140,17 @@ export const alaramTime = () => async (dispatch) => {
     .getAlaramTime()
     .then((response) => {
       dispatch(actions.AlaramTime(response?.data?.data));
+    })
+    .catch((error) => {
+      toast.error(error?.response?.data?.message);
+    });
+};
+
+export const incidentTypes = () => async (dispatch) => {
+  return await requestFromServer
+    .getIncidentTypes()
+    .then((response) => {
+      dispatch(actions.AllIncidentTypes(response.data?.data));
     })
     .catch((error) => {
       toast.error(error?.response?.data?.message);

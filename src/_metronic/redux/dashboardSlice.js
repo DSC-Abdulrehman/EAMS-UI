@@ -55,10 +55,14 @@ export const dashboardSlice = createSlice({
       state.data = action.payload;
     },
     updateData: (state, action) => {
-      console.log("action payload", action.payload);
-      const { id, fieldName, value } = action.payload;
-      const rowIndex = state.lastTrips.findIndex((row) => row.id === id);
-      state.lastTrips[rowIndex] = action.payload;
+      state.lastTrips = state.lastTrips.map((entity) => {
+        console.log("entity", entity);
+        if (entity.id === action.payload.id) {
+          return action.payload;
+        }
+
+        return entity;
+      });
     },
     AlaramTime: (state, action) => {
       state.alarmTime = action.payload;

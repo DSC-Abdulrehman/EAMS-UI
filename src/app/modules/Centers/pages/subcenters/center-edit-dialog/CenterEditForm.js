@@ -180,17 +180,17 @@ export function CenterEditForm({
                     </div> */}
                   </div>
                 </fieldset>
-                {isUserForRead ? (
-                  <>
-                    <CentersVehiclesTable
-                      vehiclesForCenter={vehiclesForCenter}
-                      totalCount={totalCount}
-                    />
-                  </>
-                ) : (
-                  <></>
-                )}
               </Form>
+              {isUserForRead ? (
+                <>
+                  <CentersVehiclesTable
+                    vehiclesForCenter={vehiclesForCenter}
+                    totalCount={totalCount}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
             </Modal.Body>
             <Modal.Footer>
               {!isUserForRead ? (
