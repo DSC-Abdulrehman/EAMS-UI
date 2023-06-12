@@ -2,20 +2,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
-import * as actions from "../../../_redux/subcenters/subCentersActions";
-import { useCentersUIContext } from "../MortuaryUIContext";
+import * as actions from "../../../_redux/mortuary/reduxActions";
+//import { useModuleUIContext } from "../MortuaryUIContext";
 
 export function MortuaryDeleteDialog({ id, show, onHide }) {
-  // Centers UI Context
   const [loading, setLoading] = useState(false);
-  const centersUIContext = useCentersUIContext();
-  const centersUIProps = useMemo(() => {
-    return {
-      queryParams: centersUIContext.queryParams,
-    };
-  }, [centersUIContext]);
-
-  // Customers Redux state
   const dispatch = useDispatch();
   const { isLoading } = useSelector(
     (state) => ({ isLoading: state.customers.actionsLoading }),
@@ -43,14 +34,10 @@ export function MortuaryDeleteDialog({ id, show, onHide }) {
     // server request for deleting customer by id
     enableLoading();
 
-    dispatch(actions.deleteCenter(id)).then(() => {
+    dispatch(actions.deleteRecord(id)).then(() => {
       onHide();
       // refresh list after deletion
-      dispatch(actions.fetchSubCenters(centersUIProps.queryParams));
-      // clear selections list
-      // usersUIProps.setIds([]);
-      // closing delete modal
-
+      // dispatch(actions.fetchIbs(centersUIProps.queryParams));
       disabledLoading();
     });
   };
@@ -66,12 +53,12 @@ export function MortuaryDeleteDialog({ id, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Deactivate Sub Center
+          Deactivate Record
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span>Are you sure to deactivate this sub center?</span>}
-        {isLoading && <span> sub center is deactivating...</span>}
+        {!isLoading && <span>Are you sure to deactivate this record?</span>}
+        {isLoading && <span> Record is deactivating...</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>

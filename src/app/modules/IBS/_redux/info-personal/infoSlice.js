@@ -53,7 +53,7 @@ export const infoSlice = createSlice({
     },
     //get User By ID
     infoFetched: (state, action) => {
-      // console.log("action", action);
+      state.actionsLoading = false;
       state.listLoading = false;
       state.infoForEdit = action.payload;
       state.error = null;
@@ -111,17 +111,9 @@ export const infoSlice = createSlice({
     AllVehiclesByCenterAndSubCenterId: (state, action) => {
       state.allVehicles = action.payload;
     },
-    // RolesFetched: (state, action) => {
-    //   const entities = action.payload
-    //   state.listLoading = false
-    //   state.error = null
-    //   state.roles = entities
-    // },
-    // CentersFetched: (state, action) => {
-    //   const entities = action.payload
-    //   state.listLoading = false
-    //   state.error = null
-    //   state.centers = entities
-    // },
+
+    AnaulReport: (state, action) => {
+      state.AnaulReport = action.payload;
+    },
   },
 });

@@ -44,9 +44,11 @@ export default function BasePage() {
           <Redirect exact from="/" to="/dashboard" />
         }
         <ContentRoute path="/dashboard" component={Dashboard} />
+        <ContentRoute path="/images-slider" component={MyPage} />
+        {/* <ContentRoute path="/images-slider" component={Dashboard} /> */}
         {/* <ContentRoute path="/ibs" component={IBSModule} /> */}
         {/* <ContentRoute path="/builder" component={BuilderPage} />
-        <ContentRoute path="/my-page" component={MyPage} />
+        
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         <Route path="/e-commerce" component={ECommercePage} />

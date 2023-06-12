@@ -5,100 +5,121 @@ import { MortuaryUIProvider } from "./MortuaryUIContext";
 import { MortuaryEditDialog } from "./mortuary-edit-dialog/MortuaryEditDialog";
 import { MortuaryDeleteDialog } from "./mortuary-delete-dialog/MortuaryDeleteDialog";
 import { MortuaryActiveDialog } from "./mortuary-active-dialog/MortuaryActiveDialog";
+import { CoffinEditDialog } from "./coffin-edit-dialog/CoffinEditDialog";
 import { MortuaryCard } from "./mortuary-card/MortuaryCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as actions from "../../_redux/subcenters/subCentersActions";
-import { fetchAllCenters } from "../../../../../_metronic/redux/dashboardActions";
+import * as actions from "../../_redux/mortuary/reduxActions";
+import { fetchUserStatusTypes } from "../../../UserMangement/_redux/usersActions";
+import { ImageSliderDialog } from "./image-slider-dialog/ImageSliderDialog";
 
 export function MortuaryPage({ history }) {
   const dispatch = useDispatch();
-  const centersUIEvents = {
-    newCenterButtonClick: () => {
-      dispatch(actions.fetchCenter());
-      dispatch(fetchAllCenters());
-      history.push("/ibs/read-all-mortuary-list/new");
+  dispatch(
+    fetchUserStatusTypes({
+      filter: {
+        mf: true,
+      },
+    })
+  );
+  const moduleUIEvents = {
+    addNewButtonClick: () => {
+      history.push("/ibs/read-all-mortuaryforms/new");
     },
-    openEditCenterDialog: async (id) => {
-      dispatch(actions.fetchCenter(id));
-      dispatch(fetchAllCenters());
-      history.push(`/ibs/read-all-mortuary-list/${id}/edit`);
+    openEditDialog: (ibfId, id) => {
+      dispatch(actions.fetchInfoById(id));
+      history.push(`/ibs/read-all-mortuaryforms/${id}/edit`);
     },
-    openDeleteCenterDialog: (id, status) => {
-      history.push(`/ibs/read-all-mortuary-list/${id}/${status}/delete`);
+    openDeleteDialog: (id, status) => {
+      history.push(`/ibs/read-all-mortuaryforms/${id}/${status}/delete`);
     },
-    openActiveCenterDialog: (id) => {
-      history.push(`/ibs/read-all-mortuary-list/${id}/active`);
+    openActiveDialog: (id) => {
+      history.push(`/ibs/read-all-mortuaryforms/${id}/active`);
     },
-    openReadCenterDialog: (id, isUserRead) => {
-      dispatch(actions.fetchCenter(id));
-      dispatch(fetchAllCenters());
-      history.push(`/ibs/read-all-mortuary-list/${id}/read`);
+    openReadDialog: (id, isUserRead) => {
+      dispatch(actions.fetchInfoById(id));
+      history.push(`/ibs/read-all-mortuaryforms/${id}/read`);
+    },
+    openAddCoffinDialog: (ibfId, mfId) => {
+      dispatch(actions.fetchInfoById(mfId));
+      history.push(`/ibs/read-all-mortuaryforms/${ibfId}/${mfId}/add-coffin`);
+    },
+    openImageSlider: () => {
+      history.push(`/ibs/read-all-mortuaryforms/slider`);
     },
   };
   return (
-    <MortuaryUIProvider centersUIEvents={centersUIEvents}>
-      <Route exact path="/ibs/read-all-mortuary-list/new">
+    <MortuaryUIProvider moduleUIEvents={moduleUIEvents}>
+      <Route exact path="/ibs/read-all-mortuaryforms/new">
         {({ history, match }) => (
           <MortuaryEditDialog
             show={match != null}
             onHide={() => {
-              history.push("/ibs/read-all-mortuary-list");
+              history.push("/ibs/read-all-mortuaryforms");
             }}
             isNew={true}
           />
         )}
       </Route>
-      <Route path="/ibs/read-all-mortuary-list/:id/edit">
+      <Route path="/ibs/read-all-mortuaryforms/:id/edit">
         {({ history, match }) => (
           <MortuaryEditDialog
             show={match != null}
-            id={match && match.params.id}
-            isEdit={true}
             onHide={() => {
-              dispatch(actions.fetchCenter());
-              // dispatch(fetchAllCity());
-              history.push("/ibs/read-all-mortuary-list");
+              history.push("/ibs/read-all-mortuaryforms");
             }}
           />
         )}
       </Route>
-      <Route path="/ibs/read-all-mortuary-list/:id/read">
+      <Route path="/ibs/read-all-mortuaryforms/:id/read">
         {({ history, match }) => (
           <MortuaryEditDialog
             show={match != null}
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/ibs/read-all-mortuary-list");
+              history.push("/ibs/read-all-mortuaryforms");
             }}
           />
         )}
       </Route>
-
-      <Route path="/ibs/read-all-mortuary-list/:id/:status/delete">
+      <Route path="/ibs/read-all-mortuaryforms/:id/:status/delete">
         {({ history, match }) => (
           <MortuaryDeleteDialog
             show={match != null}
             id={match && match.params.id}
             status={match && match.params.status}
             onHide={() => {
-              history.push("/ibs/read-all-mortuary-list");
+              history.push("/ibs/read-all-mortuaryforms");
             }}
           />
         )}
       </Route>
-      <Route path="/ibs/read-all-mortuary-list/:id/active">
+      <Route path="/ibs/read-all-mortuaryforms/:id/active">
         {({ history, match }) => (
           <MortuaryActiveDialog
             show={match != null}
             id={match && match.params.id}
-            //status={match && match.params.status}
             onHide={() => {
-              history.push("/ibs/read-all-mortuary-list");
+              history.push("/ibs/read-all-mortuaryforms");
             }}
           />
         )}
+      </Route>
+      <Route path="/ibs/read-all-mortuaryforms/:ibfId/:mfId/add-coffin">
+        {({ history, match }) => {
+          return (
+            <CoffinEditDialog
+              show={match != null}
+              onHide={() => history.push("/ibs/read-all-mortuaryforms")}
+            />
+          );
+        }}
+      </Route>
+      <Route path="/ibs/read-all-mortuaryforms/slider">
+        {({ history, match }) => {
+          return <ImageSliderDialog show={match != null} onHide={() => {}} />;
+        }}
       </Route>
       <MortuaryCard />
       <ToastContainer

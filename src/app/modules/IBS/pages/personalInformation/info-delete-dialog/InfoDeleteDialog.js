@@ -1,19 +1,19 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 import * as actions from "../../../_redux/info-personal/infoActions";
-import { useInfoUIContext } from "../PersonalUIContext";
+//import { useInfoUIContext } from "../PersonalUIContext";
 
 export function InfoDeleteDialog({ id, show, onHide }) {
   // Centers UI Context
   const [loading, setLoading] = useState(false);
-  const centersUIContext = useInfoUIContext();
-  const centersUIProps = useMemo(() => {
-    return {
-      queryParams: centersUIContext.queryParams,
-    };
-  }, [centersUIContext]);
+  //const centersUIContext = useInfoUIContext();
+  // const centersUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: centersUIContext.queryParams,
+  //   };
+  // }, [centersUIContext]);
 
   // Customers Redux state
   const dispatch = useDispatch();

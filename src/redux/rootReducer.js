@@ -15,6 +15,8 @@ import { incidentSlice } from "../app/modules/IncidentDetails/_redux/incidents/i
 import { TriplogSlice } from "../app/modules/IncidentDetails/_redux/triplogs/triplogSlice";
 import { dashboardSlice } from "../app/modules/Dashboard/_redux/dashboardSlice";
 import { infoSlice } from "../app/modules/IBS/_redux/info-personal/infoSlice";
+import { mortuarySlice } from "../app/modules/IBS/_redux/mortuary/reduxSlice";
+import { coffinSlice } from "../app/modules/IBS/_redux/coffin/reduxSlice";
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -31,6 +33,8 @@ export const rootReducer = combineReducers({
   incidentDetails: incidentSlice.reducer,
   triplogs: TriplogSlice.reducer,
   personalInformation: infoSlice.reducer,
+  mortuary: mortuarySlice.reducer,
+  coffin: coffinSlice.reducer,
 });
 
 export function* rootSaga() {

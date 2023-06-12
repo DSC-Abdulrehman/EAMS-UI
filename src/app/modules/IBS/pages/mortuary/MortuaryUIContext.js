@@ -8,19 +8,19 @@ import React, {
 import { isEqual, isFunction } from "lodash";
 import { initialFilter, initialvehicleFilter } from "./MortuaryUIHelpers";
 
-const CentersUIContext = createContext();
+const ModuleUIContext = createContext();
 
-export function useCentersUIContext() {
-  return useContext(CentersUIContext);
+export function useModuleUIContext() {
+  return useContext(ModuleUIContext);
 }
 
-export const CentersUIConsumer = CentersUIContext.Consumer;
+export const ModuleUIConsumer = ModuleUIContext.Consumer;
 // const initialFilter = {
 //   sortBy: "name",
 //   limit: 10,
 //   page: 1,
 // }
-export function MortuaryUIProvider({ centersUIEvents, children }) {
+export function MortuaryUIProvider({ moduleUIEvents, children }) {
   const [queryParams, setQueryParamsBase] = useState(initialFilter);
   const [ids, setIds] = useState([]);
   const setQueryParams = useCallback((nextQueryParams) => {
@@ -57,12 +57,23 @@ export function MortuaryUIProvider({ centersUIEvents, children }) {
   }, []);
 
   const initCenter = {
-    centerId: "",
-    name: "",
-    phoneNo: "",
-    // location: "",
-    // longitude: "",
-    // latitude: "",
+    images: "",
+    sN: "",
+    countryId: "",
+    cityId: "",
+    hospitalId: "",
+    statusId: "",
+    ibfId: "",
+    dateTime: "",
+    fullNameOfTheDeceased: "",
+    fatherNameOfTheDeceased: "",
+    Address: "",
+    callerCnic: "",
+    callerName: "",
+    callerPhNo: "",
+    description: "",
+    mortuaryReachdateTime: "",
+    dischargeFromMortuaryDateTime: "",
   };
 
   const value = {
@@ -75,15 +86,17 @@ export function MortuaryUIProvider({ centersUIEvents, children }) {
     ids,
     setIds,
     initCenter,
-    newCenterButtonClick: centersUIEvents.newCenterButtonClick,
-    openEditCenterDialog: centersUIEvents.openEditCenterDialog,
-    openDeleteCenterDialog: centersUIEvents.openDeleteCenterDialog,
-    openActiveCenterDialog: centersUIEvents.openActiveCenterDialog,
-    openReadCenterDialog: centersUIEvents.openReadCenterDialog,
+    addNewButtonClick: moduleUIEvents.addNewButtonClick,
+    openEditDialog: moduleUIEvents.openEditDialog,
+    openDeleteDialog: moduleUIEvents.openDeleteDialog,
+    openActiveDialog: moduleUIEvents.openActiveDialog,
+    openReadDialog: moduleUIEvents.openReadDialog,
+    openAddCoffinDialog: moduleUIEvents.openAddCoffinDialog,
+    openImageSlider: moduleUIEvents.openImageSlider,
   };
   return (
-    <CentersUIContext.Provider value={value}>
+    <ModuleUIContext.Provider value={value}>
       {children}
-    </CentersUIContext.Provider>
+    </ModuleUIContext.Provider>
   );
 }

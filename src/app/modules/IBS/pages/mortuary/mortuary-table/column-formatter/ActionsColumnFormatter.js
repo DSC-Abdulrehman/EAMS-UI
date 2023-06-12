@@ -2,6 +2,7 @@ import React from "react";
 import SVG from "react-inlinesvg";
 import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { ro } from "date-fns/locale";
 
 export function ActionsColumnFormatter(
   cellContent,
@@ -9,35 +10,28 @@ export function ActionsColumnFormatter(
   rowIndex,
 
   {
-    openEditCenterDialog,
-    openDeleteCenterDialog,
-    openActiveCenterDialog,
-    openReadCenterDialog,
+    openEditDialog,
+    openDeleteDialog,
+    openActiveDialog,
+    openReadDialog,
+    openAddCoffinDialog,
     isAccessForEdit,
     isAccessForDelete,
+    isAccessForCoffin,
   }
 ) {
   const isUserRead = false;
-  // const { userAccess } = useSelector(
-  //   (state) => ({
-  //     userAccess: state.auth.userAccess.Users,
-  //   }),
-  //   shallowEqual
-  // )
 
-  // // const isAccessForEdit = userAccess.find(
-  // //   (item) => item.componentName === "UpdateUser"
-  // // )
-  // console.log("userAccess", userAccess)
+  // console.log("row", row);
   return (
     <>
       <OverlayTrigger
-        overlay={<Tooltip id="products-edit-tooltip">Read Sub Center</Tooltip>}
+        overlay={<Tooltip id="products-edit-tooltip">Read Detail</Tooltip>}
       >
         <a
           // title="Read User"
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-          onClick={() => openReadCenterDialog(row.id, isUserRead)}
+          onClick={() => openReadDialog(row.id, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
             <SVG
@@ -46,16 +40,14 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && (
+      {isAccessForEdit && row?.isActive && (
         <OverlayTrigger
-          overlay={
-            <Tooltip id="products-edit-tooltip">Edit Sub Center</Tooltip>
-          }
+          overlay={<Tooltip id="products-edit-tooltip">Edit Detail</Tooltip>}
         >
           <a
             // title="Edit Center"
             className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
-            onClick={() => openEditCenterDialog(row.id)}
+            onClick={() => openEditDialog(row.ibfId, row.id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
               <SVG
@@ -79,7 +71,7 @@ export function ActionsColumnFormatter(
             <a
               title=""
               className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
-              onClick={() => openDeleteCenterDialog(row.id, row.isActive)}
+              onClick={() => openDeleteDialog(row.id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
                 <SVG
@@ -92,11 +84,26 @@ export function ActionsColumnFormatter(
             <a
               title=""
               className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
-              onClick={() => openActiveCenterDialog(row.id, row.isActive)}
+              onClick={() => openActiveDialog(row.id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-success">A</span>
             </a>
           )}
+        </OverlayTrigger>
+      )}
+      <></>
+
+      {row.ibfId && isAccessForCoffin && row?.isActive && (
+        <OverlayTrigger
+          overlay={<Tooltip id="products-edit-tooltip">Add Coffin</Tooltip>}
+        >
+          <a
+            title=""
+            className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
+            onClick={() => openAddCoffinDialog(row.ibfId, row.id)}
+          >
+            <span className="svg-icon svg-icon-md svg-icon-success">C</span>
+          </a>
         </OverlayTrigger>
       )}
     </>

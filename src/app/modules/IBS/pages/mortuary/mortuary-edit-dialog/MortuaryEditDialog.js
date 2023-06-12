@@ -1,110 +1,68 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MortuaryEditForm } from "./MortuaryEditForm";
 import { MortuaryEditDialogHeader } from "./MortuaryEditDialogHeader";
-import { useCentersUIContext } from "../MortuaryUIContext";
-import * as actions from "../../../_redux/subcenters/subCentersActions";
-import { fetchAllCity } from "../../../../../../_metronic/redux/dashboardActions";
-import { makeStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { useModuleUIContext } from "../MortuaryUIContext";
+import * as actions from "../../../_redux/mortuary/reduxActions";
+import { useParams } from "react-router-dom";
+import { set } from "date-fns";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "2rem",
-    marginBottom: "2rem",
-  },
-}));
+const initValue = {
+  images: "",
+  sN: "",
+  countryId: "",
+  cityId: "",
+  hospitalId: "",
+  statusId: "",
+  ibfId: "",
+  dateTime: "",
+  fullNameOfTheDeceased: "",
+  fatherNameOfTheDeceased: "",
+  Address: "",
+  callerCnic: "",
+  callerName: "",
+  callerPhNo: "",
+  description: "",
+  mortuaryReachdateTime: "",
+  dischargeFromMortuaryDateTime: "",
+};
 
-export function MortuaryEditDialog({ id, show, isNew, onHide, userForRead }) {
-  const classes = useStyles();
-  const [isForEdit, setIsForEdit] = useState();
-  const centersUIContext = useCentersUIContext();
-  const centersUIProps = useMemo(() => {
-    return {
-      initCenter: centersUIContext.initCenter,
-      queryParams: centersUIContext.queryParams,
-      secondQueryParams: centersUIContext.secondQueryParams,
-    };
-  }, [centersUIContext]);
-
+export function MortuaryEditDialog({ show, onHide, userForRead }) {
   const dispatch = useDispatch();
+  let { id } = useParams();
+  const [initialValue, setInitialValue] = useState(initValue);
 
-  const {
-    centerState,
-    actionLoading,
-    centerForEdit,
-    roles,
-    centers,
-    isuserForRead,
-    vehiclesForCenter,
-    totalCount,
-  } = useSelector(
-    (state) => ({
-      centerState: state.subCenters,
-      actionLoading: state.subCenters.actionsLoading,
-      centerForEdit: state.subCenters.centerForEdit,
-      roles: state.users.roles,
-      centers: state.users.centers,
-      isuserForRead: state.users.userForRead,
-      vehiclesForCenter: state.subCenters.vehiclesForCenter?.rows,
-      totalCount: state.subCenters.vehiclesForCenter?.totalResults,
-    }),
-    shallowEqual
-  );
+  //const moduleUIContext = useModuleUIContext();
+  // const moduleUIProps = useMemo(() => {
+  //   return {
+  //     initCenter: moduleUIContext.initCenter,
+  //     queryParams: moduleUIContext.queryParams,
+  //     secondQueryParams: moduleUIContext.secondQueryParams,
+  //   };
+  // }, [moduleUIContext]);
+
+  const mortuaryState = useSelector((state) => state.mortuary);
+  const { infoForEdit } = mortuaryState;
 
   useEffect(() => {
     if (id) {
-      // dispatch(actions.fetchCenter(id));
-      dispatch(
-        actions.fetchVehicles({
-          ...centersUIProps.secondQueryParams,
-          subCenterId: id,
-          // centerId: centerForEdit.centerId,
-        })
+      const filteredObj = Object.fromEntries(
+        Object.entries(infoForEdit).filter(([key, value]) => value !== null)
       );
+      setInitialValue(filteredObj);
     }
-  }, [id, centersUIProps.secondQueryParams]);
+  }, [id, infoForEdit]);
 
-  useEffect(() => {
-    if (id) {
-      if (centerForEdit || userForRead) {
-        // console.log("centerForEdit", centerForEdit);
-        dispatch(actions.fetchAllCity(centerForEdit.countryId));
-      }
-    }
-  }, [id, centerForEdit]);
-
-  //console.log("centerForEdit", centerForEdit);
-  const saveCenter = (center) => {
-    console.log("cneter", center);
-    //console.log("Update sub center", center);
-    const { centerId, ...rest } = center;
-    // const finalObj = {
-    //   centerId: centerId.value,
-    //   ...rest,
-    // };
-    // console.log("finalObj", finalObj);
+  const saveCenter = (props) => {
     if (!id) {
-      dispatch(actions.createCenter(center)).then((res) => {
+      dispatch(actions.createInfo(props)).then((res) => {
         onHide();
       });
     } else {
-      const centerUpdatedFields = {
-        id: center.id,
-        name: center.name,
-        phoneNo: center.phoneNo,
-        // location: center.location,
-        // longitude: center.longitude,
-        // latitude: center.latitude,
-        centerId: center.centerId,
-        // conuntryId: center.conuntryId,
-        // cityId: center.cityId,
-      };
-      dispatch(actions.updateCenter(centerUpdatedFields));
-      onHide();
+      dispatch(actions.updateInfo(props)).then((res) => {
+        onHide();
+      });
     }
   };
 
@@ -120,13 +78,9 @@ export function MortuaryEditDialog({ id, show, isNew, onHide, userForRead }) {
 
       <MortuaryEditForm
         saveCenter={saveCenter}
-        center={centerForEdit || centersUIProps.initCenter}
+        initialValue={initialValue}
         onHide={onHide}
-        roles={roles}
-        centers={centers}
         isUserForRead={userForRead}
-        vehiclesForCenter={vehiclesForCenter}
-        totalCount={totalCount}
       />
     </Modal>
   );

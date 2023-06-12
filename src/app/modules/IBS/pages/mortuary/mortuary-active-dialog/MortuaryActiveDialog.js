@@ -2,18 +2,18 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
-import * as actions from "../../../_redux/subcenters/subCentersActions";
-import { useCentersUIContext } from "../MortuaryUIContext";
+import * as actions from "../../../_redux/mortuary/reduxActions";
+//import { useCentersUIContext } from "../MortuaryUIContext";
 
 export function MortuaryActiveDialog({ id, show, onHide }) {
   // Centers UI Context
   const [loading, setLoading] = useState(false);
-  const centersUIContext = useCentersUIContext();
-  const centersUIProps = useMemo(() => {
-    return {
-      queryParams: centersUIContext.queryParams,
-    };
-  }, [centersUIContext]);
+  // const centersUIContext = useCentersUIContext();
+  // const centersUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: centersUIContext.queryParams,
+  //   };
+  // }, [centersUIContext]);
 
   // Customers Redux state
   const dispatch = useDispatch();
@@ -33,23 +33,15 @@ export function MortuaryActiveDialog({ id, show, onHide }) {
     if (!id) {
       onHide();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   // looking for loading/dispatch
   useEffect(() => {}, [isLoading, dispatch]);
 
   const deleteUser = () => {
-    // server request for deleting customer by id
     enableLoading();
-    dispatch(actions.activeCenter(id)).then(() => {
+    dispatch(actions.activeRecord(id)).then(() => {
       onHide();
-      // refresh list after deletion
-      dispatch(actions.fetchSubCenters(centersUIProps.queryParams));
-      // clear selections list
-      // usersUIProps.setIds([]);
-      // closing delete modal
-
       disabledLoading();
     });
   };
@@ -65,11 +57,11 @@ export function MortuaryActiveDialog({ id, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Active Sub Center
+          Activate Record
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {!isLoading && <span> Are you sure to active this sub center?</span>}
+        {!isLoading && <span> Are you sure to active this record?</span>}
       </Modal.Body>
       <Modal.Footer>
         <div>

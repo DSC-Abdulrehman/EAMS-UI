@@ -1,30 +1,42 @@
-import * as requestFromServer from "./subCentersCrud";
-import { subCentersSlice, callTypes } from "./subCentersSlice";
+import * as requestFromServer from "./reduxCrud";
+import { mortuarySlice, callTypes } from "./reduxSlice";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
-const { actions } = subCentersSlice;
+const { actions } = mortuarySlice;
+// const history = useHistory();
 // const { roleActions } = getAllrolesSlice
 
-export const fetchSubCenters = (queryparm) => async (dispatch) => {
+export const fetchAllHospitals = (body) => async (dispatch) => {
+  return await requestFromServer.getAllHospital(body).then((response) => {
+    dispatch(actions.hospitalFetched(response.data?.data));
+  });
+};
+
+export const fetchAllPoliceStations = (body) => async (dispatch) => {
+  return await requestFromServer.getAllPoliceStations(body).then((response) => {
+    dispatch(actions.policeStationsFetched(response.data?.data));
+  });
+};
+
+export const fetchIbs = (queryparm) => async (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.list }));
   return await requestFromServer
     .getAllRequest(queryparm)
     .then((response) => {
       const entities = response.data?.data;
-      dispatch(actions.centersFetched(entities));
+      dispatch(actions.ibsFetched(entities));
     })
     .catch((error) => {
-      //console.log("Can't find user", error)
-      error.clientMessage = "Can't find customers";
       toast.error("Some thing went wrong");
       dispatch(actions.catchError({ error, callType: callTypes.list }));
     });
 };
 
-export const fetchCenter = (id) => async (dispatch) => {
+export const fetchInfoById = (id) => async (dispatch) => {
   if (!id) {
-    return await dispatch(actions.centerFetched(""));
+    return await dispatch(actions.infoFetched(""));
   }
 
   dispatch(actions.startCall({ callType: callTypes.action }));
@@ -33,7 +45,7 @@ export const fetchCenter = (id) => async (dispatch) => {
     .then((response) => {
       // console.log("get center by Id response", response);
       const entities = response.data?.data;
-      dispatch(actions.centerFetched(entities));
+      dispatch(actions.infoFetched(entities));
     })
     .catch((error) => {
       error.clientMessage = "Can't find user";
@@ -41,13 +53,12 @@ export const fetchCenter = (id) => async (dispatch) => {
     });
 };
 
-export const deleteCenter = (id) => (dispatch) => {
+export const deleteRecord = (id) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .deleteRequest({ id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
-      dispatch(actions.centerDeleted({ id: id }));
+      dispatch(actions.recordDeleted(response?.data?.data));
       toast.success("Successfully Deactivated", {
         position: "top-right",
         autoClose: 5000,
@@ -59,19 +70,18 @@ export const deleteCenter = (id) => (dispatch) => {
       });
     })
     .catch((error) => {
-      error.clientMessage = "can't delete user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       toast.error(error.response.data.message);
     });
 };
 
-export const activeCenter = (id) => (dispatch) => {
+export const activeRecord = (id) => (dispatch) => {
+  console.log("id ", id);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .deleteRequest({ id: id })
     .then((response) => {
-      //console.log("response from delete user ", response.data.message)
-      dispatch(actions.centerDeleted({ id: id }));
+      dispatch(actions.recordDeleted(response?.data?.data));
       toast.success("Successfully Activated", {
         position: "top-right",
         autoClose: 5000,
@@ -83,20 +93,31 @@ export const activeCenter = (id) => (dispatch) => {
       });
     })
     .catch((error) => {
-      error.clientMessage = "can't delete user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       toast.error(error.response.data.message);
     });
 };
 
-export const createCenter = (userForCreation) => (dispatch) => {
+export const fetchStandByVehicles = (body) => async (dispatch) => {
+  return await requestFromServer
+    .getVehiclesByCenterAndSubcenterId(body)
+    .then((response) => {
+      const entities = response.data?.data;
+      dispatch(actions.AllVehiclesByCenterAndSubCenterId(entities));
+    })
+    .catch((error) => {
+      toast.error("Something went wrong.");
+    });
+};
+
+export const createInfo = (data) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .createRequest(userForCreation)
+    .createRequest(data)
     .then((res) => {
-      const entities = res.data?.data;
-      dispatch(actions.centerCreated({ entities }));
-      toast.success(res.data.message, {
+      const response = res.data?.data;
+      dispatch(actions.infoCreated(response));
+      toast.success(res.data.message + " " + "added", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -113,15 +134,15 @@ export const createCenter = (userForCreation) => (dispatch) => {
     });
 };
 
-export const updateCenter = (user) => (dispatch) => {
-  //console.log("updatedUser data", user)
+export const updateInfo = (body) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .updateRequest(user)
+    .updateRequest(body)
     .then((response) => {
+      console.log("Getting response", response);
       const updatedUser = response.data?.data;
       // console.log("userAction Res", response)
-      dispatch(actions.centerUpdated({ updatedUser }));
+      dispatch(actions.infoUpdated({ updatedUser }));
       toast.success(response.data.message + " Updated", {
         position: "top-right",
         autoClose: 5000,
@@ -189,27 +210,3 @@ export const fetchAllCity = (body) => async (dispatch) => {
       toast("error");
     });
 };
-
-// export const fetchRoles = () => (dispatch) => {
-//   dispatch(actions.startCall({ callType: callTypes.list }))
-
-//   return requestFromServer
-//     .getAllRoles()
-//     .then((response) => {
-//       const entities = response.data?.data
-//       // console.log("User entities: ", entities)
-//       dispatch(actions.RolesFetched(entities))
-//     })
-//     .catch((error) => {
-//       error.clientMessage = "Can't find roles"
-//       dispatch(actions.catchError({ error, callType: callTypes.list }))
-//     })
-// }
-
-// export const fetchCenters = () => (dispatch) => {
-//   dispatch(actions.startCall({ callType: callTypes.list }))
-//   return requestFromServer.getAllCenters().then((response) => {
-//     const entities = response.data?.data
-//     dispatch(actions.CentersFetched(entities))
-//   })
-// }

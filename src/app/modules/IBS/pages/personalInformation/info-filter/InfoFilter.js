@@ -1,7 +1,16 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Formik } from "formik";
 import { isEqual } from "lodash";
 import { useInfoUIContext } from "../PersonalUIContext";
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import axios from "axios";
+import { toAbsoluteUrl } from "../../../../../../_metronic/_helpers";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const prepareFilter = (queryParams, values) => {
   const { status, type, searchText } = values;
@@ -21,13 +30,158 @@ const prepareFilter = (queryParams, values) => {
 };
 
 export function InfoFilter({ listLoading }) {
+  const [startDate, setStartDate] = useState();
   const centersUIContext = useInfoUIContext();
+  const [Loading, setLoading] = useState(false);
+
   const centersUIProps = useMemo(() => {
     return {
       queryParams: centersUIContext.queryParams,
       setQueryParams: centersUIContext.setQueryParams,
     };
   }, [centersUIContext]);
+
+  async function fetchData(year) {
+    try {
+      const response = await axios.post(`${API_URL}/ibs/read-ibsreport`, {
+        year: year,
+      });
+      return response?.data?.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  function getBase64ImageFromURL(url) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        var dataURL = canvas.toDataURL("image/png");
+
+        resolve(dataURL);
+      };
+
+      img.onerror = (error) => {
+        reject(error);
+      };
+
+      img.src = url;
+    });
+  }
+
+  async function createPdf(e) {
+    setStartDate(e);
+    const getYear = moment(e).format("yyyy");
+    if (e != null) {
+      setLoading(true);
+      const data = await fetchData(getYear);
+      const table = {
+        headerRow: [
+          "Name",
+          "jan",
+          "feb",
+          "mar",
+          "apr",
+          "may",
+          "june",
+          "july",
+          "aug",
+          "sep",
+          "oct",
+          "nov",
+          "dec",
+          "total",
+        ],
+        body: [],
+      };
+
+      data &&
+        data.forEach((item) => {
+          const row = [
+            item.name,
+            item.jan,
+            item.feb,
+            item.mar,
+            item.apr,
+            item.may,
+            item.june,
+            item.july,
+            item.aug,
+            item.sep,
+            item.oct,
+            item.nov,
+            item.dec,
+            item.total,
+          ];
+          table.body.push(row);
+        });
+
+      // console.log("table body", table.body);
+
+      const documentDefinition = {
+        content: [
+          {
+            alignment: "justify",
+            columns: [
+              {
+                width: 70,
+                image: await getBase64ImageFromURL(
+                  `${toAbsoluteUrl("/media/logos/abdul-star-edhi.jpg")}`
+                ),
+              },
+              {
+                width: "*",
+                text: [
+                  `${getYear} YEARLY REPORT KARACHI\n`,
+                  `TRAFFIC ACCIDENT & OTHER INCIDENTS`,
+                ],
+                style: "header",
+              },
+              {
+                width: 110,
+                image: await getBase64ImageFromURL(
+                  `${toAbsoluteUrl("/media/logos/logo-letter-1.png")}`
+                ),
+              },
+            ],
+          },
+
+          {
+            table: {
+              headerRows: 1,
+              body: [table.headerRow, ...table.body],
+            },
+          },
+        ],
+        styles: {
+          header: {
+            fontSize: 14,
+            bold: true,
+            margin: [0, 0, 0, 10],
+            alignment: "center",
+          },
+        },
+        defaultStyle: {
+          columnGap: 20,
+        },
+      };
+
+      setLoading(false);
+
+      pdfMake.createPdf(documentDefinition).download();
+    }
+  }
+
+  //const dispatch = useDispatch();
 
   // queryParams, setQueryParams,
   const applyFilter = (values) => {
@@ -61,49 +215,7 @@ export function InfoFilter({ listLoading }) {
         }) => (
           <form onSubmit={handleSubmit} className="form form-label-right">
             <div className="row">
-              {/* <div className="col-lg-2">
-                <select
-                  className="form-control"
-                  name="status"
-                  placeholder="Filter by Status"
-                  // TODO: Change this code
-                  onChange={(e) => {
-                    setFieldValue("status", e.target.value);
-                    handleSubmit();
-                  }}
-                  onBlur={handleBlur}
-                  value={values.status}
-                >
-                  <option value="">All</option>
-                  <option value="0">Susspended</option>
-                  <option value="1">Active</option>
-                  <option value="2">Pending</option>
-                </select>
-                <small className="form-text text-muted">
-                  <b>Filter</b> by Status
-                </small>
-              </div>
-              <div className="col-lg-2">
-                <select
-                  className="form-control"
-                  placeholder="Filter by Type"
-                  name="type"
-                  onBlur={handleBlur}
-                  onChange={(e) => {
-                    setFieldValue("type", e.target.value);
-                    handleSubmit();
-                  }}
-                  value={values.type}
-                >
-                  <option value="">All</option>
-                  <option value="0">Business</option>
-                  <option value="1">Individual</option>
-                </select>
-                <small className="form-text text-muted">
-                  <b>Filter</b> by Type
-                </small>
-              </div> */}
-              <div className="col-12">
+              <div className="col-12 col-md-6">
                 <input
                   type="text"
                   className="form-control"
@@ -118,6 +230,35 @@ export function InfoFilter({ listLoading }) {
                 />
                 <small className="form-text text-muted">
                   <b>Search</b> in all fields
+                </small>
+              </div>
+              <div className="col-12 col-md-6">
+                <DatePicker
+                  className="form-control"
+                  selected={startDate}
+                  onChange={(e) => createPdf(e)}
+                  showYearPicker
+                  dateFormat="yyyy"
+                />
+                {/* <select
+                  className="form-control"
+                  name="status"
+                  placeholder="Filter by Status"
+                  // TODO: Change this code
+                  onChange={(e) => {
+                    setFieldValue("status", e.target.value);
+                    handleSubmit();
+                  }}
+                  onBlur={handleBlur}
+                  value={values.status}
+                >
+                  <option value="">All</option>
+                  <option value="0">2023</option>
+                  <option value="1"></option>
+                  <option value="2">Pending</option>
+                </select> */}
+                <small className="form-text text-muted">
+                  {Loading ? <>Creating PDF...</> : <>Select year for report</>}
                 </small>
               </div>
             </div>

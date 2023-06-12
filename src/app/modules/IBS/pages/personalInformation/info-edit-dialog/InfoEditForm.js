@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
-import TextField from "@material-ui/core/TextField";
 import { Box } from "@material-ui/core";
-import SystemUpdateAltIcon from "@material-ui/icons/SystemUpdateAlt";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
 import DatePicker from "react-datepicker";
 import * as Yup from "yup";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Input,
   TextArea,
-  DatePickerField,
-  DateTimePickerField,
 } from "../../../../../../_metronic/_partials/controls";
-import { useSelector, useDispatch } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import { ImageDropZone } from "../../../../../../_metronic/_helpers/ImageDropZone";
 import {
@@ -30,69 +26,89 @@ import {
   fetchStandByVehicles,
   fetchAllPoliceStations,
 } from "../../../_redux/info-personal/infoActions";
-
+import { InfoImageSlider } from "../info-image-slider/InfoImageSlider";
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
+const nameRegExp = /r'^[a-zA-Z]+$'/;
 
 // Validation schema
 const formSchema = Yup.object().shape({
   //images: Yup.mixed(),
-  images: Yup.array().of(Yup.string()),
-  countryId: Yup.number(),
-  cityId: Yup.number(),
-  incidentTypeId: Yup.number(),
-  districtId: Yup.number(),
-  areaId: Yup.number(),
+
+  countryId: Yup.number().required("Country is required"),
+  cityId: Yup.number().required("City is required"),
+  incidentTypeId: Yup.number().required("incident Type is required"),
+  districtId: Yup.number().required("District is required"),
+  areaId: Yup.number().required("Area is required"),
   bodyType: Yup.string(),
   vehicleType: Yup.string(),
   vehicleId: Yup.number(),
   vehicleRegNo: Yup.string(),
-  patientName: Yup.string(),
-  age: Yup.number(),
+  patientName: Yup.string().matches(
+    /^[a-zA-Z\s]+$/,
+    "Only alphabetic characters are allowed"
+  ),
+  age: Yup.number()
+    .positive("Number must be positive")
+    .min(1, "Number must be greater then 0")
+    .max(150, "Number must be less than or equal to 150")
+    .required("Age is required"),
   gender: Yup.string(),
   callerCnic: Yup.string(),
-  callerName: Yup.string(),
+  callerName: Yup.string().matches(
+    /^[a-zA-Z\s]+$/,
+    "Only alphabetic characters are allowed"
+  ),
   callerPhNo: Yup.string(),
   description: Yup.string(),
-  dateTime: Yup.date(),
+  images: Yup.array().of(Yup.string()),
+  dateTime: Yup.date().required("Incident Date is required"),
   incidentAddress: Yup.string(),
   incidentlocationReachdateTime: Yup.date(),
   hospitalReachdateTime: Yup.date(),
-  statusId: Yup.number(),
+  statusId: Yup.number().required("Status is required"),
   hospitalId: Yup.number(),
   policeStationId: Yup.number(),
 });
 
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
-    position: "absolute",
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-    position: "absolute",
-    color: "red",
-    fontSize: 22,
-    right: 0,
-  },
-}));
+const useStyles = makeStyles((theme) => {
+  return {
+    margin: {
+      margin: theme.spacing(1),
+      position: "absolute",
+      backgroundColor: "#ffcccc",
+      position: "absolute",
+      right: "-17px",
+      top: "-16px",
+      width: "25px",
+      height: "25px",
+      minHeight: "auto",
 
-export function InfoEditForm({
-  saveInfo,
-  initialInfo,
-  actionsLoading,
-  onHide,
-  isUserForRead,
-  vehiclesForCenter,
-  totalCount,
-}) {
+      "&:hover": {
+        backgroundColor: "#f35d5d",
+      },
+    },
+    extendedIcon: {
+      // marginRight: theme.spacing(1),
+      // position: "absolute",
+      color: "#fffff",
+      fontSize: 15,
+      // right: 0,
+    },
+  };
+});
+
+export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const dashboard = useSelector((state) => state.dashboard);
   const personalInfo = useSelector((state) => state.personalInformation);
   const user = useSelector((state) => state.users);
-  var oldImagesArr = [];
-  const [createDate, setCreateTime] = useState(new Date());
-  const [incidentReachedTime, setIncidentReachedTime] = useState(new Date());
-  const [hospitalReachedTime, setHospitalReachedTime] = useState(new Date());
+
+  const [show, setShow] = useState(false);
+  const [createDate, setCreateTime] = useState(null);
+  const [incidentReachedTime, setIncidentReachedTime] = useState(null);
+  const [hospitalReachedTime, setHospitalReachedTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState([]);
   const [city, setCity] = useState([]);
@@ -113,6 +129,7 @@ export function InfoEditForm({
   const [oldImages, setoldImages] = useState([]);
 
   useEffect(() => {
+    //console.log("Use Effect called ib images");
     if (initialInfo.ibFormImages) {
       setSelectedImages(initialInfo.ibFormImages);
     }
@@ -135,13 +152,14 @@ export function InfoEditForm({
     height: 100,
     padding: 4,
     boxSizing: "border-box",
+    position: "relative",
   };
 
   const thumbInner = {
     display: "flex",
     minWidth: 0,
     overflow: "hidden",
-    position: "relative",
+    cursor: "pointer",
   };
 
   const img = {
@@ -151,34 +169,37 @@ export function InfoEditForm({
   };
 
   const removeImage = (index, id) => {
+    console.log("index", index);
+    console.log("id", id);
     const updatedImages = [...seletedImages];
     updatedImages.splice(index, 1);
     setSelectedImages(updatedImages);
     setoldImages((preIds) => [...preIds, id]);
   };
 
-  console.log("oldImages", oldImages);
-
   const thumbs =
     seletedImages &&
     seletedImages.map((file, index) => {
       return (
         <>
-          <Box component="span" m={1} key={file.name}>
-            <div style={thumb} key={file.name}>
+          <Box component="span" m={1} key={index}>
+            <div style={thumb}>
               <div style={thumbInner}>
-                <img src={file.url} style={img} />
-                {/* <Fab
-            size="small"
-            color="secondary"
-            aria-label="add"
-            className={classes.margin}
-          > */}
-                <ClearIcon
-                  className={classes.extendedIcon}
-                  onClick={() => removeImage(index, file.id)}
-                />
-                {/* </Fab> */}
+                <img src={file.url} style={img} onClick={() => setShow(true)} />
+
+                {!isUserForRead && (
+                  <Fab
+                    size="small"
+                    color="secondary"
+                    aria-label="add"
+                    className={classes.margin}
+                  >
+                    <ClearIcon
+                      className={classes.extendedIcon}
+                      onClick={() => removeImage(index, file.id)}
+                    />
+                  </Fab>
+                )}
               </div>
             </div>
           </Box>
@@ -186,15 +207,14 @@ export function InfoEditForm({
       );
     });
 
-  // console.log("personalInfo", personalInfo);
   const genderList = [
     {
       value: 1,
-      label: "male",
+      label: "Male",
     },
     {
       value: 2,
-      label: "Fe-Male",
+      label: "Female",
     },
     {
       value: 3,
@@ -215,35 +235,19 @@ export function InfoEditForm({
   const allTypes = [
     {
       value: 1,
-      label: "RTA",
+      label: "Dead",
     },
     {
       value: 2,
-      label: "Gun Shot",
-    },
-    {
-      value: 3,
-      label: "Blast",
-    },
-    {
-      value: 4,
-      label: "Sucide",
-    },
-    {
-      value: 5,
-      label: "Other Emergency",
-    },
-    {
-      value: 6,
-      label: "injured",
+      label: "Injured",
     },
   ];
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    initialInfo.countryId && dispatch(fetchAllCity(initialInfo.countryId));
-  }, [initialInfo]);
+    if (initialInfo.countryId) {
+      initialInfo.countryId && dispatch(fetchAllCity(initialInfo.countryId));
+    }
+  }, [initialInfo.countryId]);
 
   useEffect(() => {
     if (initialInfo.districtId) {
@@ -324,10 +328,27 @@ export function InfoEditForm({
   useEffect(() => {
     if (initialInfo.statusId) {
       setStatus(
-        user.userStatusTypes.find((item) => item.value === initialInfo.statusId)
+        user?.userStatusTypes?.find(
+          (item) => item.value === initialInfo.statusId
+        )
       );
     }
   }, [initialInfo.statusId]);
+
+  useEffect(() => {
+    if (initialInfo.dateTime) {
+      const parsedDate = new Date(initialInfo.dateTime);
+      setCreateTime(parsedDate);
+    }
+    if (initialInfo.incidentlocationReachdateTime) {
+      const parsedDate = new Date(initialInfo.incidentlocationReachdateTime);
+      setIncidentReachedTime(parsedDate);
+    }
+    if (initialInfo.hospitalReachdateTime) {
+      const parsedDate = new Date(initialInfo.hospitalReachdateTime);
+      setHospitalReachedTime(parsedDate);
+    }
+  }, [initialInfo]);
 
   useEffect(() => {
     if (initialInfo.vehicleId) {
@@ -369,8 +390,6 @@ export function InfoEditForm({
     );
   }, [initialInfo.policeStationId, personalInfo.policestationList]);
 
-  console.log("initialInfo", initialInfo);
-
   const enableLoading = () => {
     setLoading(true);
   };
@@ -380,33 +399,28 @@ export function InfoEditForm({
       <Formik
         enableReinitialize={true}
         initialValues={initialInfo}
-        // validationSchema={formSchema}
-        validateOnChange={false} // Skip validation on field change
-        validateOnBlur={false} // Skip validation on field blur
+        validationSchema={formSchema}
         onSubmit={(values) => {
           enableLoading();
           const mergedValue = { ...values, oldImages };
-          console.log("mergedValue", mergedValue);
           saveInfo(mergedValue);
         }}
       >
-        {({
-          handleSubmit,
-          setFieldValue,
-          handleBlur,
-          errors,
-          touched,
-          values,
-        }) => (
+        {({ handleSubmit, setFieldValue, errors, touched }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
+              <InfoImageSlider
+                images={seletedImages}
+                show={show}
+                setShow={setShow}
+              />
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="form-group row">
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="countryId"
-                        label="Country"
+                        label="Country*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           dispatch(fetchAllCity(e.value));
@@ -419,10 +433,10 @@ export function InfoEditForm({
                         options={dashboard.allCountry}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="cityId"
-                        label="City"
+                        label="City*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           dispatch(fetchAllCityCenters(e.value));
@@ -437,10 +451,10 @@ export function InfoEditForm({
                         options={dashboard.allCity}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="districtId"
-                        label="District"
+                        label="District*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           dispatch(fetchAllSubCenter(e.value));
@@ -454,10 +468,10 @@ export function InfoEditForm({
                         options={dashboard.cityCenters}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="areaId"
-                        label="Area"
+                        label="Area*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           setFieldValue("areaId", e.value);
@@ -479,7 +493,7 @@ export function InfoEditForm({
                         options={dashboard.allSubCenter}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="incidentTypeId"
                         label="Incident Type*"
@@ -494,10 +508,10 @@ export function InfoEditForm({
                         options={dashboard.incidentTypes}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="bodyType"
-                        label="Body Type*"
+                        label="Body Type"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           setFieldValue("bodyType", e.label);
@@ -509,21 +523,13 @@ export function InfoEditForm({
                         options={allTypes}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="vehicleType"
-                        label="Vehicel Type*"
+                        label="Vehicel Type"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           setFieldValue("vehicleType", e.label);
-                          // dispatch(
-                          //   fetchStandByVehicles({
-                          //     centerId: district.value,
-                          //     subCenterId: area.value,
-                          //     available: true,
-                          //     inProgress: true,
-                          //   })
-                          // );
                           setVehicleType(e);
                           if (e.value === 1) {
                             var filterObj = {};
@@ -539,22 +545,20 @@ export function InfoEditForm({
                             dispatch(fetchDashboardVehicles(filterObj));
                             setShowEdhiVehicel(true);
                             setPrivateEdhiVehicel(false);
-                            console.log("Edhi vehicel selected");
                           } else if (e.value === 2) {
                             setPrivateEdhiVehicel(true);
                             setShowEdhiVehicel(false);
                             setVehicleId([]);
-                            console.log("Private selected");
                           }
                         }}
-                        value={vehicleType}
+                        value={vehicleType || ""}
                         error={errors.vehicleType}
                         touched={touched.vehicleType}
                         options={vehicleTypeoptions}
                       />
                     </div>
                     {showEdhivehicle && (
-                      <div className="col-12 col-md-3 mb-5">
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
                         <SearchSelect
                           name="VehcileId"
                           label="Select Vehicle"
@@ -571,7 +575,7 @@ export function InfoEditForm({
                       </div>
                     )}
                     {showPrivatevehicle && (
-                      <div className="col-12 col-md-3 mb-5">
+                      <div className="col-12 col-md-6 mb-5">
                         <Field
                           name="vehicleRegNo"
                           component={Input}
@@ -580,7 +584,7 @@ export function InfoEditForm({
                         />
                       </div>
                     )}
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="hospitalId"
                         label="Hospital"
@@ -595,7 +599,7 @@ export function InfoEditForm({
                         options={personalInfo.hospitalList}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="policeStationId"
                         label="Police Station"
@@ -610,22 +614,22 @@ export function InfoEditForm({
                         options={personalInfo.policestationList}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <Field
                         name="patientName"
                         component={Input}
                         label="Patient Name"
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <Field
                         name="age"
                         component={Input}
                         type="Number"
-                        label="Age"
+                        label="Age*"
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="gender"
                         label="Gender"
@@ -640,10 +644,10 @@ export function InfoEditForm({
                         options={genderList}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="statusId"
-                        label="Status"
+                        label="Status*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           setFieldValue("statusId", e.value);
@@ -655,7 +659,7 @@ export function InfoEditForm({
                         options={user.userStatusTypes}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <Field
                         name="callerName"
                         component={Input}
@@ -663,7 +667,7 @@ export function InfoEditForm({
                         label="Caller Name"
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <Field
                         name="callerPhNo"
                         component={Input}
@@ -671,7 +675,7 @@ export function InfoEditForm({
                         label="Caller Phone"
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <Field
                         name="callerCnic"
                         component={Input}
@@ -679,13 +683,13 @@ export function InfoEditForm({
                         label="Caller CNIC"
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <label>Incident Date</label>
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
+                      <label>Incident Date*</label>
                       <DatePicker
                         className="form-control"
                         selected={createDate}
                         onChange={(date) => {
-                          console.log("Date", date);
+                          // console.log("On change getting date Value", date);
                           setFieldValue("dateTime", date);
                           setCreateTime(date);
                         }}
@@ -695,8 +699,11 @@ export function InfoEditForm({
                         showTimeInput
                         name="dateTime"
                       />
+                      {errors.dateTime && touched.dateTime ? (
+                        <div className="form-feedBack">{errors.dateTime}</div>
+                      ) : null}
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <label>Incident Reached Time</label>
                       <DatePicker
                         className="form-control"
@@ -712,7 +719,7 @@ export function InfoEditForm({
                         disabled={isUserForRead}
                       />
                     </div>
-                    <div className="col-12 col-md-3 mb-5">
+                    <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <label>Hospital Reached Time</label>
                       <DatePicker
                         className="form-control"
@@ -721,14 +728,14 @@ export function InfoEditForm({
                           setFieldValue("hospitalReachdateTime", date);
                           setHospitalReachedTime(date);
                         }}
-                        disabled={isUserForRead}
                         timeInputLabel="Time:"
                         dateFormat="MM/dd/yyyy h:mm aa"
                         showTimeInput
                         name="hospitalReachdateTime"
+                        disabled={isUserForRead}
                       />
                     </div>
-                    <div className="col-12  mb-5">
+                    <div className="col-12 mb-5">
                       <Field
                         name="description"
                         component={TextArea}
@@ -736,7 +743,7 @@ export function InfoEditForm({
                         label="Description"
                       />
                     </div>
-                    <div className="col-12  mb-5">
+                    <div className="col-12 mb-5">
                       <Field
                         name="incidentAddress"
                         component={TextArea}

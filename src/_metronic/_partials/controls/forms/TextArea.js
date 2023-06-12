@@ -1,18 +1,18 @@
-import React from "react"
-import { FieldFeedbackLabel } from "./FieldFeedbackLabel"
+import React from "react";
+import { FieldFeedbackLabel } from "./FieldFeedbackLabel";
 
 const getFieldCSSClasses = (touched, errors) => {
-  const classes = ["form-control"]
+  const classes = ["form-control"];
   if (touched && errors) {
-    classes.push("is-invalid")
+    classes.push("is-invalid");
   }
 
   if (touched && !errors) {
-    classes.push("is-valid")
+    classes.push("is-valid");
   }
 
-  return classes.join(" ")
-}
+  return classes.join(" ");
+};
 
 export function TextArea({
   field, // { name, value, onChange, onBlur }
@@ -42,5 +42,5 @@ export function TextArea({
         />
       )}
     </>
-  )
+  );
 }

@@ -1,16 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialCentersState = {
+const initialValues = {
   listLoading: false,
   actionsLoading: false,
-  totalCount: 0,
   entities: [],
-  AllCountry: [],
-  AllCity: [],
-  centerForEdit: "",
+  totalCount: 0,
+  hospitalList: [],
+  policestationList: [],
+  allVehicles: [],
+  infoForEdit: [],
   lastError: null,
-  centerForRead: false,
-  vehiclesForCenter: undefined,
 };
 
 export const callTypes = {
@@ -18,9 +17,9 @@ export const callTypes = {
   action: "action",
 };
 
-export const subCentersSlice = createSlice({
-  name: "subCenters",
-  initialState: initialCentersState,
+export const mortuarySlice = createSlice({
+  name: "mortuary",
+  initialState: initialValues,
   reducers: {
     catchError: (state, action) => {
       state.error = `${action.type}: ${action.payload.error}`;
@@ -38,7 +37,13 @@ export const subCentersSlice = createSlice({
         state.actionsLoading = true;
       }
     },
-    centersFetched: (state, action) => {
+    hospitalFetched: (state, action) => {
+      state.hospitalList = action.payload;
+    },
+    policeStationsFetched: (state, action) => {
+      state.policestationList = action.payload;
+    },
+    ibsFetched: (state, action) => {
       const entities = action.payload?.rows;
       const totalResults = action.payload?.totalResults;
       state.listLoading = false;
@@ -47,28 +52,38 @@ export const subCentersSlice = createSlice({
       state.totalCount = totalResults;
     },
     //get User By ID
-    centerFetched: (state, action) => {
+    infoFetched: (state, action) => {
+      // console.log("action", action);
+      state.listLoading = false;
       state.actionsLoading = false;
-      state.centerForEdit = action.payload;
+      state.infoForEdit = action.payload;
       state.error = null;
     },
-    centerDeleted: (state, action) => {
+    recordDeleted: (state, action) => {
+      console.log("Pay load", action.payload);
       state.error = null;
       state.actionsLoading = false;
-      state.entities = state.entities.filter(
-        (el) => el.id !== action.payload.id
+      const index = state.entities.findIndex(
+        (obj) => obj.id === action.payload.id
       );
+      if (index !== -1) {
+        state.entities[index] = action.payload;
+      }
+      // state.entities = state.entities
+      // state.entities.unshift(action.payload);
+      // // state.entities = state.entities.filter(
+      // //   (el) => el.id !== action.payload.id
+      // // );
     },
-    centerCreated: (state, action) => {
+    infoCreated: (state, action) => {
       state.actionsLoading = false;
       state.listLoading = false;
       state.error = null;
-      state.entities.unshift(action.payload.entities);
+      state.entities.unshift(action.payload);
     },
-    centerUpdated: (state, action) => {
+    infoUpdated: (state, action) => {
       state.error = null;
       state.actionsLoading = false;
-      // state.entities.push(action.payload)
       state.entities = state.entities.map((entity) => {
         if (entity.id === action.payload.updatedUser.id) {
           return action.payload.updatedUser;
@@ -79,7 +94,6 @@ export const subCentersSlice = createSlice({
     },
     vehiclesFetched: (state, action) => {
       const entities = action.payload;
-      // console.log("action.payload", entities);
       state.error = null;
       state.actionsLoading = false;
       state.vehiclesForCenter = entities;
@@ -93,6 +107,10 @@ export const subCentersSlice = createSlice({
     },
     statusFalse: (state, action) => {
       state.listLoading = false;
+    },
+
+    AllVehiclesByCenterAndSubCenterId: (state, action) => {
+      state.allVehicles = action.payload;
     },
     // RolesFetched: (state, action) => {
     //   const entities = action.payload

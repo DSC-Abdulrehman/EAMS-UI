@@ -54,33 +54,6 @@ export function PersonalInformationUIProvider({ centersUIEvents, children }) {
     });
   }, []);
 
-  const initInfo = {
-    images: "",
-    countryId: "",
-    cityId: "",
-    incidentTypeId: "",
-    districtId: "",
-    areaId: "",
-    bodyType: "",
-    vehicleType: "",
-    vehicleId: "",
-    vehicleRegNo: "",
-    patientName: "",
-    age: "",
-    gender: "",
-    callerCnic: "",
-    callerName: "",
-    callerPhNo: "",
-    description: "",
-    dateTime: "",
-    incidentAddress: "",
-    incidentlocationReachdateTime: "",
-    hospitalReachdateTime: "",
-    statusId: "",
-    hospitalId: "",
-    policeStationId: "",
-  };
-
   const value = {
     queryParams,
     setQueryParamsBase,
@@ -90,12 +63,13 @@ export function PersonalInformationUIProvider({ centersUIEvents, children }) {
     secondQueryParams,
     ids,
     setIds,
-    initInfo,
+    //initInfo,
     addNewButtonClick: centersUIEvents.addNewButtonClick,
     openEditDialog: centersUIEvents.openEditDialog,
     openDeleteDialog: centersUIEvents.openDeleteDialog,
     openActiveDialog: centersUIEvents.openActiveDialog,
     openReadDialog: centersUIEvents.openReadDialog,
+    openMortuaryDialog: centersUIEvents.openMortuaryDialog,
     makePDFreport: centersUIEvents.makePDFreport,
   };
   return (

@@ -31,6 +31,29 @@
     table-layout: auto;
 }
 
+.custom-backdrop {
+    background-color: #000000a6 !important;
+}
+
+.modal-bg {
+    height: 100%;
+    background-color: #000000a6 !important;
+}
+
+.img-dialog {
+    max-width: 100% !important;
+    margin: 0 !important;
+}
+
+.img-dialog .modal-content {
+    height: 100% !important;
+}
+
+/* .modal-backdrop {
+    background-color: rgb(151, 0, 0) !important;
+    
+} */
+
 /* .card-body {
     overflow-x: scroll;
 } */

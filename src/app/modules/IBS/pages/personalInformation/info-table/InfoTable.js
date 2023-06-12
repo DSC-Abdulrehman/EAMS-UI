@@ -20,30 +20,31 @@ import { useInfoUIContext } from "../PersonalUIContext";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 
 export function InfoTable() {
-  //Users UI Context
+  const dispatch = useDispatch();
   const centersUIContext = useInfoUIContext();
-  //  console.log("centersUIContext in center", centersUIContext);
   const centersUIProps = useMemo(() => {
     return {
       openEditDialog: centersUIContext.openEditDialog,
       openDeleteDialog: centersUIContext.openDeleteDialog,
       openActiveDialog: centersUIContext.openActiveDialog,
       openReadDialog: centersUIContext.openReadDialog,
+      openMortuaryDialog: centersUIContext.openMortuaryDialog,
       queryParms: centersUIContext.queryParams,
       setQueryParams: centersUIContext.setQueryParams,
     };
   }, [centersUIContext]);
 
-  const { currentStatecenters, userAccess } = useSelector(
+  const { currentState, ibsAccess } = useSelector(
     (state) => ({
-      currentStatecenters: state.personalInformation,
-      userAccess: state?.auth?.userAccess?.Centers,
+      currentState: state.personalInformation,
+      ibsAccess: state?.auth?.userAccess.IBS,
     }),
     shallowEqual
   );
 
-  const dispatch = useDispatch();
-  const { totalCount, entities, listLoading } = currentStatecenters;
+  //console.log("ibsAccess", ibsAccess);
+
+  const { totalCount, entities, listLoading } = currentState;
 
   useEffect(() => {
     async function fetchData() {
@@ -52,12 +53,16 @@ export function InfoTable() {
     fetchData();
   }, [centersUIProps.queryParms, dispatch, totalCount]);
 
-  const isAccessForEdit = userAccess.find(
-    (item) => item.componentName === "UpdateCenter"
+  const isAccessForEdit = ibsAccess?.find(
+    (item) => item.componentName === "UpdateIbform"
   );
 
-  const isAccessForDelete = userAccess.find(
-    (item) => item.componentName === "DeleteCenter"
+  const isAccessForDelete = ibsAccess?.find(
+    (item) => item.componentName === "DeleteIbform"
+  );
+
+  const isAccessForMortuary = ibsAccess?.find(
+    (item) => item.componentName === "CreateMortuaryform"
   );
 
   // Table columns
@@ -87,6 +92,10 @@ export function InfoTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -111,6 +120,10 @@ export function InfoTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -159,15 +172,15 @@ export function InfoTable() {
         openDeleteDialog: centersUIProps.openDeleteDialog,
         openActiveDialog: centersUIProps.openActiveDialog,
         openReadDialog: centersUIProps.openReadDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
+        openMortuaryDialog: centersUIProps.openMortuaryDialog,
+        isAccessForEdit: isAccessForEdit?.isAccess,
+        isAccessForDelete: isAccessForDelete?.isAccess,
+        isAccessForMortuary: isAccessForMortuary?.isAccess,
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
       style: {
-        minWidth: "170px",
+        minWidth: "200px",
       },
     },
   ];

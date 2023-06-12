@@ -15,54 +15,54 @@ import { ActionsColumnFormatter } from "./column-formatter/ActionsColumnFormatte
 import { CreatedColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
 import { DatetimeColumnFormatter } from "./column-formatter/CreatedColumnFormatter";
 import * as uiHelpers from "../MortuaryUIHelpers";
-import * as actions from "../../../_redux/subcenters/subCentersActions";
-import { useCentersUIContext } from "../MortuaryUIContext";
+import * as actions from "../../../_redux/mortuary/reduxActions";
+import { useModuleUIContext } from "../MortuaryUIContext";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 
 export function MortuaryTable() {
-  //Users UI Context
-  const centersUIContext = useCentersUIContext();
-
-  const centersUIProps = useMemo(() => {
+  const dispatch = useDispatch();
+  const moduleUIContext = useModuleUIContext();
+  const moduleUIProps = useMemo(() => {
     return {
-      openEditCenterDialog: centersUIContext.openEditCenterDialog,
-      openDeleteCenterDialog: centersUIContext.openDeleteCenterDialog,
-      openActiveCenterDialog: centersUIContext.openActiveCenterDialog,
-      openReadCenterDialog: centersUIContext.openReadCenterDialog,
-      queryParms: centersUIContext.queryParams,
-      setQueryParams: centersUIContext.setQueryParams,
+      openEditDialog: moduleUIContext.openEditDialog,
+      openDeleteDialog: moduleUIContext.openDeleteDialog,
+      openActiveDialog: moduleUIContext.openActiveDialog,
+      openReadDialog: moduleUIContext.openReadDialog,
+      openAddCoffinDialog: moduleUIContext.openAddCoffinDialog,
+      queryParms: moduleUIContext.queryParams,
+      setQueryParams: moduleUIContext.setQueryParams,
     };
-  }, [centersUIContext]);
+  }, [moduleUIContext]);
 
-  const { currentStatecenters, userAccess } = useSelector(
+  const { userAccess, mortuary } = useSelector(
     (state) => ({
-      currentStatecenters: state.subCenters,
-      userAccess: state?.auth?.userAccess?.Centers,
-      //userAccess: state.auth.userAccess.Users,
+      userAccess: state?.auth?.userAccess?.IBS,
+      mortuary: state.mortuary,
     }),
     shallowEqual
   );
 
-  // Centers Redux state
-  const dispatch = useDispatch();
+  // console.log("userAccess", userAccess);
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(actions.fetchSubCenters(centersUIProps.queryParms));
+      await dispatch(actions.fetchIbs(moduleUIProps.queryParms));
     }
     fetchData();
-  }, [centersUIProps.queryParms]);
+  }, [moduleUIProps.queryParms]);
 
-  const isAccessForEdit = userAccess.find(
-    (item) => item.componentName === "UpdateCenter"
+  const isAccessForEdit = userAccess?.find(
+    (item) => item.componentName === "UpdateMortuaryform"
   );
 
-  const isAccessForDelete = userAccess.find(
-    (item) => item.componentName === "DeleteCenter"
+  const isAccessForDelete = userAccess?.find(
+    (item) => item.componentName === "DeleteMortuaryform"
   );
-  //console.log("currentStatecenters", currentStatecenters);
-  const { totalCount, entities, listLoading } = currentStatecenters;
-  // console.log("currentStatecenters", currentStatecenters)
+
+  const isAccessForCoffin = userAccess?.find(
+    (item) => item.componentName === "CreateCoffinform"
+  );
+  const { totalCount, entities, listLoading } = mortuary;
 
   // Table columns
   const columns = [
@@ -74,16 +74,16 @@ export function MortuaryTable() {
       headerSortingClasses,
     },
     {
-      dataField: "center.name",
-      text: "Main Center",
+      dataField: "callerName",
+      text: "Caller",
       sort: false,
       style: {
         minWidth: "130px",
       },
     },
     {
-      dataField: "name",
-      text: "Sub Center",
+      dataField: "city.name",
+      text: "City",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -91,19 +91,30 @@ export function MortuaryTable() {
         minWidth: "130px",
       },
     },
-    // {
-    //   dataField: "location",
-    //   text: "Location",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "130px",
-    //   },
-    // },
     {
-      dataField: "phoneNo",
-      text: "Phone",
+      dataField: "dateTime",
+      text: "Incident Date",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      formatter: DatetimeColumnFormatter,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "fullNameOfTheDeceased",
+      text: "Deceased Name",
+      sort: false,
+      sortCaret: sortCaret,
+      headerSortingClasses,
+      style: {
+        minWidth: "130px",
+      },
+    },
+    {
+      dataField: "status.name",
+      text: "Status",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
@@ -129,14 +140,14 @@ export function MortuaryTable() {
       isDummyField: true,
       formatter: ActionsColumnFormatter,
       formatExtraData: {
-        openEditCenterDialog: centersUIProps.openEditCenterDialog,
-        openDeleteCenterDialog: centersUIProps.openDeleteCenterDialog,
-        openActiveCenterDialog: centersUIProps.openActiveCenterDialog,
-        openReadCenterDialog: centersUIProps.openReadCenterDialog,
-        isAccessForEdit: isAccessForEdit ? isAccessForEdit.isAccess : false,
-        isAccessForDelete: isAccessForDelete
-          ? isAccessForDelete.isAccess
-          : false,
+        openEditDialog: moduleUIProps.openEditDialog,
+        openDeleteDialog: moduleUIProps.openDeleteDialog,
+        openActiveDialog: moduleUIProps.openActiveDialog,
+        openReadDialog: moduleUIProps.openReadDialog,
+        openAddCoffinDialog: moduleUIProps.openAddCoffinDialog,
+        isAccessForEdit: isAccessForEdit?.isAccess,
+        isAccessForDelete: isAccessForDelete?.isAccess,
+        isAccessForCoffin: isAccessForCoffin?.isAccess,
       },
       classes: "text-right pr-0",
       headerClasses: "text-right pr-3",
@@ -151,8 +162,8 @@ export function MortuaryTable() {
     custom: true,
     totalSize: totalCount,
     sizePerPageList: uiHelpers.sizePerPageList,
-    sizePerPage: centersUIProps.queryParms.pageSize,
-    page: centersUIProps.queryParms.pageNumber,
+    sizePerPage: moduleUIProps.queryParms.pageSize,
+    page: moduleUIProps.queryParms.pageNumber,
   };
 
   return (
@@ -175,7 +186,7 @@ export function MortuaryTable() {
                 columns={columns}
                 defaultSorted={uiHelpers.defaultSorted}
                 onTableChange={getHandlerTableChange(
-                  centersUIProps.setQueryParams
+                  moduleUIProps.setQueryParams
                 )}
                 {...paginationTableProps}
               >

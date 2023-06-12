@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { PersonalInformationUIProvider } from "./PersonalUIContext";
 import { InfoEditDialog } from "./info-edit-dialog/InfoEditDialog";
 import { InfoDeleteDialog } from "./info-delete-dialog/InfoDeleteDialog";
 import { InfoActiveDialog } from "./info-active-dialog/InfoActiveDialog";
+import { MortuaryEditDialog } from "./mortuary-edit-dialog/MortuaryEditDialog";
+//import { MortuaryEditDialog } from "../mortuary/mortuary-edit-dialog/MortuaryEditDialog";
 import { InfoCard } from "./info-card/infoCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,9 +14,19 @@ import * as actions from "../../_redux/info-personal/infoActions";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import { fetchUserStatusTypes } from "../../../UserMangement/_redux/usersActions";
 
+// export const USERS_URL = process.env.REACT_APP_API_URL;
+
+// console.log("USERS_URL", USERS_URL);
+
 export function PersonalPage({ history }) {
   const dispatch = useDispatch();
-  dispatch(fetchUserStatusTypes({ ibs: true }));
+  dispatch(
+    fetchUserStatusTypes({
+      filter: {
+        ibf: true,
+      },
+    })
+  );
   const centersUIEvents = {
     addNewButtonClick: () => {
       dispatch(actions.fetchInfoById());
@@ -37,6 +49,10 @@ export function PersonalPage({ history }) {
     makePDFreport: (id) => {
       history.push(`/ibs/read-all-ibforms/report`);
     },
+    openMortuaryDialog: (ibfId) => {
+      dispatch(actions.fetchInfoById(ibfId));
+      history.push(`/ibs/read-all-ibforms/${ibfId}/add-mortuary`);
+    },
   };
   return (
     <PersonalInformationUIProvider centersUIEvents={centersUIEvents}>
@@ -55,8 +71,7 @@ export function PersonalPage({ history }) {
         {({ history, match }) => (
           <InfoEditDialog
             show={match != null}
-            id={match && match.params.id}
-            isEdit={true}
+            // id={match && match.params.id}
             onHide={() => {
               history.push("/ibs/read-all-ibforms");
             }}
@@ -90,6 +105,17 @@ export function PersonalPage({ history }) {
       <Route path="/ibs/read-all-ibforms/:id/active">
         {({ history, match }) => (
           <InfoActiveDialog
+            show={match != null}
+            id={match && match.params.id}
+            onHide={() => {
+              history.push("/ibs/read-all-ibforms");
+            }}
+          />
+        )}
+      </Route>
+      <Route path="/ibs/read-all-ibforms/:ibfId/add-mortuary">
+        {({ history, match }) => (
+          <MortuaryEditDialog
             show={match != null}
             id={match && match.params.id}
             onHide={() => {

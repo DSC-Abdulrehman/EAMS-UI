@@ -1,6 +1,7 @@
 import * as requestFromServer from "./infoCrud";
 import { infoSlice, callTypes } from "./infoSlice";
 import { toast } from "react-toastify";
+import moment from "moment";
 import "react-toastify/dist/ReactToastify.css";
 
 const { actions } = infoSlice;
@@ -114,7 +115,7 @@ export const createInfo = (data) => (dispatch) => {
     .then((res) => {
       const response = res.data?.data;
       dispatch(actions.infoCreated(response));
-      toast.success(res.data.message, {
+      toast.success(res.data.message + " " + "Created", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -125,16 +126,138 @@ export const createInfo = (data) => (dispatch) => {
       });
     })
     .catch((error) => {
-      error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
       toast.error("Something went wrong..!");
+      toast.error(error?.response?.data?.message);
     });
 };
 
 export const updateInfo = (body) => (dispatch) => {
+  console.log("body in action", body);
+  const formData = new FormData();
+  if (body.id) {
+    formData.append("id", body.id);
+  }
+  if (body.images) {
+    body.images.forEach((element) => {
+      formData.append("images", element);
+    });
+  }
+  if (body.countryId) {
+    formData.append("countryId", body.countryId);
+  }
+  if (body.cityId) {
+    formData.append("cityId", body.cityId);
+  }
+  if (body.incidentTypeId) {
+    formData.append("incidentTypeId", body.incidentTypeId);
+  }
+  if (body.districtId) {
+    formData.append("districtId", body.districtId);
+  }
+  if (body.areaId) {
+    formData.append("areaId", body.areaId);
+  }
+  if (body.bodyType) {
+    formData.append("bodyType", body.bodyType);
+  }
+  if (body.vehicleType) {
+    formData.append("vehicleType", body.vehicleType);
+  }
+  if (body.statusId) {
+    formData.append("statusId", body.statusId);
+  }
+  if (body.age) {
+    formData.append("age", body.age);
+  }
+  if (body.callerCnic) {
+    formData.append("callerCnic", body.callerCnic);
+  }
+  if (body.callerName) {
+    formData.append("callerName", body.callerName);
+  }
+  if (body.callerPhNo) {
+    formData.append("callerPhNo", body.callerPhNo);
+  }
+  if (body.dateTime) {
+    try {
+      if (moment(body.dateTime, moment.ISO_8601).isValid()) {
+        const formattedDate = moment
+          .utc(body.dateTime)
+          .format("DD.MM.YYYY HH:mm");
+        formData.append("dateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  if (body.incidentlocationReachdateTime) {
+    try {
+      if (
+        moment(body.incidentlocationReachdateTime, moment.ISO_8601).isValid()
+      ) {
+        const formattedDate = moment
+          .utc(body.incidentlocationReachdateTime)
+          .format("DD.MM.YYYY HH:mm");
+        formData.append("incidentlocationReachdateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  if (body.hospitalReachdateTime) {
+    try {
+      if (moment(body.hospitalReachdateTime, moment.ISO_8601).isValid()) {
+        const formattedDate = moment
+          .utc(body.hospitalReachdateTime)
+          .format("DD.MM.YYYY HH:mm");
+        formData.append("hospitalReachdateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  if (body.description) {
+    formData.append("description", body.description);
+  }
+  if (body.gender) {
+    formData.append("gender", body.gender);
+  }
+  if (body.hospitalId) {
+    formData.append("hospitalId", body.hospitalId);
+  }
+  if (body.incidentAddress) {
+    formData.append("incidentAddress", body.incidentAddress);
+  }
+  if (body.patientName) {
+    formData.append("patientName", body.patientName);
+  }
+  if (body.policeStationId) {
+    formData.append("policeStationId", body.policeStationId);
+  }
+  if (body.VehcileId) {
+    formData.append("vehicleId", body.VehcileId);
+  }
+  if (body.vehicleRegNo) {
+    formData.append("vehicleRegNo", body.vehicleRegNo);
+  }
+  if (body.oldImages) {
+    body.oldImages.forEach((element) => {
+      formData.append("oldImages", element);
+    });
+  }
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
-    .updateRequest(body)
+    .updateRequest(formData)
     .then((response) => {
       console.log("Getting response", response);
       const updatedUser = response.data?.data;
@@ -205,5 +328,18 @@ export const fetchAllCity = (body) => async (dispatch) => {
     .catch((error) => {
       console.error(error);
       toast("error");
+    });
+};
+
+export const fetchAnualReport = (body) => async (dispatch) => {
+  return await requestFromServer
+    .anualReport(body)
+    .then((response) => {
+      console.log("Res", response);
+      const entities = response?.data?.data;
+      dispatch(actions.AnaulReport(entities));
+    })
+    .catch((error) => {
+      toast("error", "Data not found");
     });
 };

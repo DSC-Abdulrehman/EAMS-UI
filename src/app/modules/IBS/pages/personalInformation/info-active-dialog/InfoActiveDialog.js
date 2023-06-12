@@ -3,17 +3,17 @@ import { Modal } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 import * as actions from "../../../_redux/info-personal/infoActions";
-import { useInfoUIContext } from "../PersonalUIContext";
+//import { useInfoUIContext } from "../PersonalUIContext";
 
 export function InfoActiveDialog({ id, show, onHide }) {
   // Centers UI Context
   const [loading, setLoading] = useState(false);
-  const centersUIContext = useInfoUIContext();
-  const centersUIProps = useMemo(() => {
-    return {
-      queryParams: centersUIContext.queryParams,
-    };
-  }, [centersUIContext]);
+  //onst centersUIContext = useInfoUIContext();
+  // const centersUIProps = useMemo(() => {
+  //   return {
+  //     queryParams: centersUIContext.queryParams,
+  //   };
+  // }, [centersUIContext]);
 
   // Customers Redux state
   const dispatch = useDispatch();

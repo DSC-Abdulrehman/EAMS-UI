@@ -13,30 +13,22 @@ export function ActionsColumnFormatter(
     openDeleteDialog,
     openActiveDialog,
     openReadDialog,
+    openMortuaryDialog,
     isAccessForEdit,
     isAccessForDelete,
+    isAccessForMortuary,
   }
 ) {
   const isUserRead = false;
-  // const { userAccess } = useSelector(
-  //   (state) => ({
-  //     userAccess: state.auth.userAccess.Users,
-  //   }),
-  //   shallowEqual
-  // )
-
-  // // const isAccessForEdit = userAccess.find(
-  // //   (item) => item.componentName === "UpdateUser"
-  // // )
-  // console.log("userAccess", userAccess)
+  // console.log("Row", row);
   return (
     <>
       <OverlayTrigger
-        overlay={<Tooltip id="products-edit-tooltip">Read Center</Tooltip>}
+        overlay={<Tooltip id="products-edit-tooltip">Read</Tooltip>}
       >
         <a
           // title="Read User"
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-1"
           onClick={() => openReadDialog(row.id, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -46,13 +38,13 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && (
+      {isAccessForEdit && row.isActive && (
         <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Edit Center</Tooltip>}
+          overlay={<Tooltip id="products-edit-tooltip">Edit</Tooltip>}
         >
           <a
             // title="Edit Center"
-            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-1"
             onClick={() => openEditDialog(row.id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -76,7 +68,7 @@ export function ActionsColumnFormatter(
           {row.isActive ? (
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-1"
               onClick={() => openDeleteDialog(row.id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
@@ -89,12 +81,26 @@ export function ActionsColumnFormatter(
           ) : (
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
+              className="btn btn-icon btn-light btn-hover-success btn-sm mx-1"
               onClick={() => openActiveDialog(row.id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-success">A</span>
             </a>
           )}
+        </OverlayTrigger>
+      )}
+      <></>
+      {isAccessForMortuary && row.isActive && row.statusId != 4 && (
+        <OverlayTrigger
+          overlay={<Tooltip id="products-edit-tooltip">Open Mortuary</Tooltip>}
+        >
+          <a
+            title=""
+            className="btn btn-icon btn-light btn-hover-success btn-sm mx-1"
+            onClick={() => openMortuaryDialog(row.id)}
+          >
+            <span className="svg-icon svg-icon-md svg-icon-success">M</span>
+          </a>
         </OverlayTrigger>
       )}
     </>

@@ -7,10 +7,10 @@ import { DashboardTiles } from "./trips-vehicle-tiles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as actions from "../../_redux/dashboardActions";
-import { useCentersUIContext } from "./DashboardUIContext";
+//import { useCentersUIContext } from "./DashboardUIContext";
 
 export function DashboardPage({ history }) {
-  const centersUIContext = useCentersUIContext();
+  // const centersUIContext = useCentersUIContext();
 
   const dispatch = useDispatch();
 

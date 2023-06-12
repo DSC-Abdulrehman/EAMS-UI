@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Formik } from "formik";
 import { isEqual } from "lodash";
-import { useCentersUIContext } from "../MortuaryUIContext";
+import { useModuleUIContext } from "../MortuaryUIContext";
 
 const prepareFilter = (queryParams, values) => {
   const { status, type, searchText } = values;
@@ -21,21 +21,21 @@ const prepareFilter = (queryParams, values) => {
 };
 
 export function MortuaryFilter({ listLoading }) {
-  const centersUIContext = useCentersUIContext();
-  const centersUIProps = useMemo(() => {
+  const moduleUIContext = useModuleUIContext();
+  const moduleUIProps = useMemo(() => {
     return {
-      queryParams: centersUIContext.queryParams,
-      setQueryParams: centersUIContext.setQueryParams,
+      queryParams: moduleUIContext.queryParams,
+      setQueryParams: moduleUIContext.setQueryParams,
     };
-  }, [centersUIContext]);
+  }, [moduleUIContext]);
 
   // queryParams, setQueryParams,
   const applyFilter = (values) => {
-    const newQueryParams = prepareFilter(centersUIProps.queryParams, values);
-    if (!isEqual(newQueryParams, centersUIProps.queryParams)) {
+    const newQueryParams = prepareFilter(moduleUIProps.queryParams, values);
+    if (!isEqual(newQueryParams, moduleUIProps.queryParams)) {
       newQueryParams.pageNumber = 1;
       // update list by queryParams
-      centersUIProps.setQueryParams(newQueryParams);
+      moduleUIProps.setQueryParams(newQueryParams);
     }
   };
 

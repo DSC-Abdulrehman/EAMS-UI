@@ -7,29 +7,28 @@ import {
   CardHeaderToolbar,
 } from "../../../../../../_metronic/_partials/controls";
 import { MortuaryTable } from "../mortuary-table/MortuaryTable";
-import { useCentersUIContext } from "../MortuaryUIContext";
+import { useModuleUIContext } from "../MortuaryUIContext";
 import { useSelector, shallowEqual } from "react-redux";
 import { MortuaryFilter } from "../mortuary-filter/MortuaryFilter";
 
 export function MortuaryCard() {
-  const centersUIContext = useCentersUIContext();
+  const moduleUIContext = useModuleUIContext();
 
-  const centersUIProps = useMemo(() => {
+  const moduleUIProps = useMemo(() => {
     return {
-      newCenterButtonClick: centersUIContext.newCenterButtonClick,
-      openEditCenterDialog: centersUIContext.openEditCenterDialog,
+      addNewButtonClick: moduleUIContext.addNewButtonClick,
     };
-  }, [centersUIContext]);
+  }, [moduleUIContext]);
 
   const { userAccess } = useSelector(
     (state) => ({
-      userAccess: state?.auth?.userAccess?.Centers,
+      userAccess: state?.auth?.userAccess?.IBS,
     }),
     shallowEqual
   );
 
-  const accessUser = userAccess.find(
-    (item) => item.componentName === "CreateCenter"
+  const accessUser = userAccess?.find(
+    (item) => item.componentName === "CreateMortuaryform"
   );
 
   return (
@@ -37,11 +36,11 @@ export function MortuaryCard() {
       <Card>
         <CardHeader title={<MortuaryFilter />}>
           <CardHeaderToolbar>
-            {accessUser ? (
+            {accessUser?.isAccess ? (
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={centersUIProps.newCenterButtonClick}
+                onClick={moduleUIProps.addNewButtonClick}
               >
                 Add New Info
               </button>

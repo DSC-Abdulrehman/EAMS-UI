@@ -1,20 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Modal } from "react-bootstrap";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
 export function InfoEditDialogHeader({ id, isUserForRead }) {
-  //const userForEdit = false
   const [title, setTitle] = useState("");
-
-  const { actionsLoading } = useSelector(
-    (state) => ({
-      actionsLoading: state.centers.actionsLoading,
-    }),
-    shallowEqual
-  );
-
-  //console.log("actionsLoading", actionsLoading)
+  const personalInfoState = useSelector((state) => state.personalInformation);
+  const { actionsLoading } = personalInfoState;
 
   useEffect(() => {
     let _title = id ? "" : "Add New Info";
