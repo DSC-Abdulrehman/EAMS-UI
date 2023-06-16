@@ -3,12 +3,13 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+// import Fab from "@material-ui/core/Fab";
+// import AddIcon from "@material-ui/icons/Add";
+import InputMask from "react-input-mask";
 import ClearIcon from "@material-ui/icons/Clear";
 import DatePicker from "react-datepicker";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Input,
@@ -20,30 +21,29 @@ import {
   fetchAllCity,
   fetchAllCityCenters,
   fetchAllSubCenter,
-  fetchDashboardVehicles,
 } from "../../../../Dashboard/_redux/dashboardActions";
 import {
   fetchAllHospitals,
   fetchAllPoliceStations,
 } from "../../../_redux/mortuary/reduxActions";
 
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
+//const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // Validation schema
 const userEditSchema = Yup.object().shape({
   Images: Yup.string(),
   SN: Yup.string(),
   countryId: Yup.string().required("Country is required"),
   cityId: Yup.string().required("City is required"),
-  hospitalId: Yup.string(),
+  hospitalId: Yup.string().nullable(),
   statusId: Yup.string().required("status is required"),
-  dateTime: Yup.date(),
+  dateTime: Yup.date().required("Incident Date is required"),
   fullNameOfTheDeceased: Yup.string(),
   fatherNameOfTheDeceased: Yup.string(),
-  Address: Yup.string(),
-  callerCnic: Yup.string(),
-  callerName: Yup.string(),
-  callerPhNo: Yup.string(),
-  description: Yup.string(),
+  Address: Yup.string().nullable(),
+  callerCnic: Yup.string().nullable(),
+  callerName: Yup.string().nullable(),
+  callerPhNo: Yup.string().nullable(),
+  description: Yup.string().nullable(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -65,16 +65,13 @@ export function MortuaryEditForm({
   initialValue,
   onHide,
   isUserForRead,
+  isForEdit,
 }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const dashboard = useSelector((state) => state.dashboard);
   const mortuaryState = useSelector((state) => state.mortuary);
   const user = useSelector((state) => state.users);
-  const personalInformation = useSelector((state) => state.personalInformation);
-
-  const { infoForEdit } = personalInformation;
-
-  console.log("infoForEdit", infoForEdit);
 
   const [createDate, setCreateTime] = useState();
   const [mortuaryReachedTime, setMortuaryReachedTime] = useState();
@@ -86,42 +83,6 @@ export function MortuaryEditForm({
   const [status, setStatus] = useState([]);
   const [seletedImages, setSelectedImages] = useState([]);
   const [oldImages, setoldImages] = useState([]);
-
-  useEffect(() => {
-    if (infoForEdit.patientName) {
-      initialValue.fullNameOfTheDeceased = infoForEdit.patientName;
-    }
-    if (infoForEdit.dateTime) {
-      setCreateTime(new Date(infoForEdit.dateTime));
-    }
-    if (infoForEdit.callerName) {
-      initialValue.callerName = infoForEdit.callerName;
-    }
-    if (infoForEdit.callerPhNo) {
-      initialValue.callerPhNo = infoForEdit.callerPhNo;
-    }
-    if (infoForEdit.callerCnic) {
-      initialValue.callerCnic = infoForEdit.callerCnic;
-    }
-    if (infoForEdit.description) {
-      initialValue.description = infoForEdit.description;
-    }
-    if (infoForEdit.countryId) {
-      initialValue.countryId = infoForEdit.countryId;
-    }
-    if (infoForEdit.cityId) {
-      initialValue.cityId = infoForEdit.cityId;
-    }
-    if (infoForEdit.statusId) {
-      initialValue.statusId = infoForEdit.statusId;
-    }
-  }, [infoForEdit]);
-
-  useEffect(() => {
-    if (infoForEdit.ibFormImages) {
-      setSelectedImages(infoForEdit.ibFormImages);
-    }
-  }, [infoForEdit.ibFormImages]);
 
   const thumbsContainer = {
     display: "flex",
@@ -162,142 +123,67 @@ export function MortuaryEditForm({
     setoldImages((preIds) => [...preIds, id]);
   };
 
-  const thumbs =
-    seletedImages &&
-    seletedImages.map((file, index) => {
-      return (
-        <>
-          <Box component="span" m={1} key={file.name}>
-            <div style={thumb} key={file.name}>
-              <div style={thumbInner}>
-                <img src={file.url} style={img} />
-                {/* <Fab
-            size="small"
-            color="secondary"
-            aria-label="add"
-            className={classes.margin}
-          > */}
-                {!isUserForRead && (
-                  <ClearIcon
-                    className={classes.extendedIcon}
-                    onClick={() => removeImage(index, file.id)}
-                  />
-                )}
-
-                {/* </Fab> */}
-              </div>
-            </div>
-          </Box>
-        </>
-      );
-    });
-
-  const genderList = [
-    {
-      value: 1,
-      label: "male",
-    },
-    {
-      value: 2,
-      label: "Fe-Male",
-    },
-    {
-      value: 3,
-      label: "Other",
-    },
-  ];
-  const vehicleTypeoptions = [
-    {
-      value: 1,
-      label: "Edhi Vehicle",
-    },
-    {
-      value: 2,
-      label: "private",
-    },
-  ];
-
-  const allTypes = [
-    {
-      value: 1,
-      label: "RTA",
-    },
-    {
-      value: 2,
-      label: "Gun Shot",
-    },
-    {
-      value: 3,
-      label: "Blast",
-    },
-    {
-      value: 4,
-      label: "Sucide",
-    },
-    {
-      value: 5,
-      label: "Other Emergency",
-    },
-    {
-      value: 6,
-      label: "injured",
-    },
-  ];
-
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    infoForEdit.countryId && dispatch(fetchAllCity(infoForEdit.countryId));
-  }, [infoForEdit]);
-
-  // useEffect(() => {
-  //   if (infoForEdit.districtId) {
-  //     dispatch(fetchAllSubCenter(initialValue.districtId));
-  //   }
-  // }, [infoForEdit]);
-
-  useEffect(() => {
-    if (infoForEdit.cityId) {
-      dispatch(fetchAllCityCenters(infoForEdit.cityId));
-      dispatch(fetchAllHospitals({ cityId: infoForEdit.cityId }));
+    if (initialValue.mortuaryFormImages) {
+      setSelectedImages(initialValue.mortuaryFormImages);
     }
-  }, [infoForEdit.cityId]);
+  }, [initialValue, initialValue.mortuaryFormImages]);
 
   useEffect(() => {
-    if (infoForEdit.countryId) {
+    initialValue.countryId && dispatch(fetchAllCity(initialValue.countryId));
+  }, [initialValue]);
+
+  useEffect(() => {
+    if (initialValue.districtId) {
+      dispatch(fetchAllSubCenter(initialValue.districtId));
+    }
+  }, [initialValue]);
+
+  useEffect(() => {
+    if (initialValue.cityId) {
+      dispatch(fetchAllCityCenters(initialValue.cityId));
+      dispatch(fetchAllHospitals({ cityId: initialValue.cityId }));
+    }
+  }, [initialValue.cityId]);
+
+  useEffect(() => {
+    if (initialValue.countryId) {
       var seletecCOuntry =
         dashboard.allCountry &&
         dashboard.allCountry.find(
-          (item) => item.value == infoForEdit.countryId
+          (item) => item.value == initialValue.countryId
         );
       setCountry(seletecCOuntry);
     }
-  }, [infoForEdit.countryId, dashboard.allCountry]);
+  }, [initialValue.countryId]);
 
   useEffect(() => {
-    if (infoForEdit.cityId) {
+    if (initialValue.cityId) {
       var selectedCity =
         dashboard.allCity &&
-        dashboard.allCity.find((item) => item.value == infoForEdit.cityId);
+        dashboard.allCity.find((item) => item.value == initialValue.cityId);
       setCity(selectedCity);
     }
-  }, [infoForEdit.cityId, dashboard.allCity]);
+  }, [initialValue.cityId, dashboard.allCity]);
 
   useEffect(() => {
-    if (infoForEdit.statusId) {
+    if (initialValue.statusId) {
       setStatus(
-        user.userStatusTypes.find((item) => item.value === infoForEdit.statusId)
+        user.userStatusTypes &&
+          user.userStatusTypes.find(
+            (item) => item.value === initialValue.statusId
+          )
       );
     }
-  }, [infoForEdit.statusId]);
+  }, [initialValue.statusId]);
 
   useEffect(() => {
     sethospital(
       mortuaryState.hospitalList.find(
-        (item) => item.value == infoForEdit.hospitalId
+        (item) => item.value == initialValue.hospitalId
       )
     );
-  }, [infoForEdit.hospitalId, mortuaryState.hospitalList]);
+  }, [initialValue.hospitalId, mortuaryState.hospitalList]);
 
   useEffect(() => {
     if (initialValue.dateTime) {
@@ -317,11 +203,42 @@ export function MortuaryEditForm({
     }
   }, [initialValue.dischargeFromMortuaryDateTime]);
 
-  // console.log("initialValue", initialValue);
+  const thumbs =
+    seletedImages &&
+    seletedImages.map((file, index) => {
+      return (
+        <>
+          <Box component="span" m={1} key={file.name}>
+            <div style={thumb} key={file.name}>
+              <div style={thumbInner}>
+                <img src={file.url} style={img} />
+                {/* <Fab
+          size="small"
+          color="secondary"
+          aria-label="add"
+          className={classes.margin}
+        > */}
+                {!isUserForRead && (
+                  <ClearIcon
+                    className={classes.extendedIcon}
+                    onClick={() => removeImage(index, file.id)}
+                  />
+                )}
 
+                {/* </Fab> */}
+              </div>
+            </div>
+          </Box>
+        </>
+      );
+    });
+
+  //console.log("seletedImages", seletedImages);
   const enableLoading = () => {
     setLoading(true);
   };
+
+  //console.log("final initial Value", initialValue);
 
   return (
     <>
@@ -360,7 +277,7 @@ export function MortuaryEditForm({
                     <div className="col-12 col-md-3 mb-5">
                       <SearchSelect
                         name="countryId"
-                        label="Country"
+                        label="Country*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           console.log("Onchnage vlue", e.value);
@@ -377,7 +294,7 @@ export function MortuaryEditForm({
                     <div className="col-12 col-md-3 mb-5">
                       <SearchSelect
                         name="cityId"
-                        label="City"
+                        label="City*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           dispatch(fetchAllCityCenters(e.value));
@@ -410,7 +327,7 @@ export function MortuaryEditForm({
                     <div className="col-12 col-md-3 mb-5">
                       <SearchSelect
                         name="statusId"
-                        label="Status"
+                        label="Status*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           setFieldValue("statusId", e.value);
@@ -423,7 +340,7 @@ export function MortuaryEditForm({
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">
-                      <label>Incident Date</label>
+                      <label>Incident Date*</label>
                       <DatePicker
                         className="form-control"
                         selected={createDate}
@@ -438,6 +355,9 @@ export function MortuaryEditForm({
                         showTimeInput
                         name="dateTime"
                       />
+                      {errors.dateTime && touched.dateTime ? (
+                        <div className="form-feedBack">{errors.dateTime}</div>
+                      ) : null}
                     </div>
                     <div className="col-12 col-md-3 mb-5">
                       <label>Mortuary Reached Time</label>
@@ -528,11 +448,11 @@ export function MortuaryEditForm({
                       />
                     </div>
 
-                    {/* {infoForEdit.ibFormImages && (
+                    {initialValue?.mortuaryFormImages && (
                       <div className="col-12">
                         <aside style={thumbsContainer}>{thumbs}</aside>
                       </div>
-                    )} */}
+                    )}
 
                     {!isUserForRead && (
                       <div className="col-12">
@@ -548,36 +468,40 @@ export function MortuaryEditForm({
               </Form>
             </Modal.Body>
             <Modal.Footer>
-              {!isUserForRead ? (
-                <button
-                  type="button"
-                  onClick={onHide}
-                  className="btn btn-light btn-elevate"
-                >
-                  Cancel
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={onHide}
-                  className="btn btn-primary btn-elevate"
-                >
-                  Ok
-                </button>
-              )}
-
+              <button
+                type="button"
+                onClick={onHide}
+                className="btn btn-light btn-elevate"
+              >
+                Cancel
+              </button>
               <> </>
-              {!isUserForRead && (
-                <button
-                  type="submit"
-                  onClick={() => handleSubmit()}
-                  className="btn btn-primary btn-elevate"
-                >
-                  Save
-                  {loading && (
-                    <span className="ml-3 mr-3 spinner spinner-white"></span>
-                  )}
-                </button>
+              {isForEdit ? (
+                <>
+                  <button
+                    type="submit"
+                    onClick={() => handleSubmit()}
+                    className="btn btn-primary btn-elevate"
+                  >
+                    Update
+                    {loading && (
+                      <span className="ml-3 mr-3 spinner spinner-white"></span>
+                    )}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="submit"
+                    onClick={() => handleSubmit()}
+                    className="btn btn-primary btn-elevate"
+                  >
+                    Save
+                    {loading && (
+                      <span className="ml-3 mr-3 spinner spinner-white"></span>
+                    )}
+                  </button>
+                </>
               )}
             </Modal.Footer>
           </>

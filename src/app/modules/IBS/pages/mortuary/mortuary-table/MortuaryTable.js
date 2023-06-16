@@ -29,6 +29,7 @@ export function MortuaryTable() {
       openActiveDialog: moduleUIContext.openActiveDialog,
       openReadDialog: moduleUIContext.openReadDialog,
       openAddCoffinDialog: moduleUIContext.openAddCoffinDialog,
+      openEditCoffinDialog: moduleUIContext.openEditCoffinDialog,
       queryParms: moduleUIContext.queryParams,
       setQueryParams: moduleUIContext.setQueryParams,
     };
@@ -145,6 +146,7 @@ export function MortuaryTable() {
         openActiveDialog: moduleUIProps.openActiveDialog,
         openReadDialog: moduleUIProps.openReadDialog,
         openAddCoffinDialog: moduleUIProps.openAddCoffinDialog,
+        openEditCoffinDialog: moduleUIProps.openEditCoffinDialog,
         isAccessForEdit: isAccessForEdit?.isAccess,
         isAccessForDelete: isAccessForDelete?.isAccess,
         isAccessForCoffin: isAccessForCoffin?.isAccess,

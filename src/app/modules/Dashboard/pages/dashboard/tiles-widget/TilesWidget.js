@@ -1,21 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import objectPath from "object-path";
 import { Dropdown } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
-import {
-  DropdownCustomToggler,
-  DropdownMenu4,
-  DropdownMenu3,
-} from "../../../../../../_metronic/_partials/dropdowns";
-
-import Modal from "react-bootstrap/Modal";
-import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+//import { useHistory } from "react-router-dom";
+import { DropdownCustomToggler } from "../../../../../../_metronic/_partials/dropdowns";
 import * as actions from "../../../_redux/dashboardActions";
 import { useDispatch } from "react-redux";
-import { getDate, getTime, getCurrentTime } from "../../../../../utils/common";
-import moment from "moment";
+import { getTime } from "../../../../../utils/common";
+//import moment from "moment";
 import { useCentersUIContext } from "../DashboardUIContext";
 
 export function TilesWidget({
@@ -37,14 +29,8 @@ export function TilesWidget({
   diable,
   rowSelection,
 }) {
+  const dispatch = useDispatch();
   const centersUIContext = useCentersUIContext();
-  const history = useHistory();
-  const [open, setOpen] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  //console.log("selectedCenter", selectedCenter);
-  //console.log("centersUIContext", centersUIContext);
-
   const centersUIProps = useMemo(() => {
     return {
       queryParams: centersUIContext.queryParams,
@@ -53,17 +39,6 @@ export function TilesWidget({
     };
   }, [centersUIContext]);
 
-  // const triplogsUIContext = useLastTripsUIContext();
-  // const triplogsUIProps = useMemo(() => {
-  //   return {
-  //     queryParams: triplogsUIContext.queryParams,
-  //     setQueryParams: triplogsUIContext.setQueryParams,
-  //     setQueryParamsBase: triplogsUIContext.setQueryParamsBase,
-  //     openEditUserDialog: triplogsUIContext.openLastTripsDialog,
-  //   };
-  // }, [triplogsUIContext]);
-
-  const dispatch = useDispatch();
   const timerFormater = (cellContent) => {
     return (
       <>
@@ -84,14 +59,7 @@ export function TilesWidget({
       </>
     );
   };
-  const getMinutes = (start) => {
-    var now = moment(new Date());
-    return now.diff(start, "minutes");
-  };
-  const handleClose = () => {
-    history.push(`/dashboard`);
-    setOpen(false);
-  };
+
   const actionFormater = (cell, row) => {
     const openReadLastTripsDialog = centersUIProps.openReadLastTripsDialog;
 
@@ -126,9 +94,6 @@ export function TilesWidget({
       };
 
       const payload = {};
-      console.log("seletedCity", seletedCity);
-      console.log("selectedCenter", selectedCenter);
-      console.log("selectedSubCenter", selectedSubCenter);
       if (seletedCity) {
         payload.cityId = seletedCity.value;
       }
@@ -145,25 +110,25 @@ export function TilesWidget({
       });
     };
 
-    const handleClickLastTripsDialoge = () => {
-      history.push(`/dashboard/read-vehicle-trip-logs/${row.vehicleid}/edit`);
+    // const handleClickLastTripsDialoge = () => {
+    //   history.push(`/dashboard/read-vehicle-trip-logs/${row.vehicleid}/edit`);
 
-      const body = {
-        vehicleId: row.vehicleid,
-        filter: {
-          searchQuery: "",
-        },
-        sortOrder: "name",
-        pageSize: 20,
-        pageNumber: 1,
-      };
-      dispatch(actions.getLastTrips(body));
-      setOpen(true);
-    };
+    //   const body = {
+    //     vehicleId: row.vehicleid,
+    //     filter: {
+    //       searchQuery: "",
+    //     },
+    //     sortOrder: "name",
+    //     pageSize: 20,
+    //     pageNumber: 1,
+    //   };
+    //   dispatch(actions.getLastTrips(body));
+    //   setOpen(true);
+    // };
 
     return (
       <>
-        {heading != "On Duty" && (
+        {heading !== "On Duty" && (
           <Dropdown className="dropdown-inline" alignRight>
             <Dropdown.Toggle
               className=" btn-clean btn-hover-light-primary btn-sm btn-icon"
@@ -185,14 +150,6 @@ export function TilesWidget({
                         <span className="navi-text">Off Duty</span>
                       </a>
                     </li>
-                    {/* <li className="navi-item">
-                      <a href="#" className="navi-link">
-                        <span className="navi-icon">
-                          <i className="flaticon2-rocket-1"></i>
-                        </span>
-                        <span className="navi-text">Update</span>
-                      </a>
-                    </li> */}
                     <li
                       className="navi-item"
                       onClick={() => openReadLastTripsDialog(row.vehicleid)}
@@ -223,14 +180,7 @@ export function TilesWidget({
     );
   };
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setCurrentTime(new Date());
-  //   }, 10000);
-  //   return () => clearInterval(intervalId);
-  // }, []);
-
-  if (heading == "Stand By") {
+  if (heading === "Stand By") {
     var columns = [
       {
         dataField: "regNo",
@@ -241,7 +191,7 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
           return { verticalAlign: "middle" };
@@ -256,7 +206,7 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
 
@@ -273,7 +223,7 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
 
@@ -290,7 +240,7 @@ export function TilesWidget({
       //   // },
       //   style: (cell, row, rowIndex, colIndex) => {
       //     const { timestatus } = row;
-      //     if (row.status != "offDuty" && timestatus === "late") {
+      //     if (row.status !== "offDuty" && timestatus === "late") {
       //       return { color: "red", verticalAlign: "middle" };
       //     }
 
@@ -307,13 +257,13 @@ export function TilesWidget({
       //   // },
       //   style: (cell, row, rowIndex, colIndex) => {
       //     const { timestatus } = row;
-      //     if (row.status != "offDuty" && timestatus === "late") {
+      //     if (row.status !== "offDuty" && timestatus === "late") {
       //       return { color: "red", verticalAlign: "middle" };
       //     }
 
       //     // Old function to update countinue
       //     // var minutes = getMinutes(row.start_time);
-      //     // if (row.status != "offDuty" && minutes > 5) {
+      //     // if (row.status !== "offDuty" && minutes > 5) {
       //     //   return { color: "red", verticalAlign: "middle" };
       //     // }
       //     return { verticalAlign: "middle" };
@@ -345,7 +295,7 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
           return { verticalAlign: "middle" };
@@ -360,7 +310,7 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
 
@@ -377,7 +327,7 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
 
@@ -394,7 +344,7 @@ export function TilesWidget({
       //   // },
       //   style: (cell, row, rowIndex, colIndex) => {
       //     const { timestatus } = row;
-      //     if (row.status != "offDuty" && timestatus === "late") {
+      //     if (row.status !== "offDuty" && timestatus === "late") {
       //       return { color: "red", verticalAlign: "middle" };
       //     }
 
@@ -428,7 +378,7 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
           return { verticalAlign: "middle" };
@@ -443,15 +393,9 @@ export function TilesWidget({
         // },
         style: (cell, row, rowIndex, colIndex) => {
           const { timestatus } = row;
-          if (row.status != "offDuty" && timestatus === "late") {
+          if (row.status !== "offDuty" && timestatus === "late") {
             return { color: "red", verticalAlign: "middle" };
           }
-
-          // Old function to update countinue
-          // var minutes = getMinutes(row.start_time);
-          // if (row.status != "offDuty" && minutes > 5) {
-          //   return { color: "red", verticalAlign: "middle" };
-          // }
           return { verticalAlign: "middle" };
         },
         formatter: timerFormater,

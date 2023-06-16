@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Route } from "react-router-dom";
 import { ItemUIProvider } from "./ItemUIContext";
 import { ItemEditDialog } from "./item-edit-dialog/ItemEditDialog";

@@ -1,17 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
-import objectPath from "object-path";
 import { Dropdown } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import {
-  DropdownCustomToggler,
-  DropdownMenu4,
-  DropdownMenu3,
-} from "../../dropdowns";
-
-import Modal from "react-bootstrap/Modal";
-import cellEditFactory, { Type } from "react-bootstrap-table2-editor";
+import { DropdownCustomToggler } from "../../dropdowns";
 import {
   updateVehicelStatus,
   fetchDashboardVehicles,

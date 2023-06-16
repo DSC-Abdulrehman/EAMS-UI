@@ -70,6 +70,7 @@ export function PersonalInformationUIProvider({ centersUIEvents, children }) {
     openActiveDialog: centersUIEvents.openActiveDialog,
     openReadDialog: centersUIEvents.openReadDialog,
     openMortuaryDialog: centersUIEvents.openMortuaryDialog,
+    openMortuaryEditDialog: centersUIEvents.openMortuaryEditDialog,
     makePDFreport: centersUIEvents.makePDFreport,
   };
   return (

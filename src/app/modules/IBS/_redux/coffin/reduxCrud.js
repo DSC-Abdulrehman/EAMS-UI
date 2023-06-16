@@ -20,16 +20,31 @@ export function getAllPoliceStations(body) {
 
 export async function createRequest(body) {
   if (body.dateTime) {
-    body.dateTime = moment(body.dateTime).format("DD.MM.YYYY HH:mm");
+    try {
+      if (moment(body.dateTime, moment.ISO_8601).isValid()) {
+        body.dateTime = moment.utc(body.dateTime).format("DD.MM.YYYY HH:mm");
+        //formData.append("dateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
   }
   if (body.dateTimeofDeath) {
-    body.dateTimeofDeath = moment(body.dateTimeofDeath).format(
-      "DD.MM.YYYY HH:mm"
-    );
+    try {
+      if (moment(body.dateTimeofDeath, moment.ISO_8601).isValid()) {
+        body.dateTimeofDeath = moment
+          .utc(body.dateTimeofDeath)
+          .format("DD.MM.YYYY HH:mm");
+        // formData.append("dateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
   }
-
-  // const updatedObj = { ...body, ...body.dateTime };
-
   return await axios.post(`${USERS_URL}/ibs/create-coffinform`, body);
 }
 
@@ -51,12 +66,30 @@ export const getById = async (id) => {
 
 export async function updateRequest(body) {
   if (body.dateTime) {
-    body.dateTime = moment(body.dateTime).format("DD.MM.YYYY HH:mm");
+    try {
+      if (moment(body.dateTime, moment.ISO_8601).isValid()) {
+        body.dateTime = moment.utc(body.dateTime).format("DD.MM.YYYY HH:mm");
+        //formData.append("dateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
   }
   if (body.dateTimeofDeath) {
-    body.dateTimeofDeath = moment(body.dateTimeofDeath).format(
-      "DD.MM.YYYY HH:mm"
-    );
+    try {
+      if (moment(body.dateTimeofDeath, moment.ISO_8601).isValid()) {
+        body.dateTimeofDeath = moment
+          .utc(body.dateTimeofDeath)
+          .format("DD.MM.YYYY HH:mm");
+        // formData.append("dateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
   }
   return axios.patch(`${USERS_URL}/ibs/update-coffinform`, body);
 }

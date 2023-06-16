@@ -10,24 +10,25 @@ import { MortuaryCard } from "./mortuary-card/MortuaryCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as actions from "../../_redux/mortuary/reduxActions";
+import * as coffinAction from "../../_redux/coffin/reduxActions";
 import { fetchUserStatusTypes } from "../../../UserMangement/_redux/usersActions";
-import { ImageSliderDialog } from "./image-slider-dialog/ImageSliderDialog";
 
 export function MortuaryPage({ history }) {
   const dispatch = useDispatch();
-  dispatch(
-    fetchUserStatusTypes({
-      filter: {
-        mf: true,
-      },
-    })
-  );
+
   const moduleUIEvents = {
     addNewButtonClick: () => {
       history.push("/ibs/read-all-mortuaryforms/new");
     },
     openEditDialog: (ibfId, id) => {
       dispatch(actions.fetchInfoById(id));
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            mf: true,
+          },
+        })
+      );
       history.push(`/ibs/read-all-mortuaryforms/${id}/edit`);
     },
     openDeleteDialog: (id, status) => {
@@ -38,14 +39,37 @@ export function MortuaryPage({ history }) {
     },
     openReadDialog: (id, isUserRead) => {
       dispatch(actions.fetchInfoById(id));
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            mf: true,
+          },
+        })
+      );
       history.push(`/ibs/read-all-mortuaryforms/${id}/read`);
     },
     openAddCoffinDialog: (ibfId, mfId) => {
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            cf: true,
+          },
+        })
+      );
       dispatch(actions.fetchInfoById(mfId));
+
       history.push(`/ibs/read-all-mortuaryforms/${ibfId}/${mfId}/add-coffin`);
     },
-    openImageSlider: () => {
-      history.push(`/ibs/read-all-mortuaryforms/slider`);
+    openEditCoffinDialog: (cfId) => {
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            cf: true,
+          },
+        })
+      );
+      dispatch(coffinAction.fetchInfoById(cfId));
+      history.push(`/ibs/read-all-mortuaryforms/${cfId}/edit-coffin`);
     },
   };
   return (
@@ -116,11 +140,17 @@ export function MortuaryPage({ history }) {
           );
         }}
       </Route>
-      <Route path="/ibs/read-all-mortuaryforms/slider">
+      <Route path="/ibs/read-all-mortuaryforms/:cfId/edit-coffin">
         {({ history, match }) => {
-          return <ImageSliderDialog show={match != null} onHide={() => {}} />;
+          return (
+            <CoffinEditDialog
+              show={match != null}
+              onHide={() => history.push("/ibs/read-all-mortuaryforms")}
+            />
+          );
         }}
       </Route>
+
       <MortuaryCard />
       <ToastContainer
         position="top-right"

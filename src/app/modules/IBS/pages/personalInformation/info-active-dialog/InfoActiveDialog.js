@@ -65,7 +65,7 @@ export function InfoActiveDialog({ id, show, onHide }) {
       {/*end::Loading*/}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          Active Record
+          Activate Record
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

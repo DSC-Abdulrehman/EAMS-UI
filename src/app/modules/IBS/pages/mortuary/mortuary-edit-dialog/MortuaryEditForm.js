@@ -8,7 +8,6 @@ import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
 import DatePicker from "react-datepicker";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useModuleUIContext } from "../MortuaryUIContext";
 import {
@@ -27,6 +26,7 @@ import {
   fetchAllHospitals,
   fetchAllPoliceStations,
 } from "../../../_redux/mortuary/reduxActions";
+import { InfoImageSlider } from "../../../../../../_metronic/_partials/widgets/info-image-slider/InfoImageSlider";
 
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // Validation schema
@@ -73,15 +73,15 @@ export function MortuaryEditForm({
   const user = useSelector((state) => state.users);
 
   const MortuaryUIContext = useModuleUIContext();
-  const moduleUIProps = useMemo(() => {
-    return {
-      openImageSlider: MortuaryUIContext.openImageSlider,
-    };
-  }, [MortuaryUIContext]);
-  const { openImageSlider } = MortuaryUIContext.openImageSlider;
+  // const moduleUIProps = useMemo(() => {
+  //   return {
+  //     openImageSlider: MortuaryUIContext.openImageSlider,
+  //   };
+  // }, [MortuaryUIContext]);
+  // const { openImageSlider } = MortuaryUIContext.openImageSlider;
 
   //console.log("MortuaryUIContext", MortuaryUIContext);
-
+  const [show, setShow] = useState(false);
   const [showSlider, setShowSlider] = useState(false);
   const [createDate, setCreateTime] = useState(null);
   const [mortuaryReachedTime, setMortuaryReachedTime] = useState(null);
@@ -139,10 +139,6 @@ export function MortuaryEditForm({
     setoldImages((preIds) => [...preIds, id]);
   };
 
-  const showImageSlider = () => {
-    // setShowSlider(true);
-  };
-
   const thumbs =
     seletedImages &&
     seletedImages.map((file, index) => {
@@ -152,11 +148,11 @@ export function MortuaryEditForm({
             component="span"
             m={1}
             key={file.name}
-            onClick={() => moduleUIProps.openImageSlider()}
+            //onClick={() => moduleUIProps.openImageSlider()}
           >
             <div style={thumb} key={file.name}>
               <div style={thumbInner}>
-                <img src={file.url} style={img} />
+                <img src={file.url} style={img} onClick={() => setShow(true)} />
                 {/* <Fab
             size="small"
             color="secondary"
@@ -178,56 +174,6 @@ export function MortuaryEditForm({
       );
     });
 
-  const genderList = [
-    {
-      value: 1,
-      label: "male",
-    },
-    {
-      value: 2,
-      label: "Fe-Male",
-    },
-    {
-      value: 3,
-      label: "Other",
-    },
-  ];
-  const vehicleTypeoptions = [
-    {
-      value: 1,
-      label: "Edhi Vehicle",
-    },
-    {
-      value: 2,
-      label: "private",
-    },
-  ];
-  const allTypes = [
-    {
-      value: 1,
-      label: "RTA",
-    },
-    {
-      value: 2,
-      label: "Gun Shot",
-    },
-    {
-      value: 3,
-      label: "Blast",
-    },
-    {
-      value: 4,
-      label: "Sucide",
-    },
-    {
-      value: 5,
-      label: "Other Emergency",
-    },
-    {
-      value: 6,
-      label: "injured",
-    },
-  ];
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -334,6 +280,11 @@ export function MortuaryEditForm({
         }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
+              <InfoImageSlider
+                images={seletedImages}
+                show={show}
+                setShow={setShow}
+              />
               <Form className="form form-label-right">
                 <fieldset disabled={isUserForRead}>
                   <div className="form-group row">

@@ -32,9 +32,9 @@ const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{
 const formSchema = Yup.object().shape({
   SN: Yup.number(),
   countryId: Yup.number().required("Country is required"),
-  cityId: Yup.number(),
+  cityId: Yup.number().required("City is required"),
   statusId: Yup.number().required("status is required"),
-  dateTime: Yup.date().required("Time is required"),
+  dateTime: Yup.date().required("incident date is required"),
   dateTimeofDeath: Yup.date(),
   fullNameOfTheDeceased: Yup.string().required("Name of deceased required"),
   fatherNameOfTheDeceased: Yup.string().required(
@@ -84,9 +84,9 @@ export function CoffinEditForm({
   const mortuaryState = useSelector((state) => state.mortuary);
   const user = useSelector((state) => state.users);
 
-  const [createDate, setCreateTime] = useState(new Date());
-  const [deathTime, setDateTimeOfDeath] = useState(new Date());
-  const [dischargedTime, setDischargedTime] = useState(new Date());
+  const [createDate, setCreateTime] = useState(null);
+  const [deathTime, setDateTimeOfDeath] = useState(null);
+  const [dischargedTime, setDischargedTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState([]);
   const [city, setCity] = useState([]);
@@ -101,6 +101,7 @@ export function CoffinEditForm({
     }
   }, [initialValue.mortuaryFormImages]);
 
+  //console.log("initialValue", initialValue);
   const thumbsContainer = {
     display: "flex",
     flexDirection: "row",
@@ -283,8 +284,6 @@ export function CoffinEditForm({
     }
   }, [initialValue.dateTime]);
 
-  console.log("initialValue", initialValue);
-
   const enableLoading = () => {
     setLoading(true);
   };
@@ -327,7 +326,7 @@ export function CoffinEditForm({
                     <div className="col-12 col-md-3 mb-5">
                       <SearchSelect
                         name="countryId"
-                        label="Country"
+                        label="Country*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           dispatch(fetchAllCity(e.value));
@@ -343,7 +342,7 @@ export function CoffinEditForm({
                     <div className="col-12 col-md-3 mb-5">
                       <SearchSelect
                         name="cityId"
-                        label="City"
+                        label="City*"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           dispatch(fetchAllCityCenters(e.value));
@@ -359,7 +358,7 @@ export function CoffinEditForm({
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">
-                      <label>Incident Date</label>
+                      <label>Incident Date*</label>
                       <DatePicker
                         className="form-control"
                         selected={createDate}
@@ -374,13 +373,16 @@ export function CoffinEditForm({
                         showTimeInput
                         name="dateTime"
                       />
+                      {errors.dateTime && touched.dateTime ? (
+                        <div className="form-feedBack">{errors.dateTime}</div>
+                      ) : null}
                     </div>
                     <div className="col-12 col-md-3 mb-5">
                       <Field
                         name="fullNameOfTheDeceased"
                         component={Input}
                         placeholder=""
-                        label="Deceased Name"
+                        label="Deceased Name*"
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">
@@ -388,7 +390,7 @@ export function CoffinEditForm({
                         name="fatherNameOfTheDeceased"
                         component={Input}
                         placeholder=""
-                        label="Father Name"
+                        label="Father Name*"
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">
@@ -429,7 +431,7 @@ export function CoffinEditForm({
                         component={Input}
                         placeholder=""
                         type="Number"
-                        label="Age"
+                        label="Age*"
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">

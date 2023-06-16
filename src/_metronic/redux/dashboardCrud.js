@@ -1,5 +1,4 @@
 import axios from "axios";
-import { async } from "q";
 export const USERS_URL = process.env.REACT_APP_API_URL;
 
 export const getAllCeters = async () => {

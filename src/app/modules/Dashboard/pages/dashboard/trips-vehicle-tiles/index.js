@@ -75,9 +75,6 @@ export function DashboardTiles({ history }) {
   //console.log("dashboard.allCity", dashboard);
   useEffect(() => {
     if (dashboard.allCity) {
-      console.log(
-        "This useEffect called first time of page load and when Dashboard.all City will chnage"
-      );
       const getSeletedCity =
         dashboard.allCity &&
         dashboard.allCity.find((item) => {

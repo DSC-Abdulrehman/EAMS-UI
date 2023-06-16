@@ -60,28 +60,11 @@ export function InfoEditDialog({ show, onHide, userForRead }) {
     }
   }, [id, infoForEdit]);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     dispatch(
-  //       actions.fetchVehicles({
-  //         ...infoUIProps.secondQueryParams,
-  //         centerId: id,
-  //       })
-  //     );
-  //   }
-  // }, [id, infoUIProps.secondQueryParams]);
-
-  // console.log("initialValue", initialValue);
-
   const saveInfo = (info) => {
     if (!id) {
-      dispatch(actions.createInfo(info)).then((res) => {
-        onHide();
-      });
+      dispatch(actions.createInfo(info, onHide));
     } else {
-      dispatch(actions.updateInfo(info)).then((res) => {
-        onHide();
-      });
+      dispatch(actions.updateInfo(info, onHide));
     }
   };
 

@@ -6,7 +6,6 @@ import paginationFactory, {
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/usersActions";
 import {
-  getSelectRow,
   getHandlerTableChange,
   NoRecordsFoundMessage,
   PleaseWaitMessage,
@@ -39,7 +38,7 @@ export function UsersTable() {
   const { currentState, userAccess } = useSelector(
     (state) => ({
       currentState: state.users,
-      userAccess: state.auth.userAccess.Users,
+      userAccess: state.auth.userAccess?.Users,
     }),
     shallowEqual
   );
@@ -53,11 +52,11 @@ export function UsersTable() {
     dispatch(actions.fetchUsers(usersUIProps.queryParams));
   }, [usersUIProps.queryParams, dispatch, totalCount]);
 
-  const isAccessForEdit = userAccess.find(
+  const isAccessForEdit = userAccess?.find(
     (item) => item.componentName === "UpdateUser"
   );
 
-  const isAccessForDelete = userAccess.find(
+  const isAccessForDelete = userAccess?.find(
     (item) => item.componentName === "DeleteUser"
   );
   // Table columns
@@ -77,18 +76,12 @@ export function UsersTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "130px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
-    // {
-    //   dataField: "lastName",
-    //   text: "Last Name",
-    //   sort: false,
-    //   sortCaret: sortCaret,
-    //   headerSortingClasses,
-    //   style: {
-    //     minWidth: "130px",
-    //   },
-    // },
     {
       dataField: "email",
       text: "Email",
@@ -96,7 +89,11 @@ export function UsersTable() {
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
-        minWidth: "150px",
+        minWidth: "130px",
+        maxWidth: "130px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -135,6 +132,10 @@ export function UsersTable() {
       sortCaret: sortCaret,
       style: {
         minWidth: "130px",
+        maxWidth: "130px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -144,6 +145,10 @@ export function UsersTable() {
       sortCaret: sortCaret,
       style: {
         minWidth: "130px",
+        maxWidth: "130px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {

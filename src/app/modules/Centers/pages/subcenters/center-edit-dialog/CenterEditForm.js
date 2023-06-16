@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import { Input } from "../../../../../../_metronic/_partials/controls";
 import { useSelector, useDispatch } from "react-redux";
 import { CentersVehiclesTable } from "../centers-vehicles-table/CentersVehiclesTable";
-import { SearchAbleSelect } from "./SearchAbleSelect";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 
 const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
@@ -36,39 +35,12 @@ export function CenterEditForm({
   vehiclesForCenter,
   totalCount,
 }) {
-  // const [country, setCountry] = useState();
-  // const [city, setCity] = useState();
-  const dispatch = useDispatch();
-  const { id } = useParams();
+  const { dashboard } = useSelector((state) => state);
   const [mainCenter, setMainCenter] = useState([]);
-  const mainCenterDropdown = useSelector((item) => item.dashboard?.allCenters);
-  const [state, selectedVal] = useState([]);
   const [loading, setLoading] = useState(false);
   const enableLoading = () => {
     setLoading(true);
   };
-
-  // if (id) {
-  //   console.log("Id UseEffctr call", id);
-  //   selectedVal(
-  //     mainCenterDropdown &&
-  //       mainCenterDropdown.find((item) => item.value === center.centerId)
-  //   );
-  // }
-  // useEffect(() => {
-  //   const getDefaultValue = mainCenterDropdown.filter((item) => {
-  //     console.log("item", item);
-  //   });
-  //   console.log("UseEffect call", getDefaultValue);
-  //   // selectedVal(mainCenterDropdown.find((item) => item.value === center.centerId)
-  // }, [id]);
-  const onChangeSelectedOption = (e) => {
-    console.log("e", e);
-    selectedVal({ selectedVal: e.value });
-    //this.setState({ selectedVal: e.value });
-  };
-
-  const { dashboard } = useSelector((state) => state);
 
   useEffect(() => {
     setMainCenter(
@@ -78,8 +50,6 @@ export function CenterEditForm({
         })
     );
   }, [center, dashboard.allCenters]);
-  //console.log("state", state);
-  // console.log("mainCenterDropdown", mainCenterDropdown);
 
   return (
     <>
@@ -117,24 +87,6 @@ export function CenterEditForm({
                         }}
                         value={mainCenter}
                       />
-                      {/* <SearchAbleSelect
-                        name="centerId"
-                        label="Main Center*"
-                        onBlur={() => {
-                          handleBlur({ target: { name: "centerId" } });
-                        }}
-                        //onChange={onChangeSelectedOption}
-                        onChange={(option) => {
-                          //console.log("ON CHANGE option,", option);
-                          setFieldValue("centerId", option);
-                          //setFieldValue(field.name, option.value);
-                        }}
-                        value={center.centerId}
-                        error={errors.centerId}
-                        touched={touched.centerId}
-                        options={mainCenterDropdown}
-                        // defalutValue={state}
-                      /> */}
                     </div>
 
                     <div className="col-12 col-md-4 mb-5">
@@ -153,31 +105,6 @@ export function CenterEditForm({
                         label="Phone No*"
                       />
                     </div>
-                    {/* <div className="col-12 col-md-4 mb-5">
-                      <Field
-                        name="location"
-                        component={Input}
-                        placeholder="Location"
-                        label="Location*"
-                      />
-                    </div> */}
-
-                    {/* <div className="col-12 col-md-4 mb-5">
-                      <Field
-                        name="longitude"
-                        component={Input}
-                        placeholder="Longitude"
-                        label="Longitude*"
-                      />
-                    </div>
-                    <div className="col-12 col-md-4 mb-5">
-                      <Field
-                        name="latitude"
-                        component={Input}
-                        placeholder="Latitude"
-                        label="Latitude*"
-                      />
-                    </div> */}
                   </div>
                 </fieldset>
               </Form>

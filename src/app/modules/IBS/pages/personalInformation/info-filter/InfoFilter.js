@@ -84,6 +84,7 @@ export function InfoFilter({ listLoading }) {
     if (e != null) {
       setLoading(true);
       const data = await fetchData(getYear);
+      console.log("data", data);
       const table = {
         headerRow: [
           "Name",
@@ -125,17 +126,15 @@ export function InfoFilter({ listLoading }) {
           table.body.push(row);
         });
 
-      // console.log("table body", table.body);
-
       const documentDefinition = {
         content: [
           {
             alignment: "justify",
             columns: [
               {
-                width: 70,
+                width: 100,
                 image: await getBase64ImageFromURL(
-                  `${toAbsoluteUrl("/media/logos/abdul-star-edhi.jpg")}`
+                  `${toAbsoluteUrl("/media/logos/abdul-start-edhi (1).png")}`
                 ),
               },
               {
@@ -147,9 +146,9 @@ export function InfoFilter({ listLoading }) {
                 style: "header",
               },
               {
-                width: 110,
+                width: 100,
                 image: await getBase64ImageFromURL(
-                  `${toAbsoluteUrl("/media/logos/logo-letter-1.png")}`
+                  `${toAbsoluteUrl("/media/logos/abdul-start-edhi (2).png")}`
                 ),
               },
             ],
@@ -177,7 +176,12 @@ export function InfoFilter({ listLoading }) {
 
       setLoading(false);
 
-      pdfMake.createPdf(documentDefinition).download();
+      try {
+        pdfMake.createPdf(documentDefinition).download();
+      } catch (error) {
+        // Handle the error
+        console.error(error);
+      }
     }
   }
 

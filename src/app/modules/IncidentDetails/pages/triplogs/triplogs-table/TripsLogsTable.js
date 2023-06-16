@@ -6,7 +6,6 @@ import paginationFactory, {
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/triplogs/triplogActions";
 import {
-  getSelectRow,
   getHandlerTableChange,
   NoRecordsFoundMessage,
   PleaseWaitMessage,
@@ -18,13 +17,13 @@ import * as uiHelpers from "../TripLogsUIHelpers";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useTripLogsUIContext } from "../TripLogsUIContext";
 import * as columnFormatters from "./column-formatter";
-import {
-  FormClasses,
-  Http,
-  OperationStatus,
-  RedirectURLs,
-} from "../../../../../utils/constants";
-import { getDate, listingRedirection } from "../../../../../utils/common";
+// import {
+//   FormClasses,
+//   Http,
+//   OperationStatus,
+//   RedirectURLs,
+// } from "../../../../../utils/constants";
+// import { getDate, listingRedirection } from "../../../../../utils/common";
 
 export function TripLogsTable() {
   //Users UI Context

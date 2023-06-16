@@ -14,6 +14,7 @@ export function ActionsColumnFormatter(
     openActiveDialog,
     openReadDialog,
     openMortuaryDialog,
+    openMortuaryEditDialog,
     isAccessForEdit,
     isAccessForDelete,
     isAccessForMortuary,
@@ -90,16 +91,35 @@ export function ActionsColumnFormatter(
         </OverlayTrigger>
       )}
       <></>
-      {isAccessForMortuary && row.isActive && row.statusId != 4 && (
+      {isAccessForMortuary &&
+        row.isActive &&
+        row.statusId != 4 &&
+        row.relatedMortuaryForm == null && (
+          <OverlayTrigger
+            overlay={
+              <Tooltip id="products-edit-tooltip">Open Mortuary</Tooltip>
+            }
+          >
+            <a
+              title=""
+              className="btn btn-icon btn-light btn-hover-success btn-sm mx-1"
+              onClick={() => openMortuaryDialog(row.id)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-success">M</span>
+            </a>
+          </OverlayTrigger>
+        )}
+
+      {row.relatedMortuaryForm && row.isActive && (
         <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Open Mortuary</Tooltip>}
+          overlay={<Tooltip id="products-edit-tooltip">Edit Mortuary</Tooltip>}
         >
           <a
             title=""
             className="btn btn-icon btn-light btn-hover-success btn-sm mx-1"
-            onClick={() => openMortuaryDialog(row.id)}
+            onClick={() => openMortuaryEditDialog(row?.relatedMortuaryForm?.id)}
           >
-            <span className="svg-icon svg-icon-md svg-icon-success">M</span>
+            <span className="svg-icon svg-icon-md svg-icon-success">Edit</span>
           </a>
         </OverlayTrigger>
       )}

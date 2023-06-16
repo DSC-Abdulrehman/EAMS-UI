@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
-import { useSelector } from "react-redux";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Switch } from "react-router-dom";
 import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
 import { ItemPage } from "./vehicles";
 

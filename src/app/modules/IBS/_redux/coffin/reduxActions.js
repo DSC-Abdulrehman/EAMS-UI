@@ -2,9 +2,9 @@ import * as requestFromServer from "./reduxCrud";
 import { coffinSlice, callTypes } from "./reduxSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as action from "../mortuary/reduxActions";
 
 const { actions } = coffinSlice;
-// const { roleActions } = getAllrolesSlice
 
 export const fetchAllHospitals = (body) => async (dispatch) => {
   return await requestFromServer.getAllHospital(body).then((response) => {
@@ -107,7 +107,9 @@ export const fetchStandByVehicles = (body) => async (dispatch) => {
     });
 };
 
-export const createInfo = (data) => (dispatch) => {
+export const createInfo = (data, onHide, queryParams, disabledloading) => (
+  dispatch
+) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createRequest(data)
@@ -123,15 +125,19 @@ export const createInfo = (data) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      dispatch(action.fetchIbs(queryParams));
+      onHide();
     })
     .catch((error) => {
-      error.clientMessage = "Can't create user";
       dispatch(actions.catchError({ error, callType: callTypes.action }));
-      toast.error("Something went wrong..!");
+      toast.error("Something went wrong...!");
+      disabledloading();
     });
 };
 
-export const updateInfo = (body) => (dispatch) => {
+export const updateInfo = (body, onHide, queryParams, disabledloading) => (
+  dispatch
+) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(body)
@@ -149,6 +155,9 @@ export const updateInfo = (body) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      dispatch(action.fetchIbs(queryParams));
+      disabledloading();
+      onHide();
     })
     .catch((error) => {
       // console.log("error User update", error)
@@ -163,6 +172,7 @@ export const updateInfo = (body) => (dispatch) => {
         progress: undefined,
       });
       dispatch(actions.catchError({ error, callType: callTypes.action }));
+      disabledloading();
     });
 };
 

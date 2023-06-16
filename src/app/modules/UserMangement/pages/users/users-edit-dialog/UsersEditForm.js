@@ -2,14 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import {
-  Input,
-  Select,
-  DatePickerField,
-} from "../../../../../../_metronic/_partials/controls";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import * as actions from "../../../_redux/usersActions";
-import { login } from "../../../../Auth/_redux/authCrud";
+import { Input, Select } from "../../../../../../_metronic/_partials/controls";
+import { useDispatch, useSelector } from "react-redux";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
 import {
   fetchAllCity,
@@ -24,12 +18,6 @@ const cnicRegExp = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
 // Password Regex
 const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 // Validation schema
-
-const onChangeCountry = (e) => {};
-
-const handleInputChange = () => {
-  console.log("handleInputChange");
-};
 const userEditSchema = Yup.object().shape(
   {
     countryId: Yup.string().required("Please select Country"),
@@ -75,11 +63,6 @@ const userEditSchema = Yup.object().shape(
           passwordRegex,
           "Minimum eight characters, at least one letter and one number"
         ),
-      // .test(
-      //   "name Your Test here",
-      //   "Minimum eight characters, at least one letter and one number",
-      //   (value) => !passwordRegex.test(value)
-      // )
     }),
   },
   [["password", "password"]]
@@ -97,6 +80,7 @@ export function UserEditForm({
   enableLoading,
   loading,
 }) {
+  const dispatch = useDispatch();
   // const [loading, setLoading] = useState(false);
   const [defCountry, setDefaultCountry] = useState({});
   const [defCity, setDefaultCity] = useState({});
@@ -104,53 +88,27 @@ export function UserEditForm({
   const [defSubcenter, setDefaultSubCenter] = useState({});
   const [defStatus, setDefaultStatus] = useState();
 
-  const { dashboard, users } = useSelector((state) => state);
-
-  //lconsole.log("userStatusTypes", userStatusTypes);
-  // const enableLoading = () => {
-  //   setLoading(true);
-  // };
-  // const disbaleLoading = () => {
-  //   setLoading(false);
-  // };
-  const dispatch = useDispatch();
-  const title = "UserEditForm";
-  const statusOption = [{ label: "Available", value: 1 }];
-
+  const { dashboard } = useSelector((state) => state);
   // Get User Details
   const { auth } = useSelector((state) => state);
-  // if (user.countryId) {
-  //   dispatch(fetchAllCity(user.countryId));
-  // }
-  // if (user.cityId) {
-  //   dispatch(fetchAllCityCenters(user.cityId));
-  // }
-  // user.cityId &&
-  //   setDefaultCountry(
-  //     dashboard.allCountry &&
-  //       dashboard.allCountry.filter((item) => {
-  //         return item.value === user.countryId;
-  //       })
-  //   );
-
-  // // console.log("defCity", defCity);
-
-  // setDefaultCity(
-  //   dashboard.allCity.filter((item) => item.value === user.cityId)
-  // );
-
-  //console.log("dashboard.allCountry", dashboard.allCountry);
-  useEffect(() => {
-    user.countryId && dispatch(fetchAllCity(user.countryId));
-  }, [user]);
 
   useEffect(() => {
-    user.cityId && dispatch(fetchAllCityCenters(user.cityId));
-  }, [user]);
+    if (user.countryId) {
+      dispatch(fetchAllCity(user.countryId));
+    }
+  }, [user.countryId, dispatch]);
 
   useEffect(() => {
-    user.centerId && dispatch(fetchAllSubCenter(user.centerId));
-  }, [user]);
+    if (user.cityId) {
+      dispatch(fetchAllCityCenters(user.cityId));
+    }
+  }, [user.cityId, dispatch]);
+
+  useEffect(() => {
+    if (user.centerId) {
+      dispatch(fetchAllSubCenter(user.centerId));
+    }
+  }, [user.centerId, dispatch]);
 
   useEffect(() => {
     const countryId = defCountry?.value ? defCountry.value : user.countryId;
@@ -180,20 +138,15 @@ export function UserEditForm({
       dashboard.allSubCenter &&
         dashboard.allSubCenter.filter((item) => item.value === user.subCenterId)
     );
-    // if (user && defSubcenter.length === 0) {
-    //   alert("Something wrong with subcenter");
-    // }
   }, [user.subCenterId, dashboard.allSubCenter]);
-  useEffect(() => {
-    // console.log("defCity", defCity);
 
+  useEffect(() => {
     setDefaultStatus(
       userStatusTypes &&
         userStatusTypes.find((item) => item.label === user.status.trim())
     );
   }, [user]);
 
-  //console.log("defStatus", defStatus);
   return (
     <>
       <Formik
@@ -299,44 +252,6 @@ export function UserEditForm({
                         touched={touched.subCenterId}
                         options={dashboard.allSubCenter}
                       />
-                      {/* <Select
-                        label="Center*"
-                        name="centerId"
-                        value={values.centerId}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ display: "block" }}
-                      >
-                        <option value="" label="Select Center" />
-                        {centers &&
-                          centers.map((response) => {
-                            return (
-                              <option
-                                key={response.value}
-                                value={response.value}
-                                label={response.label}
-                              />
-                            );
-                          })}
-                      </Select>
-                      {errors.centerId && touched.centerId && (
-                        <div className="invalid-text">{errors.centerId}</div>
-                      )} */}
-
-                      {/* <Select name="centerId" label="Center">
-                        <option value="" disabled selected>
-                          Please select center
-                        </option>
-                        {centers &&
-                          centers.map((item) => {
-                            return (
-                              <option key={item.value} value={item.value}>
-                                {item.label}
-                              </option>
-                            );
-                          })}
-                      </Select>
-                      <p className="inv-feedback">{errors.centerId ? errors.centerId : ''}</p> */}
                     </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Select
@@ -367,21 +282,6 @@ export function UserEditForm({
                       {errors.roleId && touched.roleId && (
                         <div className="invalid-text">{errors.roleId}</div>
                       )}
-
-                      {/* <Select name="roleId" label="Role">
-                        <option value="" disabled selected>
-                          Please select role
-                        </option>
-                        {roles &&
-                          roles.map((item) => {
-                            return (
-                              <option key={item.value} value={item.value}>
-                                {item.label}
-                              </option>
-                            );
-                          })}
-                      </Select>
-                      <p className="inv-feedback">{errors.roleId ? errors.roleId : ''}</p> */}
                     </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -390,7 +290,6 @@ export function UserEditForm({
                         placeholder="First Name"
                         label="First Name*"
                       />
-                      {/* <p className="inv-feedback">{errors.firstName ? errors.firstName : ''}</p> */}
                     </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Field
@@ -408,51 +307,22 @@ export function UserEditForm({
                         placeholder="Email"
                         label="Email*"
                       />
-                      {/* <p className="inv-feedback">{errors.email ? errors.email : ''}</p> */}
                     </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Field name="phNo" component={Input} label="Phone No*" />
-                      {/* <p className="inv-feedback">{errors.phNo ? errors.phNo : ''}</p> */}
                     </div>
                     <div className="col-12 col-md-4 mt-3">
                       <Field name="cnic" component={Input} label="CNIC*" />
-                      {/* <p className="inv-feedback">{errors.cnic ? errors.cnic : ''}</p> */}
                     </div>
                     <div className="col-12 col-md-4 mt-3">
-                      {/* <Select
-                        label="Role*"
-                        name="roleId"
-                        value={values.roleId}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ display: "block" }}
-                      >
-                        <option value="" label="Select Role" />
-                        {roles &&
-                          roles.map((response) => {
-                            return (
-                              <option
-                                key={response.value}
-                                value={response.value}
-                                label={response.label}
-                              />
-                            );
-                          })}
-                      </Select>
-                      {errors.roleId && touched.roleId && (
-                        <div className="invalid-text">{errors.roleId}</div>
-                      )} */}
-
                       <Select
                         name="status"
                         label="Status*"
                         value={defStatus && defStatus.value}
                         onChange={(e) => {
-                          // console.log("default", e.target.value);
                           setFieldValue("status", e.target.value);
                           setDefaultStatus(e.target.value);
                         }}
-                        // onBlur={handleBlur}
                         style={{ display: "block" }}
                       >
                         <option value="" label="Select Status" />
@@ -468,16 +338,6 @@ export function UserEditForm({
                       {errors.status && touched.status && (
                         <div className="invalid-text">{errors.status}</div>
                       )}
-
-                      {/* <Select name="status" label="Status">
-                        <option value="">Please select status</option>
-                        <option value="Available">Available</option>
-                      </Select>
-                      <p className="inv-feedback">
-                        {errors.status ? errors.status : ""}
-                      </p> */}
-
-                      {/* <Field name="status" component={Input} label="Status" /> */}
                     </div>
                     {!isUserForRead && user.centerId === "" ? (
                       <div className="col-12 col-md-4 mt-3">

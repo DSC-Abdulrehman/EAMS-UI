@@ -1,5 +1,4 @@
 import axios from "axios";
-import { func } from "prop-types";
 
 export const LOGIN_URL = `${process.env.REACT_APP_API_URL}/auth/login`;
 export const REGISTER_URL = "api/auth/register";

@@ -18,19 +18,6 @@ export function ActionsColumnFormatter(
   }
 ) {
   const isUserRead = false;
-
-  //console.log("isAccessForEdit, isAccessForDelete", isAccessForEdit, isAccessForDelete)
-  // const { userAccess } = useSelector(
-  //   (state) => ({
-  //     userAccess: state.auth.userAccess.Users,
-  //   }),
-  //   shallowEqual
-  // )
-
-  // // const isAccessForEdit = userAccess.find(
-  // //   (item) => item.componentName === "UpdateUser"
-  // // )
-  //console.log("row", row);
   return (
     <>
       <OverlayTrigger
@@ -48,7 +35,7 @@ export function ActionsColumnFormatter(
           </span>
         </a>
       </OverlayTrigger>
-      {isAccessForEdit && (
+      {isAccessForEdit && row.isActive && (
         <OverlayTrigger
           overlay={<Tooltip id="products-edit-tooltip">Edit Vehicle</Tooltip>}
         >

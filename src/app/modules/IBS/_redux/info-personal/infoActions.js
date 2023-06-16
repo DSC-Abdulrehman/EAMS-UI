@@ -108,7 +108,7 @@ export const fetchStandByVehicles = (body) => async (dispatch) => {
     });
 };
 
-export const createInfo = (data) => (dispatch) => {
+export const createInfo = (data, onHide) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createRequest(data)
@@ -124,6 +124,7 @@ export const createInfo = (data) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      onHide();
     })
     .catch((error) => {
       dispatch(actions.catchError({ error, callType: callTypes.action }));
@@ -132,8 +133,7 @@ export const createInfo = (data) => (dispatch) => {
     });
 };
 
-export const updateInfo = (body) => (dispatch) => {
-  console.log("body in action", body);
+export const updateInfo = (body, onHide) => (dispatch) => {
   const formData = new FormData();
   if (body.id) {
     formData.append("id", body.id);
@@ -193,7 +193,6 @@ export const updateInfo = (body) => (dispatch) => {
       console.log("Error", error);
     }
   }
-
   if (body.incidentlocationReachdateTime) {
     try {
       if (
@@ -210,7 +209,6 @@ export const updateInfo = (body) => (dispatch) => {
       console.log("Error", error);
     }
   }
-
   if (body.hospitalReachdateTime) {
     try {
       if (moment(body.hospitalReachdateTime, moment.ISO_8601).isValid()) {
@@ -225,7 +223,6 @@ export const updateInfo = (body) => (dispatch) => {
       console.log("Error", error);
     }
   }
-
   if (body.description) {
     formData.append("description", body.description);
   }
@@ -255,6 +252,7 @@ export const updateInfo = (body) => (dispatch) => {
       formData.append("oldImages", element);
     });
   }
+
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(formData)
@@ -272,6 +270,7 @@ export const updateInfo = (body) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      onHide();
     })
     .catch((error) => {
       // console.log("error User update", error)

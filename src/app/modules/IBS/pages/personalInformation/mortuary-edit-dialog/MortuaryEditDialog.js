@@ -1,10 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { MortuaryEditForm } from "./MortuaryEditForm";
 import { MortuaryEditDialogHeader } from "./MortuaryEditDialogHeader";
 import * as actions from "../../../_redux/mortuary/reduxActions";
-import { useParams, useHistory } from "react-router-dom";
+import {
+  updateInfo,
+  fetchInfoById,
+  fetchIbs,
+} from "../../../_redux/info-personal/infoActions";
+import { useParams } from "react-router-dom";
+import { useInfoUIContext } from "../PersonalUIContext";
 
 const initValue = {
   images: "",
@@ -26,20 +32,73 @@ const initValue = {
   dischargeFromMortuaryDateTime: "",
 };
 
-export function MortuaryEditDialog({ show, onHide, userForRead }) {
+export function MortuaryEditDialog({ show, onHide, userForRead, isForEdit }) {
   const dispatch = useDispatch();
-  let { ibfId } = useParams();
-  const history = useHistory();
-
   const [initialValue, setInitialValue] = useState(initValue);
+  const infoUIContext = useInfoUIContext();
+
+  const infoUIProps = useMemo(() => {
+    return {
+      queryParams: infoUIContext.queryParams,
+    };
+  }, [infoUIContext]);
+
+  let { ibfId, mfId } = useParams();
+  const { infoForEdit } = useSelector((state) => state.mortuary);
+  const PersonalInfoState = useSelector(
+    (state) => state?.personalInformation?.infoForEdit
+  );
+
+  useEffect(() => {
+    if (infoForEdit) {
+      setInitialValue(infoForEdit);
+    }
+  }, [infoForEdit]);
+
+  useEffect(() => {
+    if (ibfId && PersonalInfoState) {
+      const UpdateObj = {
+        ...PersonalInfoState,
+        fullNameOfTheDeceased: PersonalInfoState.patientName,
+      };
+      delete UpdateObj.city;
+      delete UpdateObj.country;
+      delete UpdateObj.createdAt;
+      delete UpdateObj.createdBy;
+      delete UpdateObj.district;
+      delete UpdateObj.gender;
+      delete UpdateObj.hospital;
+      delete UpdateObj.hospitalReachdateTime;
+      delete UpdateObj.ibFormImages;
+      delete UpdateObj.id;
+      delete UpdateObj.incidentTypeId;
+      delete UpdateObj.incidentlocationReachdateTime;
+      delete UpdateObj.isActive;
+      delete UpdateObj.policeStation;
+      delete UpdateObj.status;
+      delete UpdateObj.statusId;
+      delete UpdateObj.updatedAt;
+      delete UpdateObj.updatedBy;
+      delete UpdateObj.vehicle;
+      delete UpdateObj.vehicleId;
+      delete UpdateObj.vehicleRegNo;
+      delete UpdateObj.vehicleType;
+      setInitialValue(UpdateObj);
+    }
+  }, [PersonalInfoState, ibfId]);
 
   const saveCenter = (props) => {
-    if (ibfId) {
-      props.ibfId = ibfId;
+    if (mfId) {
+      dispatch(actions.updateInfo(props, onHide));
+    } else {
+      dispatch(fetchInfoById(ibfId));
+      if (ibfId) {
+        props.ibfId = ibfId;
+      }
+      // console.log("props", props);
+
+      dispatch(actions.createInfo(props, onHide, infoUIProps.queryParams));
     }
-    dispatch(actions.createInfo(props)).then((res) => {
-      onHide();
-    });
   };
 
   return (
@@ -50,13 +109,14 @@ export function MortuaryEditDialog({ show, onHide, userForRead }) {
       onHide={onHide}
       aria-labelledby="example-modal-sizes-title-lg"
     >
-      <MortuaryEditDialogHeader />
+      <MortuaryEditDialogHeader isForEdit={isForEdit} />
 
       <MortuaryEditForm
         saveCenter={saveCenter}
         initialValue={initialValue}
         onHide={onHide}
         isUserForRead={userForRead}
+        isForEdit={isForEdit}
       />
     </Modal>
   );

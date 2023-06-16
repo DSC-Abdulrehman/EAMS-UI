@@ -92,6 +92,7 @@ export function MortuaryUIProvider({ moduleUIEvents, children }) {
     openActiveDialog: moduleUIEvents.openActiveDialog,
     openReadDialog: moduleUIEvents.openReadDialog,
     openAddCoffinDialog: moduleUIEvents.openAddCoffinDialog,
+    openEditCoffinDialog: moduleUIEvents.openEditCoffinDialog,
     openImageSlider: moduleUIEvents.openImageSlider,
   };
   return (

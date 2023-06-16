@@ -2,7 +2,6 @@ import React from "react";
 import SVG from "react-inlinesvg";
 import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { ro } from "date-fns/locale";
 
 export function ActionsColumnFormatter(
   cellContent,
@@ -15,14 +14,13 @@ export function ActionsColumnFormatter(
     openActiveDialog,
     openReadDialog,
     openAddCoffinDialog,
+    openEditCoffinDialog,
     isAccessForEdit,
     isAccessForDelete,
     isAccessForCoffin,
   }
 ) {
   const isUserRead = false;
-
-  // console.log("row", row);
   return (
     <>
       <OverlayTrigger
@@ -30,7 +28,7 @@ export function ActionsColumnFormatter(
       >
         <a
           // title="Read User"
-          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+          className="btn btn-icon btn-light btn-hover-primary btn-sm mx-1"
           onClick={() => openReadDialog(row.id, isUserRead)}
         >
           <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -46,7 +44,7 @@ export function ActionsColumnFormatter(
         >
           <a
             // title="Edit Center"
-            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
+            className="btn btn-icon btn-light btn-hover-primary btn-sm mx-1"
             onClick={() => openEditDialog(row.ibfId, row.id)}
           >
             <span className="svg-icon svg-icon-md svg-icon-primary">
@@ -70,7 +68,7 @@ export function ActionsColumnFormatter(
           {row.isActive ? (
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
+              className="btn btn-icon btn-light btn-hover-danger btn-sm mx-1"
               onClick={() => openDeleteDialog(row.id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-danger">
@@ -83,7 +81,7 @@ export function ActionsColumnFormatter(
           ) : (
             <a
               title=""
-              className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
+              className="btn btn-icon btn-light btn-hover-success btn-sm mx-1"
               onClick={() => openActiveDialog(row.id, row.isActive)}
             >
               <span className="svg-icon svg-icon-md svg-icon-success">A</span>
@@ -93,19 +91,43 @@ export function ActionsColumnFormatter(
       )}
       <></>
 
-      {row.ibfId && isAccessForCoffin && row?.isActive && (
-        <OverlayTrigger
-          overlay={<Tooltip id="products-edit-tooltip">Add Coffin</Tooltip>}
-        >
-          <a
-            title=""
-            className="btn btn-icon btn-light btn-hover-success btn-sm mx-3"
-            onClick={() => openAddCoffinDialog(row.ibfId, row.id)}
+      {row.ibfId &&
+        isAccessForCoffin &&
+        row?.isActive &&
+        row.statusId !== 10 &&
+        row.coffinFormRelatedToMortuaryForm == null && (
+          <OverlayTrigger
+            overlay={<Tooltip id="products-edit-tooltip">Add Coffin</Tooltip>}
           >
-            <span className="svg-icon svg-icon-md svg-icon-success">C</span>
-          </a>
-        </OverlayTrigger>
-      )}
+            <a
+              title=""
+              className="btn btn-icon btn-light btn-hover-success btn-sm mx-1"
+              onClick={() => openAddCoffinDialog(row.ibfId, row.id)}
+            >
+              <span className="svg-icon svg-icon-md svg-icon-success">C</span>
+            </a>
+          </OverlayTrigger>
+        )}
+
+      {isAccessForCoffin &&
+        row.isActive &&
+        row.coffinFormRelatedToMortuaryForm && (
+          <OverlayTrigger
+            overlay={<Tooltip id="products-edit-tooltip">Edit Coffin</Tooltip>}
+          >
+            <a
+              title=""
+              className="btn btn-icon btn-light btn-hover-success btn-sm mx-1"
+              onClick={() =>
+                openEditCoffinDialog(row.coffinFormRelatedToMortuaryForm?.id)
+              }
+            >
+              <span className="svg-icon svg-icon-md svg-icon-success">
+                Edit
+              </span>
+            </a>
+          </OverlayTrigger>
+        )}
     </>
   );
 }

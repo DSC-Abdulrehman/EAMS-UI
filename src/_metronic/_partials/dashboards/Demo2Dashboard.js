@@ -6,7 +6,7 @@ import {
   fetchAllCityCenters,
   alaramTime,
 } from "../../redux/dashboardActions";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { TilesWidget1, TilesWidget10 } from "../widgets";
 //import CreateIncidentDialog from "../widgets/modal/CreateIncidentDialog";
 import { IncidentCreateDialog } from "../widgets/modal/incident-create-dialog/IncidentCreateDialog";

@@ -1,17 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { CoffinEditForm } from "./CoffinEditForm";
 import { CoffinEditDialogHeader } from "./CoffinEditDialogHeader";
-import { useModuleUIContext } from "../CoffinUIContext";
+//import { useModuleUIContext } from "../CoffinUIContext";
 import * as actions from "../../../_redux/coffin/reduxActions";
 import { useParams } from "react-router-dom";
-import { set } from "date-fns";
 
 const initValue = {
-  countryId: 0,
-  cityId: 0,
-  statusId: 0,
+  countryId: "",
+  cityId: "",
+  statusId: "",
   SN: 0,
   dateTime: "",
   fullNameOfTheDeceased: "",
@@ -20,7 +19,7 @@ const initValue = {
   cast: "",
   religion: "",
   nativePlace: "",
-  age: 0,
+  age: "",
   gender: "",
   dateTimeofDeath: "",
   causeOfDeath: "",
@@ -59,9 +58,7 @@ export function CoffinEditDialog({ show, onHide, userForRead }) {
 
   const saveCenter = (props) => {
     if (!id) {
-      dispatch(actions.createInfo(props)).then((res) => {
-        onHide();
-      });
+      dispatch(actions.createInfo(props, onHide));
     } else {
       delete props.isActive;
       delete props.createdBy;

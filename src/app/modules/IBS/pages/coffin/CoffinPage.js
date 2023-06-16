@@ -13,13 +13,15 @@ import { fetchUserStatusTypes } from "../../../UserMangement/_redux/usersActions
 
 export function CoffinPage({ history }) {
   const dispatch = useDispatch();
-  dispatch(fetchUserStatusTypes({ ibs: true }));
+
   const moduleUIEvents = {
     addNewButtonClick: () => {
+      dispatch(fetchUserStatusTypes({ filter: { cf: true } }));
       history.push("/ibs/read-all-coffinforms/new");
     },
     openEditDialog: (id) => {
       dispatch(actions.fetchInfoById(id));
+      dispatch(fetchUserStatusTypes({ filter: { cf: true } }));
       history.push(`/ibs/read-all-coffinforms/${id}/edit`);
     },
     openDeleteDialog: (id, status) => {
@@ -30,6 +32,7 @@ export function CoffinPage({ history }) {
     },
     openReadDialog: (id, isUserRead) => {
       dispatch(actions.fetchInfoById(id));
+      dispatch(fetchUserStatusTypes({ filter: { cf: true } }));
       history.push(`/ibs/read-all-coffinforms/${id}/read`);
     },
   };

@@ -1,13 +1,12 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import { Route, Switch } from "react-router-dom"
-import { TripLogsUIProvider } from "./TripLogsUIContext"
-import { TripLogEditDialog } from "./triplog-edit-dialog/TripLogEditDialog"
-import { TripLogViewDialog } from "./triplog-view-dialog/TripLogViewDialog"
-import { TripLogDeleteDialog } from "./triplog-delete-dialog/TripLogDeleteDialog"
-import { TripLogsCard } from "./triplogs-card/TripLogsCard"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import React from "react";
+import { Route } from "react-router-dom";
+import { TripLogsUIProvider } from "./TripLogsUIContext";
+import { TripLogEditDialog } from "./triplog-edit-dialog/TripLogEditDialog";
+import { TripLogViewDialog } from "./triplog-view-dialog/TripLogViewDialog";
+import { TripLogDeleteDialog } from "./triplog-delete-dialog/TripLogDeleteDialog";
+import { TripLogsCard } from "./triplogs-card/TripLogsCard";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export function TriplogPage({ history }) {
   const TripLogsUIEvents = {
@@ -15,15 +14,15 @@ export function TriplogPage({ history }) {
     //   history.push("/incident-details/read-all-incident-details/new")
     // },
     openEditUserDialog: (id) => {
-      history.push(`/incident-details/read-all-driver-trip-logs/${id}/edit`)
+      history.push(`/incident-details/read-all-driver-trip-logs/${id}/edit`);
     },
     openDeleteUserDialog: (id) => {
-      history.push(`/incident-details/read-all-driver-trip-logs/${id}/delete`)
+      history.push(`/incident-details/read-all-driver-trip-logs/${id}/delete`);
     },
     openReadUserDialog: (id, isUserRead) => {
-      history.push(`/incident-details/read-all-driver-trip-logs/${id}/read`)
+      history.push(`/incident-details/read-all-driver-trip-logs/${id}/read`);
     },
-  }
+  };
   return (
     <TripLogsUIProvider TripLogsUIEvents={TripLogsUIEvents}>
       {/* <Route exact path="/incident-details/read-all-incident-details/new">
@@ -42,7 +41,7 @@ export function TriplogPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/incident-details/read-all-driver-trip-logs")
+              history.push("/incident-details/read-all-driver-trip-logs");
             }}
           />
         )}
@@ -55,7 +54,7 @@ export function TriplogPage({ history }) {
             id={match && match.params.id}
             userForRead={true}
             onHide={() => {
-              history.push("/incident-details/read-all-driver-trip-logs")
+              history.push("/incident-details/read-all-driver-trip-logs");
             }}
           />
         )}
@@ -66,7 +65,7 @@ export function TriplogPage({ history }) {
             show={match != null}
             id={match && match.params.id}
             onHide={() => {
-              history.push("/incident-details/read-all-driver-trip-logs")
+              history.push("/incident-details/read-all-driver-trip-logs");
             }}
           />
         )}
@@ -108,5 +107,5 @@ export function TriplogPage({ history }) {
         pauseOnHover
       />
     </TripLogsUIProvider>
-  )
+  );
 }

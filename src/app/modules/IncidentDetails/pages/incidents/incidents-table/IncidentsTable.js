@@ -6,7 +6,6 @@ import paginationFactory, {
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../../_redux/incidents/incidentActions";
 import {
-  getSelectRow,
   getHandlerTableChange,
   NoRecordsFoundMessage,
   PleaseWaitMessage,
@@ -18,7 +17,6 @@ import * as uiHelpers from "../IncidentsUIHelpers";
 import { Pagination } from "../../../../../../_metronic/_partials/controls";
 import { useIncidentsUIContext } from "../IncidentsUIContext";
 import * as columnFormatters from "./column-formatter";
-
 
 export function IncidentsTable() {
   //Users UI Context
@@ -45,7 +43,7 @@ export function IncidentsTable() {
     }),
     shallowEqual
   );
-  console.log("editAccessStatus", editAccessStatus);
+  //console.log("editAccessStatus", editAccessStatus);
   const { totalCount, entities, listLoading } = currentState;
   const dispatch = useDispatch();
 
@@ -60,7 +58,7 @@ export function IncidentsTable() {
   useEffect(() => {
     dispatch(actions.fetchIncidentTypes());
     dispatch(actions.fetchSeverityTypes());
-  }, []);
+  }, [dispatch]);
 
   // useEffect(() => {
 

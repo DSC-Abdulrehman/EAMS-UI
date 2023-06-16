@@ -61,10 +61,6 @@ export async function createRequest(body) {
   if (body.callerPhNo) {
     formData.append("callerPhNo", body.callerPhNo);
   }
-  if (body.dateTime) {
-    body.dateTime = moment(body.dateTime).format("DD.MM.YYYY HH:mm");
-    formData.append("dateTime", body.dateTime);
-  }
   if (body.description) {
     formData.append("description", body.description);
   }
@@ -74,23 +70,8 @@ export async function createRequest(body) {
   if (body.hospitalId) {
     formData.append("hospitalId", body.hospitalId);
   }
-  if (body.hospitalReachdateTime) {
-    body.hospitalReachdateTime = moment(body.hospitalReachdateTime).format(
-      "DD.MM.YYYY HH:mm"
-    );
-    formData.append("hospitalReachdateTime", body.hospitalReachdateTime);
-  }
   if (body.incidentAddress) {
     formData.append("incidentAddress", body.incidentAddress);
-  }
-  if (body.incidentlocationReachdateTime) {
-    body.incidentlocationReachdateTime = moment(
-      body.incidentlocationReachdateTime
-    ).format("DD:MM:YYYY HH:mm");
-    formData.append(
-      "incidentlocationReachdateTime",
-      body.incidentlocationReachdateTime
-    );
   }
   if (body.patientName) {
     formData.append("patientName", body.patientName);
@@ -103,6 +84,51 @@ export async function createRequest(body) {
   }
   if (body.vehicleRegNo) {
     formData.append("vehicleRegNo", body.vehicleRegNo);
+  }
+  if (body.dateTime) {
+    try {
+      if (moment(body.dateTime, moment.ISO_8601).isValid()) {
+        const formattedDate = moment
+          .utc(body.dateTime)
+          .format("DD.MM.YYYY HH:mm");
+        formData.append("dateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+  if (body.hospitalReachdateTime) {
+    try {
+      if (moment(body.hospitalReachdateTime, moment.ISO_8601).isValid()) {
+        const formattedDate = moment
+          .utc(body.dateTimeofDeath)
+          .format("DD.MM.YYYY HH:mm");
+        formData.append("hospitalReachdateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  if (body.incidentlocationReachdateTime) {
+    try {
+      if (
+        moment(body.incidentlocationReachdateTime, moment.ISO_8601).isValid()
+      ) {
+        const formattedDate = moment
+          .utc(body.incidentlocationReachdateTime)
+          .format("DD.MM.YYYY HH:mm");
+        formData.append("incidentlocationReachdateTime", formattedDate);
+      } else {
+        console.log("Invalid date string");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
   }
   try {
     const response = await axios.post(

@@ -56,13 +56,9 @@ export function MortuaryEditDialog({ show, onHide, userForRead }) {
 
   const saveCenter = (props) => {
     if (!id) {
-      dispatch(actions.createInfo(props)).then((res) => {
-        onHide();
-      });
+      dispatch(actions.createInfo(props, onHide));
     } else {
-      dispatch(actions.updateInfo(props)).then((res) => {
-        onHide();
-      });
+      dispatch(actions.updateInfo(props, onHide));
     }
   };
 

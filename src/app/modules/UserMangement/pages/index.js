@@ -1,9 +1,8 @@
-import React, { Suspense } from "react"
-import { useSelector } from "react-redux"
-import { Redirect, Route, Switch } from "react-router-dom"
-import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout"
-import { UsersPage } from "./users/UsersPage"
-import Welcome from "./users/test"
+import React, { Suspense } from "react";
+import { Redirect, Switch } from "react-router-dom";
+import { LayoutSplashScreen, ContentRoute } from "../../../../_metronic/layout";
+import { UsersPage } from "./users/UsersPage";
+import Welcome from "./users/test";
 
 export default function UserManagment() {
   // const { auth } = useSelector((auth) => auth)
@@ -30,5 +29,5 @@ export default function UserManagment() {
         <ContentRoute path="/users/read-all-access" component={Welcome} />
       </Switch>
     </Suspense>
-  )
+  );
 }

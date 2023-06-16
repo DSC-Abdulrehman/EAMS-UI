@@ -1,42 +1,38 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { UsersUIProvider } from "./UsersUIContext";
 import { UsersEditDialog } from "./users-edit-dialog/UsersEditDialog";
 import { UserDeleteDialog } from "./user-delete-dialog/UserDeleteDialog";
 import { UserActiveDialog } from "./user-active-dialog/UserActiveDialog";
 import { UsersCard } from "./users-card/UsersCard";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Welcome from "../users/test";
 import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
-import { createUser } from "../../_redux/usersCrud";
+import {
+  fetchUserStatusTypes,
+  fetchRoles,
+  fetchCenters,
+} from "../../_redux/usersActions";
+
+// dispatch(actions.fetchRoles());
+//     dispatch(actions.fetchCenters());
 
 export function UsersPage({ history }) {
-  // const { auth } = useSelector((auth) => auth)
-  // console.log("UserManagement, Auth: ", auth)
-  // const { userAccess } = auth
-  // console.log("UserManagement, userAccess: ", userAccess)
-  // const isAdd = userAccess["Settings"]?.find(
-  //   (access) => access.resourceId === 5
-  // )
-  //   ? true
-  //   : false
-  // const isEdit = userAccess["Settings"]?.find(
-  //   (access) => access.resourceId == 4
-  // )
-  //   ? true
-  //   : false
-  // console.log("UserManagement, isAdd: ", isAdd)
-  // const ForRead = false
   const dispatch = useDispatch();
   const usersUIEvents = {
     newUserButtonClick: () => {
       dispatch(fetchAllCountry());
+      dispatch(fetchRoles());
+      dispatch(fetchCenters());
+      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push("/users/read-all-users/new");
     },
     openEditUserDialog: (id) => {
       dispatch(fetchAllCountry());
+      dispatch(fetchRoles());
+      dispatch(fetchCenters());
+      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/users/read-all-users/${id}/edit`);
     },
     openDeleteUserDialog: (id, status) => {
@@ -47,20 +43,14 @@ export function UsersPage({ history }) {
     },
     openReadUserDialog: (id, isUserRead) => {
       dispatch(fetchAllCountry());
+      dispatch(fetchRoles());
+      dispatch(fetchCenters());
+      dispatch(fetchUserStatusTypes({ filter: { normal: true } }));
       history.push(`/users/read-all-users/${id}/read`);
     },
   };
   return (
     <UsersUIProvider usersUIEvents={usersUIEvents}>
-      {/* <Route path="/users/read-all-users/${id}" >
-<Welcome />
-
-        </Route> */}
-
-      {/* <Switch>
-                <Route exact path="/users/read-all-users/${id}/edit" component={Home} />
-                <Route exact path="/student" component={Student} />
-            </Switch> */}
       <Route exact path="/users/read-all-users/new">
         {({ history, match }) => (
           <UsersEditDialog
@@ -119,31 +109,6 @@ export function UsersPage({ history }) {
           />
         )}
       </Route>
-
-      {/* {isAdd && (
-        <Route exact path="/list/new">
-          {({ history, match }) => (
-            <UsersEditDialog
-              show={match != null}
-              onHide={() => {
-                history.push("/list")
-              }}
-            />
-          )}
-        </Route>
-      )}
-      {isEdit && (
-        <Route exact path="/list/edit">
-          {({ history, match }) => (
-            <UsersEditDialog
-              show={match != null}
-              onHide={() => {
-                history.push("/list")
-              }}
-            />
-          )}
-        </Route>
-      )} */}
       <UsersCard />
       <ToastContainer
         position="top-right"

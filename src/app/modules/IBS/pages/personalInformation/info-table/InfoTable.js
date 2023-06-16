@@ -29,6 +29,7 @@ export function InfoTable() {
       openActiveDialog: centersUIContext.openActiveDialog,
       openReadDialog: centersUIContext.openReadDialog,
       openMortuaryDialog: centersUIContext.openMortuaryDialog,
+      openMortuaryEditDialog: centersUIContext.openMortuaryEditDialog,
       queryParms: centersUIContext.queryParams,
       setQueryParams: centersUIContext.setQueryParams,
     };
@@ -128,12 +129,16 @@ export function InfoTable() {
     },
     {
       dataField: "patientName",
-      text: "Name",
+      text: "Patient Name",
       sort: false,
       sortCaret: sortCaret,
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -173,6 +178,7 @@ export function InfoTable() {
         openActiveDialog: centersUIProps.openActiveDialog,
         openReadDialog: centersUIProps.openReadDialog,
         openMortuaryDialog: centersUIProps.openMortuaryDialog,
+        openMortuaryEditDialog: centersUIProps.openMortuaryEditDialog,
         isAccessForEdit: isAccessForEdit?.isAccess,
         isAccessForDelete: isAccessForDelete?.isAccess,
         isAccessForMortuary: isAccessForMortuary?.isAccess,

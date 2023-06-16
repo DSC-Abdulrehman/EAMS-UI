@@ -9,9 +9,11 @@ export function InfoEditDialogHeader({ id, isUserForRead }) {
   const { actionsLoading } = personalInfoState;
 
   useEffect(() => {
-    let _title = id ? "" : "Add New Info";
-    if (id) {
-      _title = `Ibs Form`;
+    let _title = "";
+    if (isUserForRead) {
+      _title = `IBS Read Form`;
+    } else if (id) {
+      _title = `IBS Edit Form`;
     } else {
       _title = `Add New Info`;
     }

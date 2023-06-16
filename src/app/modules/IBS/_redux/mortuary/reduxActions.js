@@ -1,12 +1,10 @@
 import * as requestFromServer from "./reduxCrud";
 import { mortuarySlice, callTypes } from "./reduxSlice";
+import * as action from "../info-personal/infoActions";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 const { actions } = mortuarySlice;
-// const history = useHistory();
-// const { roleActions } = getAllrolesSlice
 
 export const fetchAllHospitals = (body) => async (dispatch) => {
   return await requestFromServer.getAllHospital(body).then((response) => {
@@ -110,7 +108,7 @@ export const fetchStandByVehicles = (body) => async (dispatch) => {
     });
 };
 
-export const createInfo = (data) => (dispatch) => {
+export const createInfo = (data, onHide, params) => (dispatch) => {
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createRequest(data)
@@ -126,6 +124,8 @@ export const createInfo = (data) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      onHide();
+      dispatch(action.fetchIbs(params));
     })
     .catch((error) => {
       error.clientMessage = "Can't create user";
@@ -134,14 +134,13 @@ export const createInfo = (data) => (dispatch) => {
     });
 };
 
-export const updateInfo = (body) => (dispatch) => {
+export const updateInfo = (body, onHide) => (dispatch) => {
+  console.log("body", body);
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .updateRequest(body)
     .then((response) => {
-      console.log("Getting response", response);
       const updatedUser = response.data?.data;
-      // console.log("userAction Res", response)
       dispatch(actions.infoUpdated({ updatedUser }));
       toast.success(response.data.message + " Updated", {
         position: "top-right",
@@ -152,6 +151,7 @@ export const updateInfo = (body) => (dispatch) => {
         draggable: true,
         progress: undefined,
       });
+      onHide();
     })
     .catch((error) => {
       // console.log("error User update", error)

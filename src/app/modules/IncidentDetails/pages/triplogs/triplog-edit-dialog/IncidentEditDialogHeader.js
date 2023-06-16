@@ -44,9 +44,6 @@ export function IncidentEditDialogHeader({ id, isUserForRead }) {
       {actionsLoading && <ModalProgressBar />}
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {/* {title} (<small>Start {moment(createdAt).fromNow()}</small>) */}
-          {/* Trip Duration:
-          <small>{`${hours} hours and ${minutes} minutes`}</small> */}
           Trip Duration is <small>{tripDuration}</small>
         </Modal.Title>
       </Modal.Header>

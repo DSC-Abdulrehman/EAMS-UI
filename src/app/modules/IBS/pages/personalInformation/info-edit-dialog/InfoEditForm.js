@@ -8,6 +8,7 @@ import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
 import DatePicker from "react-datepicker";
 import * as Yup from "yup";
+import InputMask from "react-input-mask";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Input,
@@ -53,12 +54,15 @@ const formSchema = Yup.object().shape({
     .max(150, "Number must be less than or equal to 150")
     .required("Age is required"),
   gender: Yup.string(),
-  callerCnic: Yup.string(),
+  callerCnic: Yup.string().matches(/^\d{5}-\d{7}-\d$/, "CNIC is not valid"),
   callerName: Yup.string().matches(
     /^[a-zA-Z\s]+$/,
     "Only alphabetic characters are allowed"
   ),
-  callerPhNo: Yup.string(),
+  callerPhNo: Yup.string().matches(
+    /^\(\d{3}\)\s\d{3}-\d{4}$/,
+    "Phone number is not valid"
+  ),
   description: Yup.string(),
   images: Yup.array().of(Yup.string()),
   dateTime: Yup.date().required("Incident Date is required"),
@@ -228,7 +232,7 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
     },
     {
       value: 2,
-      label: "private",
+      label: "Private",
     },
   ];
 
@@ -326,14 +330,14 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
   }, [initialInfo.gender]);
 
   useEffect(() => {
-    if (initialInfo.statusId) {
+    if (initialInfo.statusId && user.userStatusTypes) {
       setStatus(
         user?.userStatusTypes?.find(
           (item) => item.value === initialInfo.statusId
         )
       );
     }
-  }, [initialInfo.statusId]);
+  }, [initialInfo.statusId, user.userStatusTypes]);
 
   useEffect(() => {
     if (initialInfo.dateTime) {
@@ -406,7 +410,15 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
           saveInfo(mergedValue);
         }}
       >
-        {({ handleSubmit, setFieldValue, errors, touched }) => (
+        {({
+          handleSubmit,
+          setFieldValue,
+          errors,
+          touched,
+          values,
+          handleChange,
+          handleBlur,
+        }) => (
           <>
             <Modal.Body className="overlay overlay-block cursor-default">
               <InfoImageSlider
@@ -526,7 +538,7 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
                     <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <SearchSelect
                         name="vehicleType"
-                        label="Vehicel Type"
+                        label="Vehicle Type"
                         isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           setFieldValue("vehicleType", e.label);
@@ -575,7 +587,7 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
                       </div>
                     )}
                     {showPrivatevehicle && (
-                      <div className="col-12 col-md-6 mb-5">
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
                         <Field
                           name="vehicleRegNo"
                           component={Input}
@@ -668,20 +680,38 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
                       />
                     </div>
                     <div className="col-12 col-md-6 col-lg-3 mb-5">
-                      <Field
+                      <label>Caller Phone</label>
+                      <InputMask
+                        className="form-control"
+                        mask="(999) 999-9999"
                         name="callerPhNo"
-                        component={Input}
-                        placeholder=""
-                        label="Caller Phone"
+                        value={values.callerPhNo}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
+                      {errors.callerPhNo && touched.callerPhNo ? (
+                        <div className="form-feedBack">{errors.callerPhNo}</div>
+                      ) : null}
                     </div>
                     <div className="col-12 col-md-6 col-lg-3 mb-5">
-                      <Field
+                      <label>Caller CNIC</label>
+                      <InputMask
+                        className="form-control"
+                        mask="99999-9999999-9"
+                        name="callerCnic"
+                        value={values.callerCnic}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.callerCnic && touched.callerCnic ? (
+                        <div className="form-feedBack">{errors.callerCnic}</div>
+                      ) : null}
+                      {/* <Field
                         name="callerCnic"
                         component={Input}
                         placeholder=""
                         label="Caller CNIC"
-                      />
+                      /> */}
                     </div>
                     <div className="col-12 col-md-6 col-lg-3 mb-5">
                       <label>Incident Date*</label>

@@ -11,8 +11,9 @@ import { InfoCard } from "./info-card/infoCard";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as actions from "../../_redux/info-personal/infoActions";
-import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
+// import { fetchAllCountry } from "../../../../../_metronic/redux/dashboardActions";
 import { fetchUserStatusTypes } from "../../../UserMangement/_redux/usersActions";
+import { fetchInfoById } from "../../_redux/mortuary/reduxActions";
 
 // export const USERS_URL = process.env.REACT_APP_API_URL;
 
@@ -20,20 +21,28 @@ import { fetchUserStatusTypes } from "../../../UserMangement/_redux/usersActions
 
 export function PersonalPage({ history }) {
   const dispatch = useDispatch();
-  dispatch(
-    fetchUserStatusTypes({
-      filter: {
-        ibf: true,
-      },
-    })
-  );
+
   const centersUIEvents = {
     addNewButtonClick: () => {
       dispatch(actions.fetchInfoById());
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            ibf: true,
+          },
+        })
+      );
       history.push("/ibs/read-all-ibforms/new");
     },
     openEditDialog: (id) => {
       dispatch(actions.fetchInfoById(id));
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            ibf: true,
+          },
+        })
+      );
       history.push(`/ibs/read-all-ibforms/${id}/edit`);
     },
     openDeleteDialog: (id, status) => {
@@ -44,6 +53,13 @@ export function PersonalPage({ history }) {
     },
     openReadDialog: (id, isUserRead) => {
       dispatch(actions.fetchInfoById(id));
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            ibf: true,
+          },
+        })
+      );
       history.push(`/ibs/read-all-ibforms/${id}/read`);
     },
     makePDFreport: (id) => {
@@ -51,7 +67,25 @@ export function PersonalPage({ history }) {
     },
     openMortuaryDialog: (ibfId) => {
       dispatch(actions.fetchInfoById(ibfId));
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            mf: true,
+          },
+        })
+      );
       history.push(`/ibs/read-all-ibforms/${ibfId}/add-mortuary`);
+    },
+    openMortuaryEditDialog: (mfId) => {
+      dispatch(fetchInfoById(mfId));
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            mf: true,
+          },
+        })
+      );
+      history.push(`/ibs/read-all-ibforms/${mfId}/edit-mortuary`);
     },
   };
   return (
@@ -118,6 +152,18 @@ export function PersonalPage({ history }) {
           <MortuaryEditDialog
             show={match != null}
             id={match && match.params.id}
+            onHide={() => {
+              history.push("/ibs/read-all-ibforms");
+            }}
+          />
+        )}
+      </Route>
+      <Route path="/ibs/read-all-ibforms/:mfId/edit-mortuary">
+        {({ history, match }) => (
+          <MortuaryEditDialog
+            show={match != null}
+            id={match && match.params.id}
+            isForEdit={true}
             onHide={() => {
               history.push("/ibs/read-all-ibforms");
             }}

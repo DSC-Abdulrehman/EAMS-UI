@@ -1,7 +1,7 @@
-import React from "react"
-import SVG from "react-inlinesvg"
-import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers"
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
+import React from "react";
+import SVG from "react-inlinesvg";
+import { toAbsoluteUrl } from "../../../../../../../_metronic/_helpers";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 export function ActionsColumnFormatter(
   cellContent,
   row,
@@ -14,7 +14,6 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">Edit Role</Tooltip>}
       >
         <a
-          title="Edit Role"
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
           onClick={() => openEditUserDialog(row.id)}
         >
@@ -41,7 +40,6 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">Delete Role</Tooltip>}
       >
         <a
-          title="Delete Role"
           className="btn btn-icon btn-light btn-hover-danger btn-sm mx-3"
           onClick={() => openDeleteRoleDialog(row.id)}
         >
@@ -55,16 +53,12 @@ export function ActionsColumnFormatter(
         overlay={<Tooltip id="products-edit-tooltip">Role Access</Tooltip>}
       >
         <a
-          title="Access Right"
           className="btn btn-icon btn-light btn-hover-primary btn-sm mx-3"
           onClick={() => openRoleAccessPage(row.id)}
         >
-          <span className="svg-icon svg-icon-md svg-icon-primary">
-            A
-            {/* <SVG src={toAbsoluteUrl("/media/svg/icons/General/Trash.svg")} /> */}
-          </span>
+          <span className="svg-icon svg-icon-md svg-icon-primary">A</span>
         </a>
       </OverlayTrigger>
     </div>
-  )
+  );
 }

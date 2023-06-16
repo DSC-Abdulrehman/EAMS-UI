@@ -1,46 +1,62 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
-import React, { useEffect } from "react"
-import { useLocation } from "react-router"
-import { NavLink } from "react-router-dom"
-import { shallowEqual, useSelector } from "react-redux"
-import SVG from "react-inlinesvg"
-import { toAbsoluteUrl, checkIsActive } from "../../../../_helpers"
-import AsideparentList from "./AsideParentList"
+import React from "react";
+import { useLocation } from "react-router";
+import { NavLink } from "react-router-dom";
+import { shallowEqual, useSelector } from "react-redux";
+import SVG from "react-inlinesvg";
+import { toAbsoluteUrl, checkIsActive } from "../../../../_helpers";
+import AsideparentList from "./AsideParentList";
 
 export function AsideMenuList({ layoutProps }) {
-  const auth = useSelector(({ auth }) => auth, shallowEqual)
-  const UserAccess = auth?.userAccess
+  const auth = useSelector(({ auth }) => auth, shallowEqual);
+  const UserAccess = auth?.userAccess;
+  const Settings = auth?.userAccess?.Settings;
+
+  const isDashboardAccess = Settings?.some((obj) =>
+    Object.values(obj).includes("read-all-vehicles-dashboard")
+  );
+  const isReadALLRolesAccess = Settings?.some((obj) =>
+    Object.values(obj).includes("read-all-roles-master-data")
+  );
+
+  if (!isReadALLRolesAccess) {
+    delete UserAccess.Settings;
+  }
   //console.log("AsideMenu, Auth: ", UserAccess)
-  const location = useLocation()
+  const location = useLocation();
   const getMenuItemActive = (url, hasSubmenu = false) => {
     return checkIsActive(location, url)
       ? ` ${!hasSubmenu &&
           "menu-item-active"} menu-item-open menu-item-not-hightlighted`
-      : ""
-  }
+      : "";
+  };
 
   return (
     <>
       {/* begin::Menu Nav */}
       <ul className={`menu-nav ${layoutProps.ulClasses}`}>
-        <li
-          className={`menu-item ${getMenuItemActive("/dashboard", false)}`}
-          aria-haspopup="true"
-        >
-          <NavLink className="menu-link" to="/dashboard">
-            <span className="svg-icon menu-icon">
-              <SVG src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")} />
-            </span>
-            <span className="menu-text">Dashboard</span>
-          </NavLink>
-        </li>
+        {isDashboardAccess && (
+          <>
+            <li
+              className={`menu-item ${getMenuItemActive("/dashboard", false)}`}
+              aria-haspopup="true"
+            >
+              <NavLink className="menu-link" to="/dashboard">
+                <span className="svg-icon menu-icon">
+                  <SVG
+                    src={toAbsoluteUrl("/media/svg/icons/Design/Layers.svg")}
+                  />
+                </span>
+                <span className="menu-text">Dashboard</span>
+              </NavLink>
+            </li>
+          </>
+        )}
+
         {Object.keys(UserAccess).map((res) => {
-          return <AsideparentList element={res} key={res} />
+          return <AsideparentList element={res} key={res} />;
         })}
-
-
-        
 
         {/* Bootstrap */}
         {/*begin::1 Level*/}
@@ -1803,5 +1819,5 @@ export function AsideMenuList({ layoutProps }) {
 
       {/* end::Menu Nav */}
     </>
-  )
+  );
 }

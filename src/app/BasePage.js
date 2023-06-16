@@ -35,50 +35,20 @@ export default function BasePage() {
   dispatch(incidentTypes());
   const auth = useSelector(({ auth }) => auth, shallowEqual);
   const UserAccess = auth?.userAccess;
+  const SettingsAccess = auth?.userAccess?.Settings;
+  const isDashboardAccess = SettingsAccess?.some((obj) =>
+    Object.values(obj).includes("read-all-vehicles-dashboard")
+  );
 
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
-        {
-          /* Redirect from root URL to /dashboard. */
-          <Redirect exact from="/" to="/dashboard" />
-        }
-        <ContentRoute path="/dashboard" component={Dashboard} />
-        <ContentRoute path="/images-slider" component={MyPage} />
-        {/* <ContentRoute path="/images-slider" component={Dashboard} /> */}
-        {/* <ContentRoute path="/ibs" component={IBSModule} /> */}
-        {/* <ContentRoute path="/builder" component={BuilderPage} />
-        
-        <Route path="/google-material" component={GoogleMaterialPage} />
-        <Route path="/react-bootstrap" component={ReactBootstrapPage} />
-        <Route path="/e-commerce" component={ECommercePage} />
-        <Route path="/all-vehicle" component={Vehicle} /> 
-        {Object.keys(ROUTES).map((key)=>{
-          
-        })} */}
         {Object.keys(UserAccess).map((access, key) => {
           const accessName = access.replace(/ /g, "").toLowerCase();
           const path = access
             .split(" ")
             .join("-")
             .toLowerCase();
-          {
-            /* const accessName = access
-              .split(" ")
-              .join("-")
-              .toLowerCase()
-              { */
-          }
-
-          // console.log("access: ", { access, key, accessName })
-          // console.log("Route", ROUTES[accessName])
-          {
-            //  }
-          }
-
-          // console.log("access: ", { access, key, accessName })
-          // console.log("Route", ROUTES[accessName])
-          // console.log("Path", path)
 
           if (ROUTES[accessName])
             return (
@@ -89,6 +59,18 @@ export default function BasePage() {
               />
             );
         })}
+
+        {isDashboardAccess ? (
+          <>
+            {<Redirect exact from="/" to="/dashboard" />}
+            <ContentRoute path="/dashboard" component={Dashboard} />
+          </>
+        ) : (
+          <>
+            {<Redirect exact from="/" to="/ibs" />}
+            <ContentRoute path="/ibs" component={IBSModule} />
+          </>
+        )}
 
         <Redirect to="error/error-v1" />
       </Switch>
