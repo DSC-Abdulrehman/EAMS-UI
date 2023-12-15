@@ -93,7 +93,7 @@ export function ActionsColumnFormatter(
       <></>
       {isAccessForMortuary &&
         row.isActive &&
-        row.statusId != 4 &&
+        row.statusId != 3 &&
         row.relatedMortuaryForm == null && (
           <OverlayTrigger
             overlay={

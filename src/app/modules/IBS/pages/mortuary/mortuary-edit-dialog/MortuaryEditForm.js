@@ -222,7 +222,7 @@ export function MortuaryEditForm({
           )
       );
     }
-  }, [initialValue.statusId]);
+  }, [initialValue.statusId, user.userStatusTypes]);
 
   useEffect(() => {
     sethospital(

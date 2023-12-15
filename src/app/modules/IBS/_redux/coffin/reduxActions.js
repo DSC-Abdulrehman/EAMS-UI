@@ -107,16 +107,23 @@ export const fetchStandByVehicles = (body) => async (dispatch) => {
     });
 };
 
-export const createInfo = (data, onHide, queryParams, disabledloading) => (
-  dispatch
-) => {
+export const createInfo = (data, onHide, disabledloading) => (dispatch) => {
+  const queryParams = {
+    filter: {
+      searchQuery: "",
+    },
+    sortOrder: "name",
+    pageSize: 10,
+    pageNumber: 1,
+  };
   dispatch(actions.startCall({ callType: callTypes.action }));
   return requestFromServer
     .createRequest(data)
     .then((res) => {
-      const response = res.data?.data;
-      dispatch(actions.infoCreated(response));
-      toast.success(res.data.message, +" " + "Created", {
+      console.log("res", res);
+      dispatch(actions.infoCreated(res.data?.data));
+      dispatch(action.fetchIbs(queryParams));
+      toast.success(`${res.data.message} Created`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -125,7 +132,6 @@ export const createInfo = (data, onHide, queryParams, disabledloading) => (
         draggable: true,
         progress: undefined,
       });
-      dispatch(action.fetchIbs(queryParams));
       onHide();
     })
     .catch((error) => {

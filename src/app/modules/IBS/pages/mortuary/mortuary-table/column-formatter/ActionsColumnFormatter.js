@@ -91,10 +91,9 @@ export function ActionsColumnFormatter(
       )}
       <></>
 
-      {row.ibfId &&
-        isAccessForCoffin &&
+      {isAccessForCoffin &&
         row?.isActive &&
-        row.statusId !== 10 &&
+        (row.statusId === 10 || row.statusId === 9) &&
         row.coffinFormRelatedToMortuaryForm == null && (
           <OverlayTrigger
             overlay={<Tooltip id="products-edit-tooltip">Add Coffin</Tooltip>}

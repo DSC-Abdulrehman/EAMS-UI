@@ -68,9 +68,7 @@ export function CoffinEditDialog({ show, onHide, userForRead }) {
       delete props.status;
       delete props.city;
       delete props.updatedBy;
-      dispatch(actions.updateInfo(props)).then((res) => {
-        onHide();
-      });
+      dispatch(actions.updateInfo(props, onHide));
     }
   };
 

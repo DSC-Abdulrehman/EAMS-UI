@@ -80,6 +80,10 @@ export function MortuaryTable() {
       sort: false,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -111,6 +115,10 @@ export function MortuaryTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -121,6 +129,10 @@ export function MortuaryTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {

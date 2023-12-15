@@ -5,8 +5,7 @@ import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls
 
 export function InfoEditDialogHeader({ id, isUserForRead }) {
   const [title, setTitle] = useState("");
-  const personalInfoState = useSelector((state) => state.personalInformation);
-  const { actionsLoading } = personalInfoState;
+  const { actionsLoading } = useSelector((state) => state.personalInformation);
 
   useEffect(() => {
     let _title = "";

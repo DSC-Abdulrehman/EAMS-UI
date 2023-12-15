@@ -18,6 +18,13 @@ export function MortuaryPage({ history }) {
 
   const moduleUIEvents = {
     addNewButtonClick: () => {
+      dispatch(
+        fetchUserStatusTypes({
+          filter: {
+            mf: true,
+          },
+        })
+      );
       history.push("/ibs/read-all-mortuaryforms/new");
     },
     openEditDialog: (ibfId, id) => {

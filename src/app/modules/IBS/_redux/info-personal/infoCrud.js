@@ -161,7 +161,6 @@ export function getAllRequest(body) {
 }
 
 export const getById = async (id) => {
-  // console.log("getUserById id", id)
   return await axios.post(`${USERS_URL}/ibs/read-ibform`, id);
 };
 

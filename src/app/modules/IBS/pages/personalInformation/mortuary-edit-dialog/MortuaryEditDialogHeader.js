@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Modal } from "react-bootstrap";
 import { ModalProgressBar } from "../../../../../../_metronic/_partials/controls";
 
 export function MortuaryEditDialogHeader({ id, isForEdit }) {
-  //const userForEdit = false
   const [title, setTitle] = useState("");
-
-  const mortuaryState = useSelector((state) => state.mortuary);
-
-  const { actionsLoading } = mortuaryState;
-
-  //console.log("actionsLoading", actionsLoading)
+  const { actionsLoading } = useSelector((state) => state.personalInformation);
 
   useEffect(() => {
     let _title = id ? "" : "New Center";

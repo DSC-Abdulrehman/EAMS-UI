@@ -84,23 +84,22 @@ export function InfoFilter({ listLoading }) {
     if (e != null) {
       setLoading(true);
       const data = await fetchData(getYear);
-      console.log("data", data);
       const table = {
         headerRow: [
           "Name",
-          "jan",
-          "feb",
-          "mar",
-          "apr",
-          "may",
-          "june",
-          "july",
-          "aug",
-          "sep",
-          "oct",
-          "nov",
-          "dec",
-          "total",
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "June",
+          "July",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+          "Total",
         ],
         body: [],
       };
@@ -185,14 +184,10 @@ export function InfoFilter({ listLoading }) {
     }
   }
 
-  //const dispatch = useDispatch();
-
-  // queryParams, setQueryParams,
   const applyFilter = (values) => {
     const newQueryParams = prepareFilter(centersUIProps.queryParams, values);
     if (!isEqual(newQueryParams, centersUIProps.queryParams)) {
       newQueryParams.pageNumber = 1;
-      // update list by queryParams
       centersUIProps.setQueryParams(newQueryParams);
     }
   };

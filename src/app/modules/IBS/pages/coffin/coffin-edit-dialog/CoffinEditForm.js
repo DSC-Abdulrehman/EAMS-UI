@@ -3,31 +3,26 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import { Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
 import DatePicker from "react-datepicker";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Input,
   TextArea,
 } from "../../../../../../_metronic/_partials/controls";
 import { SearchSelect } from "../../../../../../_metronic/_helpers/SearchSelect";
-import { ImageDropZone } from "../../../../../../_metronic/_helpers/ImageDropZone";
 import {
   fetchAllCity,
   fetchAllCityCenters,
   fetchAllSubCenter,
-  fetchDashboardVehicles,
 } from "../../../../Dashboard/_redux/dashboardActions";
 import {
   fetchAllHospitals,
   fetchAllPoliceStations,
 } from "../../../_redux/mortuary/reduxActions";
 
-const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
+//const phoneRegExp = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 // Validation schema
 const formSchema = Yup.object().shape({
   SN: Yup.number(),
@@ -79,97 +74,121 @@ export function CoffinEditForm({
   onHide,
   isUserForRead,
 }) {
-  const classes = useStyles();
+  //const classes = useStyles();
   const dashboard = useSelector((state) => state.dashboard);
-  const mortuaryState = useSelector((state) => state.mortuary);
+  // const mortuaryState = useSelector((state) => state.mortuary);
   const user = useSelector((state) => state.users);
 
   const [createDate, setCreateTime] = useState(null);
   const [deathTime, setDateTimeOfDeath] = useState(null);
-  const [dischargedTime, setDischargedTime] = useState(null);
+  //const [dischargedTime, setDischargedTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState([]);
   const [city, setCity] = useState([]);
   const [gender, setGender] = useState([]);
+  const [religion, setReligion] = useState([]);
   const [status, setStatus] = useState([]);
-  const [seletedImages, setSelectedImages] = useState([]);
-  const [oldImages, setoldImages] = useState([]);
+  //const [seletedImages, setSelectedImages] = useState([]);
+  //const [oldImages, setoldImages] = useState([]);
 
-  useEffect(() => {
-    if (initialValue.mortuaryFormImages) {
-      setSelectedImages(initialValue.mortuaryFormImages);
-    }
-  }, [initialValue.mortuaryFormImages]);
+  // useEffect(() => {
+  //   if (initialValue.mortuaryFormImages) {
+  //     setSelectedImages(initialValue.mortuaryFormImages);
+  //   }
+  // }, [initialValue.mortuaryFormImages]);
 
   //console.log("initialValue", initialValue);
-  const thumbsContainer = {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 16,
-  };
+  // const thumbsContainer = {
+  //   display: "flex",
+  //   flexDirection: "row",
+  //   flexWrap: "wrap",
+  //   marginTop: 16,
+  // };
 
-  const thumb = {
-    display: "inline-flex",
-    borderRadius: 2,
-    border: "1px solid #eaeaea",
-    marginBottom: 8,
-    marginRight: 8,
-    width: 100,
-    height: 100,
-    padding: 4,
-    boxSizing: "border-box",
-  };
+  // const thumb = {
+  //   display: "inline-flex",
+  //   borderRadius: 2,
+  //   border: "1px solid #eaeaea",
+  //   marginBottom: 8,
+  //   marginRight: 8,
+  //   width: 100,
+  //   height: 100,
+  //   padding: 4,
+  //   boxSizing: "border-box",
+  // };
 
-  const thumbInner = {
-    display: "flex",
-    minWidth: 0,
-    overflow: "hidden",
-    position: "relative",
-  };
+  // const thumbInner = {
+  //   display: "flex",
+  //   minWidth: 0,
+  //   overflow: "hidden",
+  //   position: "relative",
+  // };
 
-  const img = {
-    display: "block",
-    width: "auto",
-    height: "100%",
-  };
+  // const img = {
+  //   display: "block",
+  //   width: "auto",
+  //   height: "100%",
+  // };
 
-  const removeImage = (index, id) => {
-    const updatedImages = [...seletedImages];
-    updatedImages.splice(index, 1);
-    setSelectedImages(updatedImages);
-    setoldImages((preIds) => [...preIds, id]);
-  };
+  // const removeImage = (index, id) => {
+  //   const updatedImages = [...seletedImages];
+  //   updatedImages.splice(index, 1);
+  //   setSelectedImages(updatedImages);
+  //   setoldImages((preIds) => [...preIds, id]);
+  // };
 
-  const thumbs =
-    seletedImages &&
-    seletedImages.map((file, index) => {
-      return (
-        <>
-          <Box component="span" m={1} key={file.name}>
-            <div style={thumb} key={file.name}>
-              <div style={thumbInner}>
-                <img src={file.url} style={img} />
-                {/* <Fab
-            size="small"
-            color="secondary"
-            aria-label="add"
-            className={classes.margin}
-          > */}
-                {!isUserForRead && (
-                  <ClearIcon
-                    className={classes.extendedIcon}
-                    onClick={() => removeImage(index, file.id)}
-                  />
-                )}
+  // const thumbs =
+  //   seletedImages &&
+  //   seletedImages.map((file, index) => {
+  //     return (
+  //       <>
+  //         <Box component="span" m={1} key={file.name}>
+  //           <div style={thumb} key={file.name}>
+  //             <div style={thumbInner}>
+  //               <img src={file.url} style={img} />
+  //               {/* <Fab
+  //           size="small"
+  //           color="secondary"
+  //           aria-label="add"
+  //           className={classes.margin}
+  //         > */}
+  //               {!isUserForRead && (
+  //                 <ClearIcon
+  //                   className={classes.extendedIcon}
+  //                   onClick={() => removeImage(index, file.id)}
+  //                 />
+  //               )}
 
-                {/* </Fab> */}
-              </div>
-            </div>
-          </Box>
-        </>
-      );
-    });
+  //               {/* </Fab> */}
+  //             </div>
+  //           </div>
+  //         </Box>
+  //       </>
+  //     );
+  //   });
+
+  const religionList = [
+    {
+      value: "Islam",
+      label: "Islam",
+    },
+    {
+      value: "Christianity",
+      label: "Christianity",
+    },
+    {
+      value: "Hinduism",
+      label: "Hinduism",
+    },
+    {
+      value: "Sikhism",
+      label: "Sikhism",
+    },
+    {
+      value: "Other",
+      label: "Other",
+    },
+  ];
 
   const genderList = [
     {
@@ -183,43 +202,6 @@ export function CoffinEditForm({
     {
       value: "other",
       label: "Other",
-    },
-  ];
-  const vehicleTypeoptions = [
-    {
-      value: 1,
-      label: "Edhi Vehicle",
-    },
-    {
-      value: 2,
-      label: "private",
-    },
-  ];
-
-  const allTypes = [
-    {
-      value: 1,
-      label: "RTA",
-    },
-    {
-      value: 2,
-      label: "Gun Shot",
-    },
-    {
-      value: 3,
-      label: "Blast",
-    },
-    {
-      value: 4,
-      label: "Sucide",
-    },
-    {
-      value: 5,
-      label: "Other Emergency",
-    },
-    {
-      value: 6,
-      label: "injured",
     },
   ];
 
@@ -283,6 +265,14 @@ export function CoffinEditForm({
       setCreateTime(new Date(initialValue.dateTime));
     }
   }, [initialValue.dateTime]);
+
+  useEffect(() => {
+    if (initialValue.religion) {
+      setReligion(
+        religionList.find((item) => item.value === initialValue.religion)
+      );
+    }
+  }, [initialValue.religion]);
 
   const enableLoading = () => {
     setLoading(true);
@@ -410,13 +400,28 @@ export function CoffinEditForm({
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">
+                      <SearchSelect
+                        name="religion"
+                        label="Religion"
+                        isDisabled={isUserForRead ? true : false}
+                        onChange={(e) => {
+                          setFieldValue("religion", e.value);
+                          setReligion(e);
+                        }}
+                        value={religion}
+                        error={errors.religion}
+                        touched={touched.religion}
+                        options={religionList}
+                      />
+                    </div>
+                    {/* <div className="col-12 col-md-3 mb-5">
                       <Field
                         name="religion"
                         component={Input}
                         placeholder=""
                         label="Religion"
                       />
-                    </div>
+                    </div> */}
                     <div className="col-12 col-md-3 mb-5">
                       <Field
                         name="nativePlace"

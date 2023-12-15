@@ -23,6 +23,7 @@ const initValue = {
   dateTime: "",
   fullNameOfTheDeceased: "",
   fatherNameOfTheDeceased: "",
+  age: "",
   Address: "",
   callerCnic: "",
   callerName: "",
@@ -35,6 +36,7 @@ const initValue = {
 export function MortuaryEditDialog({ show, onHide, userForRead, isForEdit }) {
   const dispatch = useDispatch();
   const [initialValue, setInitialValue] = useState(initValue);
+  const [isFieldDisable, setFieldDisable] = useState(false);
   const infoUIContext = useInfoUIContext();
 
   const infoUIProps = useMemo(() => {
@@ -60,6 +62,12 @@ export function MortuaryEditDialog({ show, onHide, userForRead, isForEdit }) {
       const UpdateObj = {
         ...PersonalInfoState,
         fullNameOfTheDeceased: PersonalInfoState.patientName,
+        statusId: "",
+        fatherNameOfTheDeceased: "",
+        SN: "",
+        mortuaryReachdateTime: "",
+        dischargeFromMortuaryDateTime: "",
+        Address: "",
       };
       delete UpdateObj.city;
       delete UpdateObj.country;
@@ -76,13 +84,20 @@ export function MortuaryEditDialog({ show, onHide, userForRead, isForEdit }) {
       delete UpdateObj.isActive;
       delete UpdateObj.policeStation;
       delete UpdateObj.status;
-      delete UpdateObj.statusId;
       delete UpdateObj.updatedAt;
       delete UpdateObj.updatedBy;
       delete UpdateObj.vehicle;
       delete UpdateObj.vehicleId;
       delete UpdateObj.vehicleRegNo;
       delete UpdateObj.vehicleType;
+      delete UpdateObj.relatedMortuaryForm;
+      delete UpdateObj.area;
+      delete UpdateObj.areaId;
+      delete UpdateObj.bodyType;
+      delete UpdateObj.incidentType;
+      delete UpdateObj.incidentAddress;
+
+      //setFieldDisable(true);
       setInitialValue(UpdateObj);
     }
   }, [PersonalInfoState, ibfId]);
@@ -117,6 +132,7 @@ export function MortuaryEditDialog({ show, onHide, userForRead, isForEdit }) {
         onHide={onHide}
         isUserForRead={userForRead}
         isForEdit={isForEdit}
+        isFieldDisable={isFieldDisable}
       />
     </Modal>
   );

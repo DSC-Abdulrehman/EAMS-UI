@@ -35,10 +35,16 @@ const userEditSchema = Yup.object().shape({
   countryId: Yup.string().required("Country is required"),
   cityId: Yup.string().required("City is required"),
   hospitalId: Yup.string().nullable(),
-  statusId: Yup.string().required("status is required"),
+  statusId: Yup.number().required("Status is required"),
   dateTime: Yup.date().required("Incident Date is required"),
   fullNameOfTheDeceased: Yup.string(),
-  fatherNameOfTheDeceased: Yup.string(),
+  fatherNameOfTheDeceased: Yup.string()
+    .nullable()
+    .required("Father name is required"),
+  age: Yup.number()
+    .positive("Number must be positive")
+    .min(1, "Number must be greater then 0")
+    .max(150, "Number must be less than or equal to 150"),
   Address: Yup.string().nullable(),
   callerCnic: Yup.string().nullable(),
   callerName: Yup.string().nullable(),
@@ -238,274 +244,282 @@ export function MortuaryEditForm({
     setLoading(true);
   };
 
-  //console.log("final initial Value", initialValue);
+  console.log("initialValue", initialValue);
 
   return (
     <>
       <Formik
         enableReinitialize={true}
         initialValues={initialValue}
-        validationSchema={userEditSchema}
-        // validateOnChange={false} // Skip validation on field change
-        // validateOnBlur={false} // Skip validation on field blur
+        // validationSchema={userEditSchema}
         onSubmit={(values) => {
           enableLoading();
           const mergedValue = { ...values, oldImages };
           saveCenter(mergedValue);
         }}
       >
-        {({
-          handleSubmit,
-          setFieldValue,
-          handleBlur,
-          errors,
-          touched,
-          field,
-        }) => (
-          <>
-            <Modal.Body className="overlay overlay-block cursor-default">
-              <Form className="form form-label-right">
-                <fieldset disabled={isUserForRead}>
-                  <div className="form-group row">
-                    <div className="col-12 col-md-3 mb-5">
-                      <Field
-                        name="SN"
-                        component={Input}
-                        label="Serial Number"
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <SearchSelect
-                        name="countryId"
-                        label="Country*"
-                        isDisabled={isUserForRead ? true : false}
-                        onChange={(e) => {
-                          console.log("Onchnage vlue", e.value);
-                          dispatch(fetchAllCity(e.value));
-                          setFieldValue("countryId", e.value);
-                          setCountry(e);
-                        }}
-                        value={country}
-                        error={errors.countryId}
-                        touched={touched.countryId}
-                        options={dashboard.allCountry}
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <SearchSelect
-                        name="cityId"
-                        label="City*"
-                        isDisabled={isUserForRead ? true : false}
-                        onChange={(e) => {
-                          dispatch(fetchAllCityCenters(e.value));
-                          dispatch(fetchAllHospitals({ cityId: e.value }));
-                          dispatch(fetchAllPoliceStations({ cityId: e.value }));
-                          setFieldValue("cityId", e.value);
-                          setCity(e);
-                        }}
-                        value={city}
-                        error={errors.cityId}
-                        touched={touched.cityId}
-                        options={dashboard.allCity}
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <SearchSelect
-                        name="hospitalId"
-                        label="Hospital"
-                        isDisabled={isUserForRead ? true : false}
-                        onChange={(e) => {
-                          setFieldValue("hospitalId", e.value);
-                          sethospital(e);
-                        }}
-                        value={hospital}
-                        error={errors.hospitalId}
-                        touched={touched.hospitalId}
-                        options={mortuaryState.hospitalList}
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <SearchSelect
-                        name="statusId"
-                        label="Status*"
-                        isDisabled={isUserForRead ? true : false}
-                        onChange={(e) => {
-                          setFieldValue("statusId", e.value);
-                          setStatus(e);
-                        }}
-                        value={status}
-                        error={errors.statusId}
-                        touched={touched.statusId}
-                        options={user.userStatusTypes}
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <label>Incident Date*</label>
-                      <DatePicker
-                        className="form-control"
-                        selected={createDate}
-                        onChange={(date) => {
-                          console.log("Date", date);
-                          setFieldValue("dateTime", date);
-                          setCreateTime(date);
-                        }}
-                        disabled={isUserForRead}
-                        timeInputLabel="Time:"
-                        dateFormat="MM/dd/yyyy h:mm aa"
-                        showTimeInput
-                        name="dateTime"
-                      />
-                      {errors.dateTime && touched.dateTime ? (
-                        <div className="form-feedBack">{errors.dateTime}</div>
-                      ) : null}
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <label>Mortuary Reached Time</label>
-                      <DatePicker
-                        className="form-control"
-                        selected={mortuaryReachedTime}
-                        onChange={(date) => {
-                          setFieldValue("mortuaryReachdateTime", date);
-                          setMortuaryReachedTime(date);
-                        }}
-                        timeInputLabel="Time:"
-                        dateFormat="MM/dd/yyyy h:mm aa"
-                        showTimeInput
-                        name="mortuaryReachdateTime"
-                        disabled={isUserForRead}
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <label>Discharge mortuary Time</label>
-                      <DatePicker
-                        className="form-control"
-                        selected={dischargedTime}
-                        onChange={(date) => {
-                          setFieldValue("dischargeFromMortuaryDateTime", date);
-                          setDischargedTime(date);
-                        }}
-                        disabled={isUserForRead}
-                        timeInputLabel="Time:"
-                        dateFormat="MM/dd/yyyy h:mm aa"
-                        showTimeInput
-                        name="dischargeFromMortuaryDateTime"
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <Field
-                        name="fullNameOfTheDeceased"
-                        component={Input}
-                        placeholder=""
-                        label="Deceased Name"
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <Field
-                        name="fatherNameOfTheDeceased"
-                        component={Input}
-                        placeholder=""
-                        label="Father Name"
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <Field
-                        name="Address"
-                        component={Input}
-                        placeholder=""
-                        label="Address"
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <Field
-                        name="callerName"
-                        component={Input}
-                        placeholder=""
-                        label="Caller Name"
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <Field
-                        name="callerPhNo"
-                        component={Input}
-                        placeholder=""
-                        label="Caller Phone"
-                      />
-                    </div>
-                    <div className="col-12 col-md-3 mb-5">
-                      <Field
-                        name="callerCnic"
-                        component={Input}
-                        placeholder=""
-                        label="Caller CNIC"
-                      />
-                    </div>
-                    <div className="col-12  mb-5">
-                      <Field
-                        name="description"
-                        component={TextArea}
-                        placeholder=""
-                        label="Description"
-                      />
-                    </div>
-
-                    {initialValue?.mortuaryFormImages && (
-                      <div className="col-12">
-                        <aside style={thumbsContainer}>{thumbs}</aside>
-                      </div>
-                    )}
-
-                    {!isUserForRead && (
-                      <div className="col-12">
-                        <ImageDropZone
-                          name="images"
-                          setFieldValue={setFieldValue}
-                          disabled={isUserForRead}
+        {({ handleSubmit, setFieldValue, errors, touched, values }) => {
+          return (
+            <>
+              <Modal.Body className="overlay overlay-block cursor-default">
+                <Form className="form form-label-right">
+                  <fieldset disabled={isUserForRead}>
+                    <div className="form-group row">
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="SN"
+                          component={Input}
+                          label="Serial Number"
                         />
                       </div>
-                    )}
-                  </div>
-                </fieldset>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <button
-                type="button"
-                onClick={onHide}
-                className="btn btn-light btn-elevate"
-              >
-                Cancel
-              </button>
-              <> </>
-              {isForEdit ? (
-                <>
-                  <button
-                    type="submit"
-                    onClick={() => handleSubmit()}
-                    className="btn btn-primary btn-elevate"
-                  >
-                    Update
-                    {loading && (
-                      <span className="ml-3 mr-3 spinner spinner-white"></span>
-                    )}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    type="submit"
-                    onClick={() => handleSubmit()}
-                    className="btn btn-primary btn-elevate"
-                  >
-                    Save
-                    {loading && (
-                      <span className="ml-3 mr-3 spinner spinner-white"></span>
-                    )}
-                  </button>
-                </>
-              )}
-            </Modal.Footer>
-          </>
-        )}
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <SearchSelect
+                          name="countryId"
+                          label="Country*"
+                          isDisabled={values.countryId == "" ? false : true}
+                          onChange={(e) => {
+                            dispatch(fetchAllCity(e.value));
+                            setFieldValue("countryId", e.value);
+                            setCountry(e);
+                          }}
+                          value={country}
+                          error={errors.countryId}
+                          touched={touched.countryId}
+                          options={dashboard.allCountry}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <SearchSelect
+                          name="cityId"
+                          label="City*"
+                          isDisabled={values.cityId == "" ? false : true}
+                          onChange={(e) => {
+                            dispatch(fetchAllCityCenters(e.value));
+                            dispatch(fetchAllHospitals({ cityId: e.value }));
+                            dispatch(
+                              fetchAllPoliceStations({ cityId: e.value })
+                            );
+                            setFieldValue("cityId", e.value);
+                            setCity(e);
+                          }}
+                          value={city}
+                          error={errors.cityId}
+                          touched={touched.cityId}
+                          options={dashboard.allCity}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <SearchSelect
+                          name="hospitalId"
+                          label="Hospital"
+                          isDisabled={values.hospitalId == "" ? false : true}
+                          onChange={(e) => {
+                            setFieldValue("hospitalId", e.value);
+                            sethospital(e);
+                          }}
+                          value={hospital}
+                          error={errors.hospitalId}
+                          touched={touched.hospitalId}
+                          options={mortuaryState.hospitalList}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <SearchSelect
+                          name="statusId"
+                          label="Status*"
+                          onChange={(e) => {
+                            setFieldValue("statusId", e.value);
+                            setStatus(e);
+                          }}
+                          value={status}
+                          error={errors.statusId}
+                          touched={touched.statusId}
+                          options={user.userStatusTypes}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <label>Incident Date*</label>
+                        <DatePicker
+                          className="form-control"
+                          selected={createDate}
+                          onChange={(date) => {
+                            setFieldValue("dateTime", date);
+                            setCreateTime(date);
+                          }}
+                          disabled={values.dateTime == "" ? false : true}
+                          timeInputLabel="Time:"
+                          dateFormat="MM/dd/yyyy h:mm aa"
+                          showTimeInput
+                          name="dateTime"
+                        />
+                        {errors.dateTime && touched.dateTime ? (
+                          <div className="form-feedBack">{errors.dateTime}</div>
+                        ) : null}
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <label>Mortuary Reached Time</label>
+                        <DatePicker
+                          className="form-control"
+                          selected={mortuaryReachedTime}
+                          onChange={(date) => {
+                            setFieldValue("mortuaryReachdateTime", date);
+                            setMortuaryReachedTime(date);
+                          }}
+                          timeInputLabel="Time:"
+                          dateFormat="MM/dd/yyyy h:mm aa"
+                          showTimeInput
+                          name="mortuaryReachdateTime"
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <label>Discharge mortuary Time</label>
+                        <DatePicker
+                          className="form-control"
+                          selected={dischargedTime}
+                          onChange={(date) => {
+                            setFieldValue(
+                              "dischargeFromMortuaryDateTime",
+                              date
+                            );
+                            setDischargedTime(date);
+                          }}
+                          disabled={isUserForRead}
+                          timeInputLabel="Time:"
+                          dateFormat="MM/dd/yyyy h:mm aa"
+                          showTimeInput
+                          name="dischargeFromMortuaryDateTime"
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="fullNameOfTheDeceased"
+                          component={Input}
+                          placeholder=""
+                          label="Deceased Name"
+                          disabled={initialValue.fullNameOfTheDeceased !== ""}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="fatherNameOfTheDeceased"
+                          component={Input}
+                          placeholder=""
+                          label="Father Name*"
+                          disabled={initialValue.fatherNameOfTheDeceased !== ""}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="age"
+                          component={Input}
+                          type="Number"
+                          label="Age*"
+                          disabled={values.age == "" ? false : true}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="Address"
+                          component={Input}
+                          placeholder=""
+                          label="Address"
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="callerName"
+                          component={Input}
+                          placeholder=""
+                          label="Caller Name"
+                          disabled={values.callerName == "" ? false : true}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="callerPhNo"
+                          component={Input}
+                          placeholder=""
+                          label="Caller Phone"
+                          disabled={values.callerPhNo == "" ? false : true}
+                        />
+                      </div>
+                      <div className="col-12 col-md-6 col-lg-3 mb-5">
+                        <Field
+                          name="callerCnic"
+                          component={Input}
+                          placeholder=""
+                          label="Caller CNIC"
+                          disabled={values.callerCnic == "" ? false : true}
+                        />
+                      </div>
+                      <div className="col-12  mb-5">
+                        <Field
+                          name="description"
+                          component={TextArea}
+                          placeholder=""
+                          label="Description"
+                        />
+                      </div>
+
+                      {initialValue?.mortuaryFormImages && (
+                        <div className="col-12">
+                          <aside style={thumbsContainer}>{thumbs}</aside>
+                        </div>
+                      )}
+
+                      {!isUserForRead && (
+                        <div className="col-12">
+                          <ImageDropZone
+                            name="images"
+                            setFieldValue={setFieldValue}
+                            disabled={isUserForRead}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </fieldset>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <button
+                  type="button"
+                  onClick={onHide}
+                  className="btn btn-light btn-elevate"
+                >
+                  Cancel
+                </button>
+                <> </>
+                {isForEdit ? (
+                  <>
+                    <button
+                      type="submit"
+                      onClick={() => handleSubmit()}
+                      className="btn btn-primary btn-elevate"
+                    >
+                      Update
+                      {loading && (
+                        <span className="ml-3 mr-3 spinner spinner-white"></span>
+                      )}
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="submit"
+                      onClick={() => handleSubmit()}
+                      className="btn btn-primary btn-elevate"
+                    >
+                      Save
+                      {loading && (
+                        <span className="ml-3 mr-3 spinner spinner-white"></span>
+                      )}
+                    </button>
+                  </>
+                )}
+              </Modal.Footer>
+            </>
+          );
+        }}
       </Formik>
     </>
   );

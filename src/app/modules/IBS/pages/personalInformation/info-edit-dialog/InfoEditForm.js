@@ -660,11 +660,11 @@ export function InfoEditForm({ saveInfo, initialInfo, onHide, isUserForRead }) {
                       <SearchSelect
                         name="statusId"
                         label="Status*"
-                        isDisabled={isUserForRead ? true : false}
                         onChange={(e) => {
                           setFieldValue("statusId", e.value);
                           setStatus(e);
                         }}
+                        isDisabled={isUserForRead}
                         value={status}
                         error={errors.statusId}
                         touched={touched.statusId}

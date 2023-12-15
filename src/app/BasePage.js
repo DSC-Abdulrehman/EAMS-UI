@@ -39,7 +39,7 @@ export default function BasePage() {
   const isDashboardAccess = SettingsAccess?.some((obj) =>
     Object.values(obj).includes("read-all-vehicles-dashboard")
   );
-
+  console.log("auth", auth);
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
@@ -49,7 +49,7 @@ export default function BasePage() {
             .split(" ")
             .join("-")
             .toLowerCase();
-
+          console.log("path", path);
           if (ROUTES[accessName])
             return (
               <Route

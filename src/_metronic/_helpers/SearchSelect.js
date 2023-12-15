@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import AsyncSelect, { createFilter } from "react-select/async";
+import React, { useState } from "react";
+import AsyncSelect from "react-select/async";
 
 export function SearchSelect({
   name,
@@ -15,7 +15,7 @@ export function SearchSelect({
   isDisabled,
   isClearable,
 }) {
-  const [selectedOption, setSelectedOption] = useState();
+  //const [selectedOption, setSelectedOption] = useState();
 
   const filterColors = (inputValue) => {
     return options.filter((i) =>

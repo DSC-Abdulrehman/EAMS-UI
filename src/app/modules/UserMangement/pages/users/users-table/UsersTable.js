@@ -121,7 +121,11 @@ export function UsersTable() {
       sort: false,
       sortCaret: sortCaret,
       style: {
-        minWidth: "60px",
+        minWidth: "130px",
+        maxWidth: "130px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
 

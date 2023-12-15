@@ -80,6 +80,10 @@ export function CoffinTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -90,6 +94,10 @@ export function CoffinTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
 
@@ -101,6 +109,10 @@ export function CoffinTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {
@@ -123,6 +135,10 @@ export function CoffinTable() {
       headerSortingClasses,
       style: {
         minWidth: "130px",
+        maxWidth: "100px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
       },
     },
     {

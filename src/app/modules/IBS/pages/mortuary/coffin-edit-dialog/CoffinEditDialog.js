@@ -89,6 +89,8 @@ export function CoffinEditDialog({ show, onHide, userForRead }) {
       delete UpdateObj.hospitalId;
       delete UpdateObj.coffinFormRelatedToMortuaryForm;
       delete UpdateObj.id;
+      delete UpdateObj.hospital;
+
       setInitialValue(UpdateObj);
     }
   }, [infoForEdit, ibfId, mfId]);

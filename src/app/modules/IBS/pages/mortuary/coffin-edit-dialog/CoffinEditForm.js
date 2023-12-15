@@ -36,7 +36,9 @@ const formSchema = Yup.object().shape({
   statusId: Yup.number().required("status is required"),
   dateTime: Yup.date().required("incident date is required"),
   dateTimeofDeath: Yup.date().required("Death date is required"),
-  fullNameOfTheDeceased: Yup.string().required("Name of deceased required"),
+  fullNameOfTheDeceased: Yup.string()
+    .required("Name of deceased required")
+    .nullable(),
   fatherNameOfTheDeceased: Yup.string().required(
     "Father Name of deceased is required"
   ),
@@ -87,7 +89,31 @@ export function CoffinEditForm({
   const [country, setCountry] = useState([]);
   const [city, setCity] = useState([]);
   const [gender, setGender] = useState([]);
+  const [religion, setReligion] = useState([]);
   const [status, setStatus] = useState([]);
+
+  const religionList = [
+    {
+      value: "Islam",
+      label: "Islam",
+    },
+    {
+      value: "Christianity",
+      label: "Christianity",
+    },
+    {
+      value: "Hinduism",
+      label: "Hinduism",
+    },
+    {
+      value: "Sikhism",
+      label: "Sikhism",
+    },
+    {
+      value: "Other",
+      label: "Other",
+    },
+  ];
 
   const genderList = [
     {
@@ -162,6 +188,14 @@ export function CoffinEditForm({
       setDateTimeOfDeath(new Date(initialValue.dateTimeofDeath));
     }
   }, [initialValue.dateTimeofDeath]);
+
+  useEffect(() => {
+    if (initialValue.religion) {
+      setReligion(
+        religionList.find((item) => item.value === initialValue.religion)
+      );
+    }
+  }, [initialValue.religion]);
 
   console.log("initialValue", initialValue);
 
@@ -291,11 +325,18 @@ export function CoffinEditForm({
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">
-                      <Field
+                      <SearchSelect
                         name="religion"
-                        component={Input}
-                        placeholder=""
                         label="Religion"
+                        isDisabled={isUserForRead ? true : false}
+                        onChange={(e) => {
+                          setFieldValue("religion", e.value);
+                          setReligion(e);
+                        }}
+                        value={religion}
+                        error={errors.religion}
+                        touched={touched.religion}
+                        options={religionList}
                       />
                     </div>
                     <div className="col-12 col-md-3 mb-5">
