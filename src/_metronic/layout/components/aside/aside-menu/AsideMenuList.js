@@ -28,7 +28,7 @@ export function AsideMenuList({ layoutProps }) {
   const getMenuItemActive = (url, hasSubmenu = false) => {
     return checkIsActive(location, url)
       ? ` ${!hasSubmenu &&
-          "menu-item-active"} menu-item-open menu-item-not-hightlighted`
+      "menu-item-active"} menu-item-open menu-item-not-hightlighted`
       : "";
   };
 
@@ -57,6 +57,40 @@ export function AsideMenuList({ layoutProps }) {
         {Object.keys(UserAccess).map((res) => {
           return <AsideparentList element={res} key={res} />;
         })}
+        <li
+          className={`menu-item menu-item-submenu ${getMenuItemActive(
+            "/props.element",
+            true
+          )}`}
+          aria-haspopup="true"
+          data-menu-toggle="hover"
+        >
+          <NavLink className="menu-link menu-toggle" to=''>
+            <span className="svg-icon menu-icon">
+              <SVG src={toAbsoluteUrl("/media/svg/icons/Shopping/Box2.svg")} />
+            </span>
+            <span className="menu-text">EDRS</span>
+            <i className="menu-arrow" />
+          </NavLink>
+          <div className="menu-submenu ">
+            <ul className="menu-subnav">
+              <ul className="menu-subnav">
+                <li
+                  className={`menu-item`}
+                  aria-haspopup="true"
+                >
+                  <NavLink className="menu-link" to='/edrs/read-all-listing'>
+                    <i className="menu-bullet menu-bullet-dot">
+                      <span />
+                    </i>
+                    <span className="menu-text">Read All Listing</span>
+                  </NavLink>
+                </li>
+              </ul>
+            </ul>
+          </div>
+        </li>
+
 
         {/* Bootstrap */}
         {/*begin::1 Level*/}

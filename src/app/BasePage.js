@@ -20,6 +20,7 @@ const IncidentDetailsManagment = lazy(() =>
 const UserManagment = lazy(() => import("./modules/UserMangement/pages"));
 const Centers = lazy(() => import("./modules/Centers/pages"));
 const IBSModule = lazy(() => import("./modules/IBS/pages/index"));
+const EDRSModule = lazy(() => import("./modules/EDRS/pages/index"));
 const ROUTES = {
   settings: SettingsPage,
   users: UserManagment,
@@ -43,6 +44,7 @@ export default function BasePage() {
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
+        <Route path='/edrs/read-all-listing' component={EDRSModule} />
         {Object.keys(UserAccess).map((access, key) => {
           const accessName = access.replace(/ /g, "").toLowerCase();
           const path = access
@@ -50,6 +52,7 @@ export default function BasePage() {
             .join("-")
             .toLowerCase();
           console.log("path", path);
+
           if (ROUTES[accessName])
             return (
               <Route
